@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static crispy_forms_tags %}
+
+{% block content %}
+
+    <form method="post" action="">
+        {% csrf_token %}
+        <fieldset>
+            {% crispy form %}
+            <button>Create</button>
+        </fieldset>
+    </form>
+    <br>
+
+    {% if ingredients %}
+        <table class="table border m-5">
+            <tr>
+                <th>Ingredient</th>
+                <th>Brand</th>
+            </tr>
+            {% for ingredient in ingredients %}
+                <tr>
+                    <td>{{ ingredient.name }}</td>
+                    <td>{% if ingredient.brand %}{{ ingredient.brand }}{% endif %}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+{% endblock content %}

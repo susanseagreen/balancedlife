@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+{% load static humanize %}
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{% block title %}Shopping List Creator{% endblock title %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="{% static 'javascript/jquery.js' %}"></script>
+    <script src="{% static 'javascript/jquery-ui.js' %}"></script>
+    <script src="{% static 'javascript/popper.min.js' %}"></script>
+    <script src="{% static 'javascript/bootstrap.min.js' %}"></script>
+    <script src="{% static 'javascript/sorttable.js' %}"></script>
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <link REL="icon" href="{% static 'img/note.svg' %}" type="image/x-icon">
+    {% block CSS %}{% endblock CSS %}
+</head>
+<body>
+
+<nav class="navbar bg-dark navbar-dark">
+
+    <div class="container">
+        <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
+           href="{% url 'ingredients:create' %}">
+            Ingredients
+        </a>
+        <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
+           href="{% url 'recipes:create' %}">
+            Recipes
+        </a>
+        <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
+           href="{% url 'shopping_lists:list' %}">
+            Shopping List
+        </a>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    {% block content %}
+        <h1>Shopping List Creator</h1>
+    {% endblock content %}
+</div>
+
+<script type="application/javascript">
+    $('.alert').click(function () {
+        $(this).slideUp()
+    });
+    $(document).ready(function () {
+        setTimeout(function () {
+            $(".alert-block .alert-info.alert").slideUp();
+        }, 15000);
+        setTimeout(function () {
+            $(".alert-block .alert-primary.alert").slideUp();
+        }, 15000);
+        setTimeout(function () {
+            $(".alert-block .alert-warning.alert").slideUp();
+        }, 15000);
+        setTimeout(function () {
+            $(".alert-block .alert-danger.alert").slideUp();
+        }, 15000);
+    });
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static crispy_forms_tags %}
+
+{% block content %}
+
+    <form method="post" action="">
+        {% csrf_token %}
+        <fieldset>
+            {% crispy form %}
+            <button>Update</button>
+        </fieldset>
+    </form>
+
+{% endblock content %}
