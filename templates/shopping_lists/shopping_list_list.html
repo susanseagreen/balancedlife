@@ -4,7 +4,7 @@
 {% block content %}
     <a href="{% url 'shopping_lists:create' %}">Create</a>
     {% if shopping_lists %}
-        <table class="table border m-5">
+        <table class="table border mt-5">
             {% for shopping_list in shopping_lists %}
                 {% ifchanged shopping_list.pk %}
                     <tr>

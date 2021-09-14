@@ -7,20 +7,22 @@
         {% csrf_token %}
         <fieldset>
             {% crispy form %}
-            <button>Create</button>
+            <button class="btn btn-dark">Create</button>
         </fieldset>
     </form>
     <br>
 
     {% if ingredients %}
-        <table class="table border m-5">
+        <table class="table border mt-5">
             <tr>
                 <th>Ingredient</th>
+                <th>Category</th>
                 <th>Brand</th>
             </tr>
             {% for ingredient in ingredients %}
                 <tr>
                     <td>{{ ingredient.name }}</td>
+                    <td>{{ ingredient.category }}</td>
                     <td>{% if ingredient.brand %}{{ ingredient.brand }}{% endif %}</td>
                 </tr>
             {% endfor %}

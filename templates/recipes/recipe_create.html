@@ -3,30 +3,37 @@
 
 {% block content %}
 
-    <form method="post" action="">
-        {% csrf_token %}
-        <fieldset>
-            <table class="table">
-                {% crispy form %}
-            </table>
+    <div class="row">
 
-            <table class="table">
-                {% crispy recipe_ingredient %}
-            </table>
-            <button>Update</button>
-        </fieldset>
-    </form>
-    <br>
+        <div class="col-8">
+            <form method="post" action="">
+                {% csrf_token %}
+                <fieldset>
+                    {% crispy form %}
+                    <button class="btn btn-dark">Create</button>
+                </fieldset>
+            </form>
+        </div>
 
-    {% if recipes %}
-        <table class="table border m-5">
-            {% for recipe in recipes %}
-                <tr>
-                    <td>{{ recipe.name }}</td>
-                    <td>{{ recipe.type }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    {% endif %}
+        {% if recipes %}
+            <div class="col-4">
+                <div>
+                    <table class="table border">
+                        {% for recipe in recipes %}
+                            {% ifchanged recipe.category %}
+                                <tr>
+                                    <th>{{ recipe.category }}</th>
+                                </tr>
+                            {% endifchanged %}
+                            <tr>
+                                <td>{{ recipe.name }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+
+    </div>
 
 {% endblock content %}

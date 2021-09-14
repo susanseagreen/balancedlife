@@ -3,12 +3,65 @@
 
 {% block content %}
 
-    <form method="post" action="">
-        {% csrf_token %}
-        <fieldset>
-            {% crispy form %}
-            <button>Update</button>
-        </fieldset>
-    </form>
+            <div id="myModal" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+    <div class="row">
+        <div class="col-8">
+            <h1>{{ recipe.name }}</h1>
+            <tr>
+                <th>{{ recipe.description }}</th>
+            </tr>
+            <form method="post" action="">
+                {% csrf_token %}
+                <fieldset>
+                    <div class="d-none">{{ form }}</div>
+                    <div class="d-flex flex-wrap">
+                        {% for recipe_ingredient in recipe_ingredients %}
+                            <div class="w-100">
+                                {% crispy recipe_ingredient %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <button class="btn btn-dark">Add Ingredient</button>
+                </fieldset>
+            </form>
+        </div>
+
+        {% if recipes %}
+            <div class="col-4">
+                <table class="table border">
+                    {% for recipe in recipes %}
+                        {% ifchanged recipe.category %}
+                            <tr>
+                                <th>{{ recipe.category }}</th>
+                            </tr>
+                        {% endifchanged %}
+                        <tr>
+                            <td>{{ recipe.name }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            jQuery('.modal_resend_activation_email').click(function (e) {
+                var linkvar = $(this).attr('id');
+                $('.modal-body').load(linkvar, function (result) {
+                    $('#myModal').modal({show: true});
+                });
+            });
+        });
+    </script>
 
 {% endblock content %}

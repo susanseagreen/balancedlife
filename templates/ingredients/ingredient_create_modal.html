@@ -1,13 +1,15 @@
 {% extends 'base.html' %}
 {% load static crispy_forms_tags %}
 
+{% block nav %}{% endblock nav %}
+
 {% block content %}
 
-    <form method="post" action="">
+    <form method="post" action="{% url 'ingredients:create_modal' %}">
         {% csrf_token %}
         <fieldset>
             {% crispy form %}
-            <button class="btn btn-dark">Update</button>
+            <button class="btn btn-dark">Create</button>
         </fieldset>
     </form>
 
