@@ -1,13 +1,15 @@
 {% extends 'base.html' %}
 {% load static crispy_forms_tags %}
 
+{% block nav %}{% endblock nav %}
+
 {% block content %}
 
-    <form method="post" action="">
+    <form method="post" action="{% url 'mo' pk %}">
         {% csrf_token %}
         <fieldset>
             {% crispy form %}
-            <button class="btn btn-dark">Create</button>
+            <button class="btn btn-dark">Update</button>
         </fieldset>
     </form>
 

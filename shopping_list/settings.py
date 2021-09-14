@@ -40,8 +40,10 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
     "crispy_forms",
     "app.ingredients",
+    "app.recipe_ingredients",
     "app.recipes",
     "app.shopping_list",
+    "templates",
 ]
 
 MIDDLEWARE = [

@@ -2,8 +2,8 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import View, CreateView, UpdateView
-from .forms import RecipeCreateForm, RecipeIngredientFormSet
-from .models import Recipe, RecipeIngredient
+from .forms import RecipeCreateForm
+from .models import Recipe
 
 
 class RecipeCreateView(CreateView):
@@ -29,43 +29,35 @@ class RecipeCreateView(CreateView):
             instance = form.save(commit=False)
             instance.save()
 
-            return redirect(reverse_lazy('recipes:update', kwargs={'pk': instance.pk}))
+            return redirect(reverse_lazy('recipe_ingredients:create', kwargs={'fk': instance.pk}))
 
         return redirect(self.request.META['HTTP_REFERER'])
 
 
 class RecipeUpdateView(UpdateView):
     template_name = 'recipes/recipe_update.html'
-    model = Recipe
-    fields = ['id', 'name']
-    success_url = None
 
-    def get_context_data(self, **kwargs):
-        context = super(RecipeUpdateView, self).get_context_data(**kwargs)
+    def get(self, request, *args, **kwargs):
 
-        context['recipes'] = Recipe.objects.order_by('category', 'name')
-        if self.object:
-            context['recipe'] = Recipe.objects.get(id=self.object.id)
+        recipes = Recipe.objects.all().order_by('category', 'name')
+        recipe = Recipe.objects.get(id=self.kwargs['pk'])
+        form = RecipeCreateForm(instance=recipe)
 
-        if self.request.POST:
-            context['recipe_ingredients'] = RecipeIngredientFormSet(
-                self.request.POST, queryset=RecipeIngredient.objects.all(), instance=self.object)
-            context['recipe_ingredients'].full_clean()
-        else:
-            recipe_ingredient = RecipeIngredientFormSet(queryset=RecipeIngredient.objects.all(), instance=self.object)
-            context['recipe_ingredients'] = recipe_ingredient
+        context = {
+            'recipes': recipes,
+            'recipe': recipe,
+            'form': form,
+        }
 
-        return context
+        return render(request, template_name=self.template_name, context=context)
 
-    def form_valid(self, form):
-        context = self.get_context_data(form=form)
-        formset = context['recipe_ingredients']
+    def post(self, request, *args, **kwargs):
 
-        if formset.is_valid():
-            formset.instance = self.object
-            formset.save()
-            return redirect(self.request.META['HTTP_REFERER'])
+        recipe = Recipe.objects.get(id=self.kwargs['pk'])
 
-        else:
-            messages.error(self.request, 'Something went wrong')
-            return super().form_invalid(form)
+        form = RecipeCreateForm(request.POST, instance=recipe)
+
+        if form.is_valid():
+            form.save()
+
+        return redirect(reverse_lazy('recipe_ingredients:create', kwargs={'fk': self.kwargs['pk']}))

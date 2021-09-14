@@ -3,6 +3,15 @@
 
 {% block content %}
 
+    <div id="myModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <form method="post" action="">
         {% csrf_token %}
         <fieldset>
@@ -16,17 +25,29 @@
         <table class="table border mt-5">
             <tr>
                 <th>Ingredient</th>
-                <th>Category</th>
+                <th>Food Group</th>
                 <th>Brand</th>
             </tr>
             {% for ingredient in ingredients %}
                 <tr>
-                    <td>{{ ingredient.name }}</td>
-                    <td>{{ ingredient.category }}</td>
+                    <td><a class="modal_update" data-toggle="modal" href="javascript:void(0);"
+                           id="{% url 'ingredients:update_modal' ingredient.id %}">{{ ingredient.name }}</a></td>
+                    <td>{{ ingredient.food_group }}</td>
                     <td>{% if ingredient.brand %}{{ ingredient.brand }}{% endif %}</td>
                 </tr>
             {% endfor %}
         </table>
     {% endif %}
+
+    <script>
+        $(document).ready(function () {
+            jQuery('.modal_update').click(function (e) {
+                var linkvar = $(this).attr('id');
+                $('.modal-body').load(linkvar, function (result) {
+                    $('#myModal').modal({show: true});
+                });
+            });
+        });
+    </script>
 
 {% endblock content %}

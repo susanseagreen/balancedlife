@@ -21,29 +21,55 @@
 <body>
 
 {% block nav %}
-<nav class="navbar bg-dark navbar-dark">
+    <nav class="navbar bg-dark navbar-dark">
 
-    <div class="container">
-        <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
-           href="{% url 'ingredients:create' %}">
-            Ingredients
-        </a>
-        <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
-           href="{% url 'recipes:create' %}">
-            Recipes
-        </a>
-        <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
-           href="{% url 'shopping_lists:list' %}">
-            Shopping List
-        </a>
-    </div>
-</nav>
+        <div class="container">
+            <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
+               href="{% url 'ingredients:create' %}">
+                Ingredients
+            </a>
+            <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
+               href="{% url 'recipes:create' %}">
+                Recipes
+            </a>
+            <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
+               href="{% url 'shopping_lists:list' %}">
+                Shopping List
+            </a>
+        </div>
+    </nav>
 {% endblock nav %}
 
 <div class="container mt-5">
-    {% block content %}
-        <h1>Shopping List Creator</h1>
-    {% endblock content %}
+
+    <div class="row">
+
+        <div class="col-lg-8 col-12">
+            {% block content %}
+                <h1>Shopping List Creator</h1>
+            {% endblock content %}
+        </div>
+
+        {% if recipes %}
+            <div class="col-lg-4 col-12">
+                <div>
+                    <table class="table border">
+                        {% for recipe in recipes %}
+                            {% ifchanged recipe.category %}
+                                <tr>
+                                    <th>{{ recipe.category }}</th>
+                                </tr>
+                            {% endifchanged %}
+                            <tr>
+                                <td><a href="{% url 'recipes:update' recipe.id %}">{{ recipe.name }}</a></td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+
+    </div>
 </div>
 
 <script type="application/javascript">

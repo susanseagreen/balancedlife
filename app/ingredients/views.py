@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import View
-from .forms import IngredientForm
+from .forms import IngredientForm, IngredientModalForm
 from .models import Ingredient
 
 
@@ -49,7 +49,9 @@ class IngredientUpdateView(View):
 
     def post(self, request, *args, **kwargs):
 
-        form = IngredientForm(request.POST)
+        ingredient = Ingredient.objects.get(id=kwargs['pk'])
+
+        form = IngredientForm(request.POST, instance=ingredient)
 
         if form.is_valid():
             form.save()
@@ -62,7 +64,7 @@ class IngredientModalCreateView(View):
 
     def get(self, request, *args, **kwargs):
 
-        form = IngredientForm()
+        form = IngredientModalForm()
 
         context = {
             'form': form,
@@ -72,7 +74,7 @@ class IngredientModalCreateView(View):
 
     def post(self, request, *args, **kwargs):
 
-        form = IngredientForm(request.POST)
+        form = IngredientModalForm(request.POST)
 
         if form.is_valid():
             form.save()
@@ -87,7 +89,7 @@ class IngredientModalUpdateView(View):
 
         ingredient = Ingredient.objects.get(id=kwargs['pk'])
 
-        form = IngredientForm(instance=ingredient)
+        form = IngredientModalForm(instance=ingredient)
 
         context = {
             'pk': kwargs['pk'],
@@ -98,7 +100,9 @@ class IngredientModalUpdateView(View):
 
     def post(self, request, *args, **kwargs):
 
-        form = IngredientForm(request.POST)
+        ingredient = Ingredient.objects.get(id=kwargs['pk'])
+
+        form = IngredientModalForm(request.POST, instance=ingredient)
 
         if form.is_valid():
             form.save()

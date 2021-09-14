@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static crispy_forms_tags get_display %}
+
+{% block content %}
+
+    <form method="post" action="">
+        {% csrf_token %}
+        <fieldset>
+            <input type="hidden" name="code_recipe" id="id_code_recipe" value="{{ fk }}">
+            {% crispy form %}
+            <button class="btn btn-dark">Create</button>
+        </fieldset>
+    </form>
+
+    <br>
+
+    <table class="table border">
+        {% for recipe_ingredient in recipe_ingredients %}
+            <col width="10">
+            <tr>
+                <td class="text-nowrap">
+                    {{ recipe_ingredient.measurement_value | no_decimals }}
+                    {{ recipe_ingredient.measurement_type }}
+                </td>
+                <td>{{ recipe_ingredient.code_ingredient.name }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock content %}

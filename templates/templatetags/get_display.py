@@ -1,20 +1,21 @@
 from django import template
-from common.choices import categories
+
 
 register = template.Library()
 
 
 @register.filter
-def item_types_display(q):
-    for choice in categories:
-        if choice[0] == q:
-            return choice[1]
-    return ''
+def no_decimals(q):
+    str_q = str(q)
+    if ".00" in str_q:
+        return str_q.replace(".00", "")
+
+    return q
 
 
-@register.filter
-def item_types_svg(q):
-    for choice in categories:
-        if choice[0] == q:
-            return choice[2]
-    return ''
+# @register.filter
+# def item_types_display(q):
+#     for choice in categories:
+#         if choice[0] == q:
+#             return choice[1]
+#     return ''
