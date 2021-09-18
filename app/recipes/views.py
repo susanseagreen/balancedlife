@@ -1,12 +1,12 @@
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import View, CreateView, UpdateView
+from django.views.generic import View
 from .forms import RecipeCreateForm
 from .models import Recipe
 
 
-class RecipeCreateView(CreateView):
+class RecipeCreateView(View):
     template_name = 'recipes/recipe_create.html'
 
     def get(self, request, *args, **kwargs):
@@ -34,7 +34,7 @@ class RecipeCreateView(CreateView):
         return redirect(self.request.META['HTTP_REFERER'])
 
 
-class RecipeUpdateView(UpdateView):
+class RecipeUpdateView(View):
     template_name = 'recipes/recipe_update.html'
 
     def get(self, request, *args, **kwargs):

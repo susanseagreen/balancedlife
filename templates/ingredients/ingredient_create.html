@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static crispy_forms_tags %}
+{% load static crispy_forms_tags get_display %}
 
 {% block content %}
 
@@ -30,9 +30,11 @@
             </tr>
             {% for ingredient in ingredients %}
                 <tr>
-                    <td><a class="modal_update" data-toggle="modal" href="javascript:void(0);"
-                           id="{% url 'ingredients:update_modal' ingredient.id %}">{{ ingredient.name }}</a></td>
-                    <td>{{ ingredient.food_group }}</td>
+                    <td>
+                        <a class="modal_update" data-toggle="modal" href="javascript:void(0);"
+                           id="{% url 'ingredients:update_modal' ingredient.id %}">{{ ingredient.name }}</a>
+                    </td>
+                    <td>{{ ingredient.food_group | food_group_display }}</td>
                     <td>{% if ingredient.brand %}{{ ingredient.brand }}{% endif %}</td>
                 </tr>
             {% endfor %}

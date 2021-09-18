@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static crispy_forms_tags get_display %}
+
+{% block container %}
+
+    <div id="myModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+
+        <div class="row">
+            <div class="col">
+
+                <form method="post" action="{% url 'shopping_lists:update' pk %}">
+                    {% csrf_token %}
+                    <fieldset>
+                        {% crispy form %}
+                    </fieldset>
+                </form>
+
+                <div class="d-flex justify-content-center">
+                    <a class="modal_create_recipe btn btn-dark m-1" data-toggle="modal" href="javascript:void(0);">
+                        Add Recipe Ingredients
+                    </a>
+                    <a class="modal_create_ingredient btn btn-dark m-1" data-toggle="modal" href="javascript:void(0);">
+                        Add Other Ingredient
+                    </a>
+                </div>
+
+                <br>
+
+                <table class="table">
+                    {% for id, ingredient in ingredient_list.items %}
+                        <tr>
+                            <td>
+                                {% if ingredient.i %}{{ ingredient.i | no_decimals }}{% endif %}
+                                {% if ingredient.g %}{{ ingredient.g | no_decimals }}g{% endif %}
+                                {% if ingredient.kg %}{{ ingredient.kg | no_decimals }}kg{% endif %}
+                                {% if ingredient.dp %}{{ ingredient.dp | no_decimals }} pinch / dash{% endif %}
+                                {% if ingredient.tsp %}{{ ingredient.tsp | no_decimals }} tsp{% endif %}
+                                {% if ingredient.tbsp %}{{ ingredient.tbsp | no_decimals }} Tbsp{% endif %}
+                                {% if ingredient.c %}{{ ingredient.c | no_decimals }} cups{% endif %}
+                                {% if ingredient.l %}{{ ingredient.l | no_decimals }} litres{% endif %}
+                            </td>
+                            <td>{{ ingredient.ingredient_name }}</td>
+                        </tr>
+                        {% for added in ingredient.added %}
+                            <tr>
+                                <td>
+                                    <a class="modal_update_ingredient" data-toggle="modal"
+                                       href="javascript:void(0);"
+                                       id="{% url 'shopping_list_items:update_ingredient_modal' added.id %}">
+                                        {{ added.measurement_value | no_decimals }}
+                                        {{ added.measurement_type | measurement_type_display }}
+                                    </a>
+                                </td>
+                                <td>{{ added.code_ingredient__name }}</td>
+                            </tr>
+                        {% endfor %}
+                        {% for removed in ingredient.removed %}
+                            <tr>
+                                <td>
+                                    <a class="modal_update_ingredient" data-toggle="modal"
+                                       href="javascript:void(0);" style="color: red"
+                                       id="{% url 'shopping_list_items:update_ingredient_modal' removed.id %}">
+                                        {{ removed.measurement_value | no_decimals }}
+                                        {{ removed.measurement_type | measurement_type_display }}
+                                    </a>
+                                </td>
+                                <td>{{ removed.code_ingredient__name }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </table>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            jQuery('.modal_create_recipe').click(function (e) {
+                $('.modal-body').load("{% url 'shopping_list_items:create_recipe_modal' pk %}", function (result) {
+                    $('#myModal').modal({show: true});
+                });
+            });
+            jQuery('.modal_create_ingredient').click(function (e) {
+                $('.modal-body').load("{% url 'shopping_list_items:create_ingredient_modal' pk %}", function (result) {
+                    $('#myModal').modal({show: true});
+                });
+            });
+            jQuery('.modal_update_ingredient').click(function (e) {
+                var linkvar = $(this).attr('id');
+                $('.modal-body').load(linkvar, function (result) {
+                    $('#myModal').modal({show: true});
+                });
+            });
+        });
+    </script>
+
+{% endblock container %}

@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic import View
 from .forms import IngredientForm, IngredientModalForm
 from .models import Ingredient
+from app.recipes.models import Recipe
 
 
 class IngredientCreateView(View):
@@ -11,11 +12,13 @@ class IngredientCreateView(View):
 
     def get(self, request, *args, **kwargs):
 
+        recipes = Recipe.objects.all().order_by('category', 'name')
         ingredients = Ingredient.objects.all().order_by('name')
 
         form = IngredientForm()
 
         context = {
+            'recipes': recipes,
             'ingredients': ingredients,
             'form': form,
         }
@@ -37,11 +40,13 @@ class IngredientUpdateView(View):
 
     def get(self, request, *args, **kwargs):
 
+        recipes = Recipe.objects.all().order_by('category', 'name')
         ingredient = Ingredient.objects.get(id=kwargs['pk'])
 
         form = IngredientForm(instance=ingredient)
 
         context = {
+            'recipes': recipes,
             'form': form,
         }
 

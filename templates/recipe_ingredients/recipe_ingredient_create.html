@@ -3,6 +3,17 @@
 
 {% block content %}
 
+    <div class="d-flex justify-content-between">
+        <h3>
+            <a href="{% url 'recipes:update' recipe.id %}">{{ recipe.name }}</a>
+        </h3>
+
+        <div>
+            {{ recipe.category }}
+        </div>
+    </div>
+    {{ recipe.description }}
+
     <form method="post" action="">
         {% csrf_token %}
         <fieldset>
@@ -16,15 +27,45 @@
 
     <table class="table border">
         {% for recipe_ingredient in recipe_ingredients %}
-            <col width="10">
             <tr>
-                <td class="text-nowrap">
-                    {{ recipe_ingredient.measurement_value | no_decimals }}
-                    {{ recipe_ingredient.measurement_type }}
+                <td class="text-nowrap" style="width: 50px">
+                    {% if shopping_list_item.code_recipe_ingredient__measurement_value %}
+                        {{ shopping_list_item.code_recipe_ingredient__measurement_value | no_decimals }}
+                    {% endif %}
+                    {% if shopping_list_item.code_recipe_ingredient__measurement_type %}
+                        {{ shopping_list_item.code_recipe_ingredient__measurement_type | measurement_type_display }}
+                    {% endif %}
                 </td>
                 <td>{{ recipe_ingredient.code_ingredient.name }}</td>
+                <td>{{ recipe_ingredient.code_ingredient.food_group }}</td>
+                <td>
+                    {% if recipe_ingredient.code_ingredient.brand %}
+                        {% if recipe_ingredient.code_ingredient.brand == "d" %}
+
+                        {% endif %}
+                        {% if recipe_ingredient.code_ingredient.brand == "f" %}
+
+                        {% endif %}
+                        {% if recipe_ingredient.code_ingredient.brand == "g" %}
+
+                        {% endif %}
+                        {% if recipe_ingredient.code_ingredient.brand == "o" %}
+
+                        {% endif %}
+                        {% if recipe_ingredient.code_ingredient.brand == "m" %}
+
+                        {% endif %}
+                        {% if recipe_ingredient.code_ingredient.brand == "v" %}
+
+                        {% endif %}
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
     </table>
+
+    <br>
+
+    {{ recipe.steps }}
 
 {% endblock content %}

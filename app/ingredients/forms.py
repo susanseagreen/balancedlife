@@ -12,7 +12,6 @@ class IngredientForm(forms.ModelForm):
 
         widgets = {
             'name': forms.TextInput(attrs={'autofocus': True}),
-            'food_group': forms.TextInput(attrs={'list': 'datalist'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -22,11 +21,6 @@ class IngredientForm(forms.ModelForm):
             Row(
                 Column('name', css_class='form-group col-lg-6 col-sm-12'),
                 Column('food_group', css_class='form-group col-lg-3 col-sm-12'),
-                HTML('<datalist id="datalist">'),
-                HTML('<option value="Vegetable">'),
-                HTML('<option value="Meat">'),
-                HTML('<option value="Diary">'),
-                HTML('</datalist>'),
                 Column('brand', css_class='form-group col-lg-3 col-sm-12'),
                 css_class='form-row'
             ),
@@ -41,7 +35,6 @@ class IngredientModalForm(forms.ModelForm):
 
         widgets = {
             'name': forms.TextInput(attrs={'autofocus': True}),
-            'food_group': forms.TextInput(attrs={'list': 'datalist'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -51,14 +44,6 @@ class IngredientModalForm(forms.ModelForm):
             Row(
                 Column('name', css_class='form-group col-12'),
                 Column('food_group', css_class='form-group col-12'),
-                HTML('<datalist id="datalist">'),
-                HTML('<option value="Diary">'),
-                HTML('<option value="Fruit">'),
-                HTML('<option value="Grain">'),
-                HTML('<option value="Other">'),
-                HTML('<option value="Protein">'),
-                HTML('<option value="Veg">'),
-                HTML('</datalist>'),
                 Column('brand', css_class='form-group col-12'),
                 css_class='form-row'
             ),

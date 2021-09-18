@@ -5,7 +5,15 @@
 .fake-label {
     margin-top: 32px;
 }
-
+.inline-btn {
+    margin-bottom: 32px;
+}
+label {
+    font-weight: bold;
+}
+.cursor-pointer:hover {
+    cursor: help;
+}
 .navbar-dark a {
     color: rgba(255,255,255,0.5);
 }

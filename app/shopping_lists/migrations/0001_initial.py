@@ -12,12 +12,10 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Ingredient',
+            name='ShoppingList',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=50)),
-                ('food_group', models.CharField(blank=True, choices=[('', ''), ('d', 'Diary'), ('f', 'Fruit'), ('g', 'Grain'), ('o', 'Other'), ('m', 'Meat'), ('s', 'Spice'), ('v', 'Veg')], default='', max_length=50, null=True)),
-                ('brand', models.CharField(blank=True, max_length=50, null=True)),
             ],
         ),
     ]

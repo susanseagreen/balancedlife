@@ -3,7 +3,7 @@
 
 {% block nav %}{% endblock nav %}
 
-{% block content %}
+{% block container %}
 
     <form method="post" action="{% url 'mo' pk %}">
         {% csrf_token %}
@@ -13,4 +13,4 @@
         </fieldset>
     </form>
 
-{% endblock content %}
+{% endblock container %}
