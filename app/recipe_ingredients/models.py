@@ -18,7 +18,7 @@ class RecipeIngredient(models.Model):
                 'code_recipe',
                 'code_ingredient',
             ],
-                name="ingredient_recipe"
+                name="ingredient_recipe_unique"
             )
         ]
 

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static crispy_forms_filters %}
+
+{% block nologin %}
+
+    <div class="row mt-5 ml-1 mr-1">
+        <div class="col-lg-6 col-sm-12 m-auto text-center">
+
+            <div class="p-5 border-info rounded border mb-4">
+                <h5>Thank you for Registering</h5>
+                <br>
+                <div class="loading">{% include 'include/loader.svg' %}</div>
+                <br>
+                <div>
+                    An email has been sent to <b>'holiday.planner.help@gmail.com'</b>
+                    <br>
+                    They will review your request to activate your account
+                </div>
+            </div>
+            <div class="small">
+                Click <a href="{% url 'login' %}">here</a> if you aren't automatically redirected
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function pageRedirect() {
+            window.location.href = "{% url 'login' %}";
+        }
+
+        $(document).ready(function () {
+            setTimeout(pageRedirect, 10000);
+            $('.alert-block').removeClass('position-absolute').addClass('position-relative')
+        });
+
+    </script>
+
+{% endblock nologin %}

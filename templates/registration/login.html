@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static crispy_forms_filters %}
+
+{% block nologin %}
+
+    <div id="myModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5 ml-1 mr-1">
+        <div class="col-lg-4 col-md-6 col-sm-12 m-auto">
+            <div class="p-4 border-info rounded border">
+                <div class="text-center mb-5">
+                    <h4>Log In</h4>
+                </div>
+                <form method="POST" enctype="multipart/form-data" action="" class="save-form">
+                    {% csrf_token %}
+                    <fieldset class="form-group-container">
+                        {{ form | crispy }}
+                        <div class="text-right">
+                            <label class="small">Show Password</label>
+                            <input type="checkbox" onclick="togglePassword()">
+                        </div>
+                    </fieldset>
+                    <div class="user-btn mt-5">
+                        <div style="text-align: center;">
+                            <button class="btn btn-info ripple" type="submit">Click here to LOGIN</button>
+                        </div>
+                    </div>
+                    <div class="small text-center m-2">Don't have an account? <a
+                            href="{% url 'register' %}">Register</a></div>
+                    <div class="small text-center m-2">
+                        Never received an activation email?
+                        <a class="modal_resend_activation_email" href="javascript:void(0);">Resend email</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            jQuery('.modal_resend_activation_email').click(function (e) {
+                $('.modal-body').load("{% url 'resend_activation_email' %}", function (result) {
+                    $('#myModal').modal({show: true});
+                });
+            });
+            $('.alert-block').removeClass('position-absolute').addClass('position-relative')
+        });
+
+        function togglePassword() {
+            var x = document.getElementById("id_password");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+    </script>
+
+{% endblock nologin %}

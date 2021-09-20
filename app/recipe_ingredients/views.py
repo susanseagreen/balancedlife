@@ -33,13 +33,11 @@ class RecipeIngredientCreateView(View):
         form = RecipeIngredientCreateForm(request.POST)
 
         if form.is_valid():
-            instance = form.save(commit=False)
-            instance.code_recipe_id = self.kwargs['fk']
-            instance.save()
+            form.save()
+        else:
+            messages.success(self.request, f"Ingredient already exists on this Recipe")
 
-            return redirect(reverse_lazy('recipe_ingredients:create', kwargs={'fk': self.kwargs['fk']}))
-
-        return redirect(self.request.META['HTTP_REFERER'])
+        return redirect(reverse_lazy('recipe_ingredients:create', kwargs={'fk': self.kwargs['fk']}))
 
 
 class RecipeIngredientModalUpdateView(View):

@@ -20,83 +20,100 @@
 </head>
 <body>
 
-{% block nav %}
-    <nav class="navbar bg-dark navbar-dark">
+{% if user.is_authenticated %}
+    {% block nav %}
+        <nav class="navbar bg-dark navbar-dark">
 
-        <div class="container">
-            <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
-               href="{% url 'ingredients:create' %}">
-                Ingredients
-            </a>
-            <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
-               href="{% url 'recipes:create' %}">
-                Recipes
-            </a>
-            <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
-               href="{% url 'ingredient_categories:create' %}">
-                Categories
-            </a>
-            <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
-               href="{% url 'shopping_lists:create' %}">
-                Shopping List
-            </a>
-        </div>
-    </nav>
-{% endblock nav %}
-
-<div class="alert-block position-absolute w-100">
-    {% block messages %}
-        {% if messages %}
-            <div class="alert alert-warning text-center">
-                {% for message in messages %}{{ message }}<br/>{% endfor %}
+            <div class="container">
+                <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
+                   href="{% url 'ingredients:create' %}">
+                    Ingredients
+                </a>
+                <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
+                   href="{% url 'recipes:create' %}">
+                    Recipes
+                </a>
+                <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
+                   href="{% url 'ingredient_categories:create' %}">
+                    Categories
+                </a>
+                <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
+                   href="{% url 'shopping_lists:create' %}">
+                    Shopping List
+                </a>
             </div>
-        {% endif %}
-    {% endblock messages %}
-</div>
+        </nav>
+    {% endblock nav %}
 
-{% block container %}
-    <div class="container mt-5">
-
-        <div class="row">
-
-            <div class="col-lg-8 col-12">
-                {% block content %}
-                    <h1>Shopping List Creator</h1>
-                {% endblock content %}
-            </div>
-
-            <div class="col-lg-4 col-12">
-                <div>
-                    {% block list %}
-                        <div class="col-12">
-                            <h4>Recipes</h4>
-                        </div>
-                        {% if recipes %}
-                            <table class="table border">
-                                {% for recipe in recipes %}
-                                    {% ifchanged recipe.code_category.name %}
-                                        <tr>
-                                            <th>{{ recipe.code_category.name }}</th>
-                                        </tr>
-                                    {% endifchanged %}
-                                    <tr>
-                                        <td><a href="{% url 'recipes:update' recipe.id %}">{{ recipe.name }}</a></td>
-                                        <td><a href="{% url 'recipe_ingredients:create' recipe.id %}">Ingredients</a></td>
-                                    </tr>
-                                {% endfor %}
-                            </table>
-                        {% else %}
-                            <div class="col-12">
-                                No recipes created
-                            </div>
-                        {% endif %}
-                    {% endblock list %}
+    <div class="alert-block position-absolute w-100">
+        {% block messages %}
+            {% if messages %}
+                <div class="alert alert-warning text-center">
+                    {% for message in messages %}{{ message }}<br/>{% endfor %}
                 </div>
-            </div>
-
-        </div>
+            {% endif %}
+        {% endblock messages %}
     </div>
-{% endblock container %}
+
+    {% block container %}
+        <div class="container mt-5">
+
+            <div class="row">
+
+                <div class="col-lg-8 col-12">
+                    {% block content %}
+                        <h1>Shopping List Creator</h1>
+                    {% endblock content %}
+                </div>
+
+                <div class="col-lg-4 col-12">
+                    <div>
+                        {% block list %}
+                            <div class="col-12">
+                                <h4>Recipes</h4>
+                            </div>
+                            {% if recipes %}
+                                <table class="table border">
+                                    {% for recipe in recipes %}
+                                        {% ifchanged recipe.code_category.name %}
+                                            <tr>
+                                                <th>{{ recipe.code_category.name }}</th>
+                                            </tr>
+                                        {% endifchanged %}
+                                        <tr>
+                                            <td><a href="{% url 'recipes:update' recipe.id %}">{{ recipe.name }}</a>
+                                            </td>
+                                            <td>
+                                                <a href="{% url 'recipe_ingredients:create' recipe.id %}">Ingredients</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            {% else %}
+                                <div class="col-12">
+                                    No recipes created
+                                </div>
+                            {% endif %}
+                        {% endblock list %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    {% endblock container %}
+
+{% else %}
+    {% block nologin %}
+
+        <div class="row mt-5">
+            <div class="col text-center">
+                <h1>
+                    <a href="{% url 'login' %}">Login</a>
+                </h1>
+            </div>
+        </div>
+    {% endblock nologin %}
+{% endif %}
 
 <script type="application/javascript">
     $('.alert').click(function () {

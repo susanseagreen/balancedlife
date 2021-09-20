@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'django-insecure-a!ss-gl+y(v8ow&7q@yu8-&b&8oci!ntc*l*$m_e&ts1y3suu-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 
-ALLOWED_HOSTS = ['*.herokuapp.com']
+ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'app.recipes',
     'app.shopping_list_items',
     'app.shopping_lists',
+    'app.registration',
     'templates',
 ]
 
@@ -135,3 +136,14 @@ django_heroku.settings(locals())
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'registration.User'
+
+LOGIN_REDIRECT_URL = '/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'holiday.planner.help@gmail.com'
+EMAIL_HOST_PASSWORD = 'zcvjuochcgoglhlt'

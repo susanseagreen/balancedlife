@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+Someone wants to join the Recipes Shopping List<br>
+Username: {{ instance_user.username }}<br>
+Email: {{ instance_user.email }}<br>
+<br>
+<a href="{{ path }}{% url 'user_activate' instance_user.id instance_user.user_code %}">
+    Activate their account?
+</a>
+</body>
+</html>

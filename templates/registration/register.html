@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static crispy_forms_filters %}
+
+{% block nologin %}
+
+    <div class="row mt-5 ml-1 mr-1">
+        <div class="col-lg-4 col-md-6 col-sm-12 m-auto">
+            <div class="p-4 border-info rounded border">
+                <div class="text-center mb-5">
+                    <h4>Sign up</h4>
+                </div>
+                <form method="post">
+                    <fieldset class="form-group-container">
+                        {% csrf_token %}
+                        {{ form | crispy }}
+                        <div class="user-btn mt-5">
+                            <div style="text-align: center;">
+                                <button class="btn btn-info ripple" type="submit">Register</button>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="small text-center m-2">Already have an account? <a href="{% url 'login' %}">Login</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $('.alert-block').removeClass('position-absolute').addClass('position-relative')
+        function togglePassword() {
+            var x = document.getElementById("id_password");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+    </script>
+
+{% endblock nologin %}

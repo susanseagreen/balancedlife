@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static crispy_forms_tags %}
+
+{% block modal %}
+    <h4>Resend Activation Email</h4>
+    <hr>
+    <form method="post" action="{% url 'resend_activation_email' %}">
+        {% csrf_token %}
+
+        <fieldset>
+            <div id="div_id_email" class="form-group">
+                <label for="id_email">
+                    Email
+                </label>
+                <div class="">
+                    <input type="text" name="email" class="textinput textInput form-control" required="" id="id_email">
+                </div>
+            </div>
+            <div class="user-btn mt-5">
+                <div style="text-align: center;">
+                    <button class="btn btn-info ripple" type="submit">Resend Activation Email</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+
+{% endblock modal %}

@@ -7,7 +7,7 @@ from crispy_forms.layout import Layout, HTML, Submit, Row, Column, Fieldset
 class RecipeIngredientCreateForm(forms.ModelForm):
     class Meta:
         model = RecipeIngredient
-        fields = ['added', 'measurement_value', 'measurement_type', 'code_ingredient']
+        fields = ['code_recipe', 'added', 'measurement_value', 'measurement_type', 'code_ingredient']
         labels = {
             'added': '',
             'measurement_value': 'Amount',
@@ -19,6 +19,7 @@ class RecipeIngredientCreateForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Row(
+                HTML('<input type="hidden" name="code_recipe" id="id_code_recipe" value="{{ fk }}">'),
                 Column('added', css_class='form-group col-sm-1 col-1 fake-label'),
                 Column('measurement_value', css_class='form-group col-sm-2 col-3'),
                 Column('measurement_type', css_class='form-group col-sm-3 col-8'),
