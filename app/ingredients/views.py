@@ -12,7 +12,7 @@ class IngredientCreateView(View):
 
     def get(self, request, *args, **kwargs):
 
-        recipes = Recipe.objects.all().order_by('category', 'name')
+        recipes = Recipe.objects.select_related('code_category').order_by('code_category__name', 'name')
         ingredients = Ingredient.objects.all().order_by('name')
 
         form = IngredientForm()
@@ -31,6 +31,8 @@ class IngredientCreateView(View):
 
         if form.is_valid():
             form.save()
+        else:
+            messages.success(self.request, "The ingredient already exists")
 
         return redirect(reverse_lazy('ingredients:create'))
 
@@ -40,7 +42,7 @@ class IngredientUpdateView(View):
 
     def get(self, request, *args, **kwargs):
 
-        recipes = Recipe.objects.all().order_by('category', 'name')
+        recipes = Recipe.objects.select_related('code_category').order_by('code_category__name', 'name')
         ingredient = Ingredient.objects.get(id=kwargs['pk'])
 
         form = IngredientForm(instance=ingredient)
@@ -60,6 +62,8 @@ class IngredientUpdateView(View):
 
         if form.is_valid():
             form.save()
+        else:
+            messages.success(self.request, "The ingredient already exists")
 
         return redirect(reverse_lazy('ingredients:create'))
 

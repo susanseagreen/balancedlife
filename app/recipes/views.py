@@ -11,7 +11,7 @@ class RecipeCreateView(View):
 
     def get(self, request, *args, **kwargs):
 
-        recipes = Recipe.objects.all().order_by('category', 'name')
+        recipes = Recipe.objects.select_related('code_category').order_by('code_category__name', 'name')
         form = RecipeCreateForm()
 
         context = {
@@ -39,7 +39,7 @@ class RecipeUpdateView(View):
 
     def get(self, request, *args, **kwargs):
 
-        recipes = Recipe.objects.all().order_by('category', 'name')
+        recipes = Recipe.objects.select_related('code_category').order_by('code_category__name', 'name')
         recipe = Recipe.objects.get(id=self.kwargs['pk'])
         form = RecipeCreateForm(instance=recipe)
 

@@ -28,7 +28,7 @@ class ShoppingListCreateView(View):
             instance = form.save(commit=False)
             instance.save()
 
-            return redirect(reverse_lazy('shopping_lists:update', kwargs={'fk': instance.pk}))
+            return redirect(reverse_lazy('shopping_lists:update', kwargs={'pk': instance.pk}))
 
         return redirect(self.request.META['HTTP_REFERER'])
 

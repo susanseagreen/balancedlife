@@ -35,47 +35,85 @@
 
                 <br>
 
-                <table class="table">
+                <table class="table m-0 table-bordered">
                     {% for id, ingredient in ingredient_list.items %}
                         <tr>
-                            <td>
-                                {% if ingredient.i %}{{ ingredient.i | no_decimals }}{% endif %}
-                                {% if ingredient.g %}{{ ingredient.g | no_decimals }}g{% endif %}
-                                {% if ingredient.kg %}{{ ingredient.kg | no_decimals }}kg{% endif %}
-                                {% if ingredient.dp %}{{ ingredient.dp | no_decimals }} pinch / dash{% endif %}
-                                {% if ingredient.tsp %}{{ ingredient.tsp | no_decimals }} tsp{% endif %}
-                                {% if ingredient.tbsp %}{{ ingredient.tbsp | no_decimals }} Tbsp{% endif %}
-                                {% if ingredient.c %}{{ ingredient.c | no_decimals }} cups{% endif %}
-                                {% if ingredient.l %}{{ ingredient.l | no_decimals }} litres{% endif %}
+                            <td class="p-0" style="width: 100px">
+                                <a class="cursor-pointer" title="See More"
+                                   onclick="return showItems(this,'{{ ingredient.id }}')">
+                                    <table class="table m-0 table-borderless">
+                                        <tr>
+                                            <td style="width: 100px">
+                                                {% if ingredient.i %}{{ ingredient.i | no_decimals }}{% endif %}
+                                                {% if ingredient.g %}{{ ingredient.g | no_decimals }}g{% endif %}
+                                                {% if ingredient.kg %}{{ ingredient.kg | no_decimals }}kg{% endif %}
+                                                {% if ingredient.dp %}{{ ingredient.dp | no_decimals }} pinch /
+                                                    dash{% endif %}
+                                                {% if ingredient.tsp %}{{ ingredient.tsp | no_decimals }} tsp{% endif %}
+                                                {% if ingredient.tbsp %}{{ ingredient.tbsp | no_decimals }}
+                                                    Tbsp{% endif %}
+                                                {% if ingredient.c %}{{ ingredient.c | no_decimals }} cups{% endif %}
+                                                {% if ingredient.l %}{{ ingredient.l | no_decimals }} litres{% endif %}
+                                            </td>
+                                            <td>{{ ingredient.ingredient_name }}</td>
+                                        </tr>
+                                    </table>
+                                </a>
                             </td>
-                            <td>{{ ingredient.ingredient_name }}</td>
+                        <tr>
+                            <td colspan="2" class="p-0">
+                                <div style='width:100%;display:none;' id='d_{{ ingredient.id }}'>
+                                    <table class="table m-0 table-borderless small">
+                                        {% for added in ingredient.added %}
+                                            <tr>
+                                                <td style="width: 100px">
+                                                    <a class="modal_update_ingredient" data-toggle="modal"
+                                                       href="javascript:void(0);"
+                                                       id="{% url 'shopping_list_items:update_ingredient_modal' added.id %}">
+                                                        {% if added.measurement_value or added.measurement_type %}
+                                                            {% if added.measurement_value %}
+                                                                {{ added.measurement_value | no_decimals }}
+                                                            {% endif %}
+                                                            {% if added.measurement_type %}
+                                                                {{ added.measurement_type | measurement_type_display }}
+                                                            {% endif %}
+                                                        {% else %}
+                                                            -
+                                                        {% endif %}
+                                                    </a>
+                                                </td>
+                                                <td>{{ added.code_recipe_ingredient__code_recipe__name }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        {% for removed in ingredient.removed %}
+                                            <tr>
+                                                <td style="width: 100px">
+                                                    <a class="modal_update_ingredient" data-toggle="modal"
+                                                       href="javascript:void(0);" style="color: red"
+                                                       id="{% url 'shopping_list_items:update_ingredient_modal' removed.id %}">
+                                                        {% if removed.measurement_value or added.measurement_type %}
+                                                            {% if removed.measurement_value %}
+                                                                {{ removed.measurement_value | no_decimals }}
+                                                            {% endif %}
+                                                            {% if removed.measurement_type %}
+                                                                {{ removed.measurement_type | measurement_type_display }}
+                                                            {% endif %}
+                                                        {% else %}
+                                                            -
+                                                        {% endif %}
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    {% if removed.code_recipe_ingredient__code_recipe__name %}
+                                                        Recipe: {{ removed.code_recipe_ingredient__code_recipe__name }}
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+                            </td>
                         </tr>
-                        {% for added in ingredient.added %}
-                            <tr>
-                                <td>
-                                    <a class="modal_update_ingredient" data-toggle="modal"
-                                       href="javascript:void(0);"
-                                       id="{% url 'shopping_list_items:update_ingredient_modal' added.id %}">
-                                        {{ added.measurement_value | no_decimals }}
-                                        {{ added.measurement_type | measurement_type_display }}
-                                    </a>
-                                </td>
-                                <td>{{ added.code_ingredient__name }}</td>
-                            </tr>
-                        {% endfor %}
-                        {% for removed in ingredient.removed %}
-                            <tr>
-                                <td>
-                                    <a class="modal_update_ingredient" data-toggle="modal"
-                                       href="javascript:void(0);" style="color: red"
-                                       id="{% url 'shopping_list_items:update_ingredient_modal' removed.id %}">
-                                        {{ removed.measurement_value | no_decimals }}
-                                        {{ removed.measurement_type | measurement_type_display }}
-                                    </a>
-                                </td>
-                                <td>{{ removed.code_ingredient__name }}</td>
-                            </tr>
-                        {% endfor %}
                     {% endfor %}
                 </table>
 
@@ -104,5 +142,6 @@
             });
         });
     </script>
+    <script src="{% static 'javascript/showitems.js' %}"></script>
 
 {% endblock container %}

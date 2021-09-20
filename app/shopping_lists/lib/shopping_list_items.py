@@ -27,6 +27,7 @@ def build_shopping_list(self, ingredient_list):
             if ingredient_id not in ingredient_list:
 
                 ingredient_list[ingredient_id] = {
+                    'id': shopping_list_item['id'],
                     'ingredient_id': shopping_list_item['code_ingredient_id'],
                     'ingredient_name': shopping_list_item['code_ingredient__name'],
                     'recipe_ingredient_id': shopping_list_item['code_recipe_ingredient_id'],

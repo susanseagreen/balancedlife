@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import View
-from .forms import RecipeIngredientForm
+from .forms import RecipeIngredientCreateForm, RecipeIngredientUpdateForm
 from .models import RecipeIngredient
 from app.recipes.models import Recipe
 
@@ -11,14 +11,13 @@ class RecipeIngredientCreateView(View):
     template_name = 'recipe_ingredients/recipe_ingredient_create.html'
 
     def get(self, request, *args, **kwargs):
-
-        recipe_ingredients = RecipeIngredient.objects\
-            .select_related('code_ingredient')\
-            .filter(code_recipe_id=self.kwargs['fk'])\
+        recipe_ingredients = RecipeIngredient.objects \
+            .select_related('code_ingredient') \
+            .filter(code_recipe_id=self.kwargs['fk']) \
             .order_by('code_ingredient__name')
-        recipes = Recipe.objects.all().order_by('category', 'name')
+        recipes = Recipe.objects.select_related('code_category').order_by('code_category__name', 'name')
         recipe = recipes.filter(id=self.kwargs['fk']).first()
-        form = RecipeIngredientForm()
+        form = RecipeIngredientCreateForm()
 
         context = {
             'recipe_ingredients': recipe_ingredients,
@@ -31,8 +30,7 @@ class RecipeIngredientCreateView(View):
         return render(request, template_name=self.template_name, context=context)
 
     def post(self, request, *args, **kwargs):
-
-        form = RecipeIngredientForm(request.POST)
+        form = RecipeIngredientCreateForm(request.POST)
 
         if form.is_valid():
             instance = form.save(commit=False)
@@ -48,21 +46,22 @@ class RecipeIngredientModalUpdateView(View):
     template_name = 'recipe_ingredients/recipe_ingredient_update_modal.html'
 
     def get(self, request, *args, **kwargs):
-
-        recipe_ingredient = RecipeIngredient.objects.get(code_recipe_id=self.kwargs['fk'])
-        form = RecipeIngredientForm(instance=recipe_ingredient)
+        recipe_ingredient = RecipeIngredient.objects.select_related('code_ingredient').get(id=self.kwargs['pk'])
+        form = RecipeIngredientUpdateForm(instance=recipe_ingredient)
 
         context = {
+            'ingredient_name': recipe_ingredient.code_ingredient.name,
+            'fk': self.kwargs['fk'],
+            'pk': self.kwargs['pk'],
             'form': form,
         }
 
         return render(request, template_name=self.template_name, context=context)
 
     def post(self, request, *args, **kwargs):
-
         recipe_ingredient = RecipeIngredient.objects.get(id=self.kwargs['pk'])
 
-        form = RecipeIngredientForm(request.POST, instance=recipe_ingredient)
+        form = RecipeIngredientUpdateForm(request.POST, instance=recipe_ingredient)
 
         if form.is_valid():
             form.save()

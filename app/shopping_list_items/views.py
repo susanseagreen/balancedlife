@@ -29,13 +29,17 @@ class ShoppingListRecipeItemCreateView(View):
             instance = form.cleaned_data['recipes']
             recipe_ingredients = RecipeIngredient.objects.filter(code_recipe_id=instance.pk)
             for recipe_ingredient in recipe_ingredients:
-                ShoppingListItem.objects.create(
-                    code_shopping_list_id=self.kwargs['fk'],
-                    code_ingredient_id=recipe_ingredient.code_ingredient_id,
-                    code_recipe_ingredient_id=recipe_ingredient.id,
-                    measurement_value=recipe_ingredient.measurement_value,
-                    measurement_type=recipe_ingredient.measurement_type,
-                )
+                if recipe_ingredient.added:
+                    ShoppingListItem.objects.create(
+                        code_shopping_list_id=self.kwargs['fk'],
+                        code_ingredient_id=recipe_ingredient.code_ingredient_id,
+                        code_recipe_ingredient_id=recipe_ingredient.id,
+                        measurement_value=recipe_ingredient.measurement_value,
+                        measurement_type=recipe_ingredient.measurement_type,
+                    )
+                else:
+                    message = f"{recipe_ingredient.code_ingredient.name} wasn't added to shopping list"
+                    messages.success(self.request, message)
 
         return redirect(self.request.META['HTTP_REFERER'])
 

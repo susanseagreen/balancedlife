@@ -43,14 +43,16 @@ class ShoppingListIngredientItemForm(forms.Form):
 
 class ShoppingListUpdateItemForm(forms.ModelForm):
 
-    measurement_value = forms.DecimalField(label='Amount', max_digits=5, decimal_places=2, required=False)
-    measurement_type = forms.ChoiceField(label='Measurement', choices=measurement_type_choices, required=False)
+    # measurement_value = forms.DecimalField(label='Amount', max_digits=5, decimal_places=2, required=False)
+    # measurement_type = forms.ChoiceField(label='Measurement', choices=measurement_type_choices, required=False)
 
     class Meta:
         model = ShoppingListItem
         fields = ['added', 'measurement_value', 'measurement_type']
         labels = {
             'added': '',
+            'measurement_value': 'Amount',
+            'measurement_type': 'Measurement',
         }
 
     def __init__(self, *args, **kwargs):
