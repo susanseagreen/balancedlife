@@ -12,5 +12,15 @@ class RecipeIngredient(models.Model):
     measurement_type = models.CharField(choices=measurement_type_choices, default='', max_length=5, blank=True,
                                         null=True)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=[
+                'code_recipe',
+                'code_ingredient',
+            ],
+                name="ingredient_recipe"
+            )
+        ]
+
     def __str__(self):
         return self.code_ingredient.name
