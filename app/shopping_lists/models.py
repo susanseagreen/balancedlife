@@ -6,3 +6,7 @@ class ShoppingList(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.username = self.name.title()
+        return super(ShoppingList, self).save(*args, **kwargs)

@@ -13,7 +13,7 @@ def build_shopping_list(self, ingredient_list):
             'code_recipe_ingredient__code_recipe__name',
             'measurement_type',
             'measurement_value',
-        ).order_by('code_ingredient__food_group', 'code_ingredient__name')
+        ).order_by('code_ingredient__name')
 
     if shopping_list_items:
 

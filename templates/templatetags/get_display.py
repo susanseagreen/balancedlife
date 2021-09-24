@@ -1,5 +1,5 @@
 from django import template
-from common.choices import measurement_type_choices, food_group_choices
+from common.choices import measurement_type_choices
 
 
 register = template.Library()
@@ -21,10 +21,3 @@ def measurement_type_display(q):
             return choice[1]
     return ''
 
-
-@register.filter
-def food_group_display(q):
-    for choice in food_group_choices:
-        if choice[0] == q:
-            return choice[1]
-    return ''

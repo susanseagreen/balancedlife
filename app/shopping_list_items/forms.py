@@ -26,7 +26,7 @@ class ShoppingListIngredientItemForm(forms.Form):
 
     measurement_value = forms.DecimalField(label='Amount', max_digits=5, decimal_places=2, required=False)
     measurement_type = forms.ChoiceField(label='Measurement', choices=measurement_type_choices, required=False)
-    ingredient = forms.ModelChoiceField(queryset=Ingredient.objects.order_by('food_group', 'name'))
+    ingredient = forms.ModelChoiceField(queryset=Ingredient.objects.order_by('name'))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

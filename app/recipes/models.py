@@ -11,3 +11,7 @@ class Recipe(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.username = self.name.title()
+        return super(Recipe, self).save(*args, **kwargs)

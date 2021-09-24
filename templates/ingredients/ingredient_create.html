@@ -25,8 +25,6 @@
         <table class="table border mt-5">
             <tr>
                 <th>Ingredient</th>
-                <th>Food Group</th>
-                <th>Brand</th>
             </tr>
             {% for ingredient in ingredients %}
                 <tr>
@@ -34,10 +32,6 @@
                         <a class="modal_update" data-toggle="modal" href="javascript:void(0);"
                            id="{% url 'ingredients:update_modal' ingredient.id %}">{{ ingredient.name }}</a>
                     </td>
-                    <td>
-                        {{ ingredient.food_group | food_group_display }}
-                    </td>
-                    <td>{% if ingredient.brand %}{{ ingredient.brand }}{% endif %}</td>
                 </tr>
             {% endfor %}
         </table>

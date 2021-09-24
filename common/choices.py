@@ -13,14 +13,3 @@ measurement_type_choices = [
     # ('qt', 'quarts'),
     # ('gal', 'gallons')
 ]
-
-food_group_choices = [
-    ("", ""),
-    ("d", "Diary"),
-    ("f", "Fruit"),
-    ("g", "Grain"),
-    ("o", "Other"),
-    ("m", "Meat"),
-    ("s", "Spice"),
-    ("v", "Veg")
-]
