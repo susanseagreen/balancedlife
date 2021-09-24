@@ -12,7 +12,8 @@ class IngredientCreateView(View):
 
     def get(self, request, *args, **kwargs):
 
-        recipes = Recipe.objects.select_related('code_category').order_by('code_category__name', 'name')
+        # recipes = Recipe.objects.select_related('code_category').order_by('code_category__name', 'name')
+        recipes = Recipe.objects.order_by('code_category__name', 'name')
         ingredients = Ingredient.objects.all().order_by('name')
 
         form = IngredientForm()

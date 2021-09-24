@@ -35,11 +35,6 @@
                            id="{% url 'ingredients:update_modal' ingredient.id %}">{{ ingredient.name }}</a>
                     </td>
                     <td>
-                        {% if ingredient.food_group == 'd' %}{% include 'include/foods/milk.png' %}{% endif %}
-                        {% if ingredient.food_group == 'f' %}{% include 'include/foods/apple.png' %}{% endif %}
-                        {% if ingredient.food_group == 'm' %}{% include 'include/foods/meat.png' %}{% endif %}
-                        {% if ingredient.food_group == 's' %}{% include 'include/foods/pepper.png' %}{% endif %}
-                        {% if ingredient.food_group == 'v' %}{% include 'include/foods/carrot.png' %}{% endif %}
                         {{ ingredient.food_group | food_group_display }}
                     </td>
                     <td>{% if ingredient.brand %}{{ ingredient.brand }}{% endif %}</td>
