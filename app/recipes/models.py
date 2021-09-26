@@ -3,6 +3,7 @@ from django.db import models
 
 class Recipe(models.Model):
     name = models.CharField(max_length=50)
+    image = models.CharField(max_length=255)  # image = models.ImageField(max_length=255)
     servings = models.IntegerField(default=1, blank=True, null=True)
     pax_serving = models.IntegerField("Pax per serving", default=2, blank=True, null=True)
     code_category = models.ForeignKey(

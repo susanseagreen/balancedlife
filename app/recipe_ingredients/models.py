@@ -11,6 +11,7 @@ class RecipeIngredient(models.Model):
     measurement_value = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     measurement_type = models.CharField(choices=measurement_type_choices, default='', max_length=5, blank=True,
                                         null=True)
+    description = models.CharField(default='', max_length=20, blank=True, null=True)
 
     class Meta:
         constraints = [

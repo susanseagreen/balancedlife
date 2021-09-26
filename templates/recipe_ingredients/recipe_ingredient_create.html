@@ -12,60 +12,77 @@
         </div>
     </div>
 
-    <div class="d-flex justify-content-between">
+    <div>
         <h3>
             <a href="{% url 'recipes:update' recipe.id %}">{{ recipe.name }}</a>
         </h3>
 
-        <div>
+        <i>
             {{ recipe.code_category.name }}
+        </i>
+        <br>
+        <br>
+        <div>
+            {{ recipe.description|linebreaks }}
         </div>
     </div>
-    {{ recipe.description|safe }}
 
-    <form method="post" action="">
-        {% csrf_token %}
-        <fieldset>
-            {% crispy form %}
-            <button class="btn btn-dark">Add</button>
-        </fieldset>
-    </form>
 
-    <br>
-
-    <table class="table border">
-        {% for recipe_ingredient in recipe_ingredients %}
-            <tr>
-                <td class="text-nowrap" style="width: 50px">
-                    <a class="modal_update" data-toggle="modal"
-                       {% if not recipe_ingredient.added %}style="color:gray" title="Exclude off shopping"{% endif %}
-                       href="javascript:void(0);"
-                       id="{% url 'recipe_ingredients:update_modal' recipe_ingredient.code_recipe_id recipe_ingredient.id %}">
-                        {% if recipe_ingredient.measurement_value or recipe_ingredient.measurement_type %}
-                            {% if recipe_ingredient.measurement_value %}
-                                {{ recipe_ingredient.measurement_value | no_decimals }}
-                            {% endif %}
-                            {% if recipe_ingredient.measurement_type %}
-                                {{ recipe_ingredient.measurement_type }}
-                            {% endif %}
-                        {% else %}
-                            --
-                        {% endif %}
-                    </a>
-                </td>
-                <td>
-                    {{ recipe_ingredient.code_ingredient.name }}
-                </td>
-                <td>
-                    {{ recipe_ingredient.measurement_type | measurement_type_display }}
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
+    <div class="container mt-5 mb-3">
+        <div class="row">
+            {% if recipe.image %}
+                <div class="col-sm-4 col-12 meal_img" style="background-image: url({{ recipe.image }})"></div>
+            {% endif %}
+            <div class="col">
+                <form method="post" action="">
+                    {% csrf_token %}
+                    <fieldset>
+                        {% crispy form %}
+                        <button class="btn btn-dark">Add</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <br>
 
-    {{ recipe.steps|safe }}
+    {% if recipe_ingredients %}
+        <table class="table border">
+            {% for recipe_ingredient in recipe_ingredients %}
+                <tr>
+                    <td class="text-nowrap" style="width: 50px">
+                        <a class="modal_update" data-toggle="modal"
+                           {% if not recipe_ingredient.added %}style="color:gray"
+                           title="Exclude off shopping"{% endif %}
+                           href="javascript:void(0);"
+                           id="{% url 'recipe_ingredients:update_modal' recipe_ingredient.code_recipe_id recipe_ingredient.id %}">
+                            {% if recipe_ingredient.measurement_value or recipe_ingredient.measurement_type %}
+                                {% if recipe_ingredient.measurement_value %}
+                                    {{ recipe_ingredient.measurement_value | no_decimals }}
+                                {% endif %}
+                                {% if recipe_ingredient.measurement_type %}
+                                    {{ recipe_ingredient.measurement_type }}
+                                {% endif %}
+                            {% else %}
+                                --
+                            {% endif %}
+                        </a>
+                    </td>
+                    <td>
+                        {{ recipe_ingredient.code_ingredient.name }}
+                    </td>
+                    <td>
+                        {{ recipe_ingredient.measurement_type | measurement_type_display }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br>
+    {% endif %}
+
+    {{ recipe.steps|linebreaks }}
+    <br>
 
     <script>
         $(document).ready(function () {

@@ -9,11 +9,11 @@
 }
 
 .fake-label {
-    margin-top: 32px;
+    margin-top: 30px;
 }
 
 .inline-btn {
-    margin-bottom: 32px;
+    margin-bottom: 30px;
 }
 
 label {
@@ -41,12 +41,6 @@ label {
     background-color: #17a2b8 !important;
     border-color: #17a2b8 !important;
     color: #fff !important;
-}
-
-svg {
-    fill: white !important;
-    width: 25px !important;
-    height: 25px !important;
 }
 
 a {
@@ -147,4 +141,13 @@ a {
     color: white;
     background: cadetblue;
     padding: 2px 4px;
+}
+
+.select2 .select2-container .select2-container--default {
+    width: 100% !important;
+}
+
+.meal_img {
+  background-repeat: no-repeat;
+    background-size: contain;
 }

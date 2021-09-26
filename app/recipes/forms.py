@@ -13,12 +13,16 @@ class RecipeForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'rows': 4}),
             'steps': forms.Textarea(attrs={'rows': 4}),
         }
+        labels = {
+            'image': 'Image URL'
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Row(
+                Column('image', css_class='form-group col-12 mb-0 pb-0'),
                 Column('name', css_class='form-group col-12 mb-0 pb-0'),
                 css_class='form-row'
             ),

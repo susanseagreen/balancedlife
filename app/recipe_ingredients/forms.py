@@ -13,11 +13,15 @@ class RecipeIngredientCreateForm(forms.ModelForm):
 
     class Meta:
         model = RecipeIngredient
-        fields = ['code_recipe', 'added', 'measurement_value', 'measurement_type', 'code_ingredient']
+        fields = ['code_recipe', 'added', 'measurement_value', 'measurement_type', 'code_ingredient', 'description']
         labels = {
             'added': '',
+            'description': 'Preparation',
             'measurement_value': 'Amount',
-            'measurement_type': 'Measurement',
+            'measurement_type': '',
+        }
+        widgets = {
+            'description': forms.TextInput(attrs={'placeholder': 'Chopped / Diced / Sliced / Cooked / Raw'})
         }
 
     def __init__(self, *args, **kwargs):
@@ -26,10 +30,17 @@ class RecipeIngredientCreateForm(forms.ModelForm):
         self.helper.layout = Layout(
             Row(
                 HTML('<input type="hidden" name="code_recipe" id="id_code_recipe" value="{{ fk }}">'),
-                Column('added', css_class='form-group col-sm-1 col-1 fake-label'),
-                Column('measurement_value', css_class='form-group col-sm-2 col-3'),
-                Column('measurement_type', css_class='form-group col-sm-3 col-8'),
-                Column('code_ingredient', css_class='form-group col-sm-6 col-12'),
+                Column('added', css_class='form-group col-sm-1 col-1 fake-label mb-0'),
+                Column('measurement_value', css_class='form-group col-4 mb-0'),
+                Column('measurement_type', css_class='form-group col-7 fake-label mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('code_ingredient', css_class='form-group col-12 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('description', css_class='form-group col-12 mb-0'),
                 css_class='form-row'
             ),
         )
