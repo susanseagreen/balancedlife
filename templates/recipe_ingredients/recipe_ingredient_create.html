@@ -21,7 +21,7 @@
             {{ recipe.code_category.name }}
         </div>
     </div>
-    {{ recipe.description }}
+    {{ recipe.description|safe }}
 
     <form method="post" action="">
         {% csrf_token %}
@@ -38,7 +38,7 @@
             <tr>
                 <td class="text-nowrap" style="width: 50px">
                     <a class="modal_update" data-toggle="modal"
-                        {% if not recipe_ingredient.added %}style="color:gray" title="Exclude off shopping"{% endif %}
+                       {% if not recipe_ingredient.added %}style="color:gray" title="Exclude off shopping"{% endif %}
                        href="javascript:void(0);"
                        id="{% url 'recipe_ingredients:update_modal' recipe_ingredient.code_recipe_id recipe_ingredient.id %}">
                         {% if recipe_ingredient.measurement_value or recipe_ingredient.measurement_type %}
@@ -65,7 +65,7 @@
 
     <br>
 
-    {{ recipe.steps }}
+    {{ recipe.steps|safe }}
 
     <script>
         $(document).ready(function () {
