@@ -2,9 +2,15 @@ from django import forms
 from app.recipe_ingredients.models import RecipeIngredient
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, HTML, Submit, Row, Column, Fieldset
+from django_select2.forms import Select2Widget
+from app.ingredients.models import Ingredient
 
 
 class RecipeIngredientCreateForm(forms.ModelForm):
+
+    code_ingredient = forms.ModelChoiceField(
+        label='Ingredient', queryset=Ingredient.objects.order_by('name'), widget=Select2Widget)
+
     class Meta:
         model = RecipeIngredient
         fields = ['code_recipe', 'added', 'measurement_value', 'measurement_type', 'code_ingredient']
@@ -30,6 +36,7 @@ class RecipeIngredientCreateForm(forms.ModelForm):
 
 
 class RecipeIngredientUpdateForm(forms.ModelForm):
+
     class Meta:
         model = RecipeIngredient
         fields = ['added', 'measurement_value', 'measurement_type']

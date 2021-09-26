@@ -26,8 +26,10 @@ class ShoppingListRecipeItemCreateView(View):
         form = ShoppingListRecipeItemForm(request.POST)
 
         if form.is_valid():
-            instance = form.cleaned_data['recipes']
-            recipe_ingredients = RecipeIngredient.objects.filter(code_recipe_id=instance.pk)
+            recipe = form.cleaned_data['recipe']
+            day_of_week = ','.join(form.cleaned_data['day_of_week'])
+            meal = ','.join(form.cleaned_data['meal'])
+            recipe_ingredients = RecipeIngredient.objects.filter(code_recipe_id=recipe.pk)
             for recipe_ingredient in recipe_ingredients:
                 if recipe_ingredient.added:
                     ShoppingListItem.objects.create(
@@ -36,6 +38,8 @@ class ShoppingListRecipeItemCreateView(View):
                         code_recipe_ingredient_id=recipe_ingredient.id,
                         measurement_value=recipe_ingredient.measurement_value,
                         measurement_type=recipe_ingredient.measurement_type,
+                        day_of_week=day_of_week,
+                        meal=meal,
                     )
                 else:
                     message = f"{recipe_ingredient.code_ingredient.name} wasn't added to shopping list"

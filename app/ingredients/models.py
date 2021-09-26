@@ -8,5 +8,5 @@ class Ingredient(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        self.name = self.name.title()
+        self.username = self.name.title()
         return super(Ingredient, self).save(*args, **kwargs)

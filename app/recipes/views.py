@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import View
-from .forms import RecipeCreateForm
+from .forms import RecipeForm
 from .models import Recipe
 
 
@@ -11,8 +11,8 @@ class RecipeCreateView(View):
 
     def get(self, request, *args, **kwargs):
 
-        recipes = Recipe.objects.select_related('code_category').order_by('code_category__name', 'name')
-        form = RecipeCreateForm()
+        recipes = Recipe.objects.select_related('code_category').order_by('name')
+        form = RecipeForm()
 
         context = {
             'recipes': recipes,
@@ -23,7 +23,7 @@ class RecipeCreateView(View):
 
     def post(self, request, *args, **kwargs):
 
-        form = RecipeCreateForm(request.POST)
+        form = RecipeForm(request.POST)
 
         if form.is_valid():
             instance = form.save(commit=False)
@@ -39,9 +39,9 @@ class RecipeUpdateView(View):
 
     def get(self, request, *args, **kwargs):
 
-        recipes = Recipe.objects.select_related('code_category').order_by('code_category__name', 'name')
+        recipes = Recipe.objects.select_related('code_category').order_by('name')
         recipe = Recipe.objects.get(id=self.kwargs['pk'])
-        form = RecipeCreateForm(instance=recipe)
+        form = RecipeForm(instance=recipe)
 
         context = {
             'recipes': recipes,
@@ -55,7 +55,7 @@ class RecipeUpdateView(View):
 
         recipe = Recipe.objects.get(id=self.kwargs['pk'])
 
-        form = RecipeCreateForm(request.POST, instance=recipe)
+        form = RecipeForm(request.POST, instance=recipe)
 
         if form.is_valid():
             form.save()

@@ -5,7 +5,10 @@ class ShoppingListItem(models.Model):
     code_shopping_list = models.ForeignKey(
         'shopping_lists.ShoppingList', verbose_name='Shopping List', on_delete=models.PROTECT,
         related_name='shopping_list_item')
+
     added = models.BooleanField(default=True, blank=True)
+    done = models.BooleanField(default=False, blank=True)
+
     code_ingredient = models.ForeignKey(
         'ingredients.Ingredient', verbose_name='Ingredient', on_delete=models.PROTECT,
         related_name='shopping_list_item')
@@ -14,6 +17,8 @@ class ShoppingListItem(models.Model):
         on_delete=models.PROTECT, related_name='shopping_list_item')
     measurement_value = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     measurement_type = models.CharField(default='', max_length=5, blank=True, null=True)
+    day_of_week = models.CharField(default='', max_length=15, blank=True, null=True)
+    meal = models.CharField(default='', max_length=15, blank=True, null=True)
 
     def __str__(self):
         return self.code_ingredient.name

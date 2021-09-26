@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'django-insecure-a!ss-gl+y(v8ow&7q@yu8-&b&8oci!ntc*l*$m_e&ts1y3suu-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -37,7 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+
     'crispy_forms',
+    "django_select2",
+
     'app.ingredients',
     'app.ingredient_categories',
     'app.recipe_ingredients',

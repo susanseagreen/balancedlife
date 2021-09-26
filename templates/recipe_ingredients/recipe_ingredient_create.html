@@ -38,6 +38,7 @@
             <tr>
                 <td class="text-nowrap" style="width: 50px">
                     <a class="modal_update" data-toggle="modal"
+                        {% if not recipe_ingredient.added %}style="color:gray" title="Exclude off shopping"{% endif %}
                        href="javascript:void(0);"
                        id="{% url 'recipe_ingredients:update_modal' recipe_ingredient.code_recipe_id recipe_ingredient.id %}">
                         {% if recipe_ingredient.measurement_value or recipe_ingredient.measurement_type %}
@@ -45,7 +46,7 @@
                                 {{ recipe_ingredient.measurement_value | no_decimals }}
                             {% endif %}
                             {% if recipe_ingredient.measurement_type %}
-                                {{ recipe_ingredient.measurement_type | measurement_type_display }}
+                                {{ recipe_ingredient.measurement_type }}
                             {% endif %}
                         {% else %}
                             --
@@ -54,6 +55,9 @@
                 </td>
                 <td>
                     {{ recipe_ingredient.code_ingredient.name }}
+                </td>
+                <td>
+                    {{ recipe_ingredient.measurement_type | measurement_type_display }}
                 </td>
             </tr>
         {% endfor %}

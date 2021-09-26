@@ -11,8 +11,12 @@ def build_shopping_list(self, ingredient_list):
             'code_ingredient__name',
             'code_recipe_ingredient_id',
             'code_recipe_ingredient__code_recipe__name',
+            'code_recipe_ingredient__code_recipe__servings',
+            'code_recipe_ingredient__code_recipe__pax_serving',
             'measurement_type',
             'measurement_value',
+            'day_of_week',
+            'meal'
         ).order_by('code_ingredient__name')
 
     if shopping_list_items:
@@ -21,11 +25,16 @@ def build_shopping_list(self, ingredient_list):
             ingredient_id = shopping_list_item['code_ingredient_id']
             measurement_type = 'i'  # items
 
+            if ',' in shopping_list_item['day_of_week']:
+                shopping_list_item['day_of_week'] = shopping_list_item['day_of_week'].split(',')
+
+            if ',' in shopping_list_item['meal']:
+                shopping_list_item['meal'] = shopping_list_item['meal'].split(',')
+
             if shopping_list_item['measurement_type']:
                 measurement_type = shopping_list_item['measurement_type']
 
             if ingredient_id not in ingredient_list:
-
                 ingredient_list[ingredient_id] = {
                     'id': shopping_list_item['id'],
                     'ingredient_id': shopping_list_item['code_ingredient_id'],
@@ -36,7 +45,12 @@ def build_shopping_list(self, ingredient_list):
                     'removed': [],
                     measurement_type: 0
                 }
-                ingredient_list[ingredient_id]['recipe_name'].append(shopping_list_item['code_recipe_ingredient__code_recipe__name'])
+                ingredient_list[ingredient_id]['recipe_name'].append(
+                    shopping_list_item['code_recipe_ingredient__code_recipe__name'])
+
+            shopping_list_item['servings'] = \
+                f"{shopping_list_item['code_recipe_ingredient__code_recipe__pax_serving']} pax for " + \
+                f"{shopping_list_item['code_recipe_ingredient__code_recipe__servings']} servings"
 
             if shopping_list_item['added']:
                 if measurement_type in ingredient_list[ingredient_id]:
@@ -58,52 +72,33 @@ def build_shopping_list(self, ingredient_list):
 
 def build_measurements(ingredient_list):
     for ingredient_id, ingredient in ingredient_list.items():
-        if ingredient.get('i'):
-            pass
 
-        # weight
-        if ingredient.get('kg'):
-            if not ingredient.get('g'):
-                ingredient['g'] = ingredient['kg'] * 1000
-            else:
-                ingredient['g'] = ingredient['g'] + (ingredient['kg'] * 1000)
-            ingredient.pop('kg')
+        convert_check(ingredient, 'kg', 'g', 1000)
+        convert_check(ingredient, 'l', 'c', 4)
+        convert_check(ingredient, 'c', 'tbsp', 16)
+        convert_check(ingredient, 'tbsp', 'tsp', 3)
+        convert_check(ingredient, 'tsp', 'ml', 5)
 
-        if ingredient.get('g') and ingredient.get('g') >= 1000:
-            ingredient['kg'] = ingredient['g'] / 1000
-            ingredient.pop('g')
-
-        if ingredient.get('l'):
-            if not ingredient.get('c'):
-                ingredient['c'] = ingredient['l'] * 4
-            else:
-                ingredient['c'] = ingredient['c'] + (ingredient['l'] * 4)
-            ingredient.pop('l')
-
-        if ingredient.get('c'):
-            if not ingredient.get('tbsp'):
-                ingredient['tbsp'] = ingredient['c'] * 16
-            else:
-                ingredient['tbsp'] = ingredient['tbsp'] + (ingredient['c'] * 16)
-            ingredient.pop('c')
-
-        if ingredient.get('tbsp'):
-            if not ingredient.get('tsp'):
-                ingredient['tsp'] = ingredient['tbsp'] * 3
-            else:
-                ingredient['tsp'] = ingredient['tsp'] + (ingredient['tbsp'] * 3)
-            ingredient.pop('tbsp')
-
-        if ingredient.get('tsp') and ingredient.get('tsp') >= 3:
-            ingredient['tbsp'] = ingredient['tsp'] / 3
-            ingredient.pop('tsp')
-
-        if ingredient.get('tbsp') and ingredient.get('tbsp') >= 16:
-            ingredient['c'] = ingredient['tbsp'] / 16
-            ingredient.pop('tbsp')
-
-        if ingredient.get('c') and ingredient.get('c') >= 4:
-            ingredient['l'] = ingredient['c'] / 4
-            ingredient.pop('c')
+    for ingredient_id, ingredient in ingredient_list.items():
+        convert_up(ingredient, 'tsp', 'ml', 5)
+        convert_up(ingredient, 'tbsp', 'tsp', 3)
+        convert_up(ingredient, 'c', 'tbsp', 16)
+        convert_up(ingredient, 'l', 'c', 4)
+        convert_up(ingredient, 'kg', 'g', 1000)
 
     return ingredient_list
+
+
+def convert_check(ingredient, bigger, smaller, diff):
+    if ingredient.get(bigger):
+        if not ingredient.get(smaller):
+            ingredient[smaller] = round(ingredient[bigger] * diff, 2)
+        else:
+            ingredient[smaller] = round(ingredient[smaller] + (ingredient[bigger] * diff), 2)
+        ingredient.pop(bigger)
+
+
+def convert_up(ingredient, bigger, smaller, diff):
+    if ingredient.get(smaller) and ingredient.get(smaller) >= diff:
+        ingredient[bigger] = round(ingredient[smaller] / diff, 2)
+        ingredient.pop(smaller)

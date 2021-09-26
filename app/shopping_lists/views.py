@@ -54,6 +54,28 @@ class ShoppingListUpdateView(View):
 
         return render(request, template_name=self.template_name, context=context)
 
+
+class ShoppingListView(View):
+    template_name = 'shopping_lists/shopping_list.html'
+
+    def get(self, request, *args, **kwargs):
+
+        ingredient_list = {}
+
+        shopping_list_items.build_shopping_list(self, ingredient_list)
+
+        shopping_list = ShoppingList.objects.get(id=self.kwargs['pk'])
+
+        form = ShoppingListUpdateForm(instance=shopping_list)
+
+        context = {
+            'pk': self.kwargs['pk'],
+            'ingredient_list': ingredient_list,
+            'form': form,
+        }
+
+        return render(request, template_name=self.template_name, context=context)
+
     def post(self, request, *args, **kwargs):
 
         shopping_list = ShoppingList.objects.get(id=self.kwargs['pk'])

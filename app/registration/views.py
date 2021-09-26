@@ -23,8 +23,8 @@ def register(request):
             email_me(request, instance_user, subject, message)
 
             return render(request, 'registration/registered.html', {"email": instance_user.email})
-    else:
-        user_form = UserForm()
+        messages.success(request, user_form.errors.as_text())
+    user_form = UserForm()
     return render(request, 'registration/register.html', {'form': user_form})
 
 

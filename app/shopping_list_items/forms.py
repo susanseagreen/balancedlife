@@ -5,18 +5,24 @@ from app.ingredients.models import Ingredient
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, HTML, Submit, Row, Column, Fieldset
 from .models import ShoppingListItem
+from django_select2.forms import Select2Widget
+from common.choices import days_of_week, meals
 
 
 class ShoppingListRecipeItemForm(forms.Form):
 
-    recipes = forms.ModelChoiceField(queryset=Recipe.objects.order_by('name'))
+    recipe = forms.ModelChoiceField(queryset=Recipe.objects.order_by('name'), widget=Select2Widget)
+    day_of_week = forms.MultipleChoiceField(choices=days_of_week, widget=forms.CheckboxSelectMultiple, required=False)
+    meal = forms.MultipleChoiceField(choices=meals, widget=forms.CheckboxSelectMultiple, required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Row(
-                Column('recipes', css_class='form-group col-12 mb-0 pb-0'),
+                Column('recipe', css_class='form-group col-12 mb-0 pb-0'),
+                Column('day_of_week', css_class='form-group col-12 mb-0 pb-0'),
+                Column('meal', css_class='form-group col-12 mb-0 pb-0'),
                 css_class='form-row'
             ),
         )

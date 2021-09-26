@@ -1,28 +1,34 @@
 .alert {
     z-index: 9;
 }
+
 .mw-65 {
     min-width: 65px;
 }
+
 .fake-label {
     margin-top: 32px;
 }
+
 .inline-btn {
     margin-bottom: 32px;
 }
+
 label {
     font-weight: bold;
 }
+
 .cursor-pointer:hover {
     cursor: help;
 }
+
 .navbar-dark a {
-    color: rgba(255,255,255,0.5);
+    color: rgba(255, 255, 255, 0.5);
 }
 
 .navbar-dark a:hover {
-    color: rgb(255,255,255);
-    background: rgba(255,255,255,0.1);
+    color: rgb(255, 255, 255);
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .page-link {
@@ -68,6 +74,7 @@ a {
 .open_close {
     margin-top: 36px;
 }
+
 .loading {
     width: 35px;
     height: 35px;
@@ -79,18 +86,63 @@ a {
     -webkit-animation-name: loading-animation; /* Safari 4.0 - 8.0 */
     -webkit-animation-duration: 1.2s; /* Safari 4.0 - 8.0 */
 }
+
 .loading svg {
     margin-bottom: 8px;
     width: 35px;
     height: 35px;
 }
+
 /* Safari 4.0 - 8.0 */
 @-webkit-keyframes loading-animation {
-    from {transform:rotate(0deg);}
-    to {transform:rotate(360deg);}
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
+
 /* Standard syntax */
 @keyframes loading-animation {
-    from {transform:rotate(0deg);}
-    to {transform:rotate(360deg);}
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.select2-container--default .select2-selection--single {
+    height: 38px !important;
+    padding: 3px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    top: 6px !important;
+}
+
+#div_id_day_of_week div, #div_id_meal div {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+[for^="id_day_of_week_"], [for^="id_meal_"] {
+    width: 90px;
+    font-size: 12px;
+    padding-top: 4px;
+}
+
+.day_of_week {
+    font-size: 8px;
+    color: white;
+    background: yellowgreen;
+    padding: 2px 4px;
+}
+
+.meal {
+    font-size: 8px;
+    color: white;
+    background: cadetblue;
+    padding: 2px 4px;
 }
