@@ -48,10 +48,11 @@ class RecipeIngredientUpdateForm(forms.ModelForm):
 
     class Meta:
         model = RecipeIngredient
-        fields = ['measurement_value', 'measurement_type']
+        fields = ['measurement_value', 'measurement_type', 'description']
         labels = {
             'measurement_value': 'Amount',
             'measurement_type': 'Measurement',
+            'description': 'Preparation',
         }
 
     def __init__(self, *args, **kwargs):
@@ -61,7 +62,8 @@ class RecipeIngredientUpdateForm(forms.ModelForm):
             Row(
                 Column('measurement_value', css_class='form-group col-sm-2 col-4'),
                 Column('measurement_type', css_class='form-group col-sm-4 col-8'),
-                HTML('<div class="col form-group col-sm-6 col-12">'),
+                Column('description', css_class='form-group col-sm-6 col-12'),
+                HTML('<div class="col form-group col-12">'),
                 HTML('<div id="div_id_ingredient_name" class="form-group">'),
                 HTML('<label for="id_ingredient_name">Ingredient</label><div class="">'),
                 HTML('<input type="text" value="{{ ingredient_name }}" readonly="" class="form-control">'),
