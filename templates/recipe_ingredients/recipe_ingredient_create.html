@@ -52,16 +52,28 @@
                 <tr>
                     <td class="text-nowrap" style="width: 50px">
                         <a class="modal_update" data-toggle="modal"
-                           {% if not recipe_ingredient.added %}style="color:gray"
-                           title="Exclude off shopping"{% endif %}
                            href="javascript:void(0);"
                            id="{% url 'recipe_ingredients:update_modal' recipe_ingredient.code_recipe_id recipe_ingredient.id %}">
                             {% if recipe_ingredient.measurement_value or recipe_ingredient.measurement_type %}
                                 {% if recipe_ingredient.measurement_value %}
-                                    {{ recipe_ingredient.measurement_value | no_decimals }}
+                                    {% if recipe_ingredient.measurement_value == '0.25' %}
+                                        1/4
+                                    {% elif recipe_ingredient.measurement_value == '0.5' %}
+                                        1/2
+                                    {% elif recipe_ingredient.measurement_value == '0.75' %}
+                                        3/4
+                                    {% elif recipe_ingredient.measurement_value >= '0.3' and recipe_ingredient.measurement_value <= '0.34' %}
+                                        1/3
+                                    {% elif recipe_ingredient.measurement_value >= '0.6' and recipe_ingredient.measurement_value <= '0.67' %}
+                                        2/3
+                                    {% else %}
+                                        {{ recipe_ingredient.measurement_value | no_decimals }}
+                                    {% endif %}
                                 {% endif %}
                                 {% if recipe_ingredient.measurement_type %}
-                                    {{ recipe_ingredient.measurement_type }}
+                                    <span title="{{ recipe_ingredient.measurement_type | measurement_type_display }}">
+                                        {{ recipe_ingredient.measurement_type }}
+                                    </span>
                                 {% endif %}
                             {% else %}
                                 --
@@ -72,7 +84,7 @@
                         {{ recipe_ingredient.code_ingredient.name }}
                     </td>
                     <td>
-                        {{ recipe_ingredient.measurement_type | measurement_type_display }}
+                        {{ recipe_ingredient.description }}
                     </td>
                 </tr>
             {% endfor %}

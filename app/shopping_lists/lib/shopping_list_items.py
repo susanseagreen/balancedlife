@@ -86,6 +86,16 @@ def build_measurements(ingredient_list):
         convert_up(ingredient, 'l', 'c', 4)
         convert_up(ingredient, 'kg', 'g', 1000)
 
+    for ingredient_id, ingredient in ingredient_list.items():
+        get_fraction(ingredient, 'i')
+        get_fraction(ingredient, 'tsp')
+        get_fraction(ingredient, 'tbsp')
+        get_fraction(ingredient, 'c')
+        get_fraction(ingredient, 'ml')
+        get_fraction(ingredient, 'l')
+        get_fraction(ingredient, 'g')
+        get_fraction(ingredient, 'kg')
+
     return ingredient_list
 
 
@@ -100,5 +110,29 @@ def convert_check(ingredient, bigger, smaller, diff):
 
 def convert_up(ingredient, bigger, smaller, diff):
     if ingredient.get(smaller) and ingredient.get(smaller) >= diff:
-        ingredient[bigger] = round(ingredient[smaller] / diff, 2)
+        ingredient[bigger] = round(ingredient[smaller]/diff, 2)
         ingredient.pop(smaller)
+
+
+def get_fraction(ingredient, value):
+
+    if '.' in str(ingredient[value]):
+        num, dec = str(ingredient[value]).split('.')
+        fraction = ''
+        if dec == '.25':
+            fraction = '1/4'
+        if dec == '.5':
+            fraction = '1/2'
+        if dec == '.75':
+            fraction = '3/4'
+        if '.3' <= dec <= '0.34':
+            fraction = '1/3'
+        if '.6' <= dec <= '0.67':
+            fraction = '2/3'
+
+        if num == '0':
+            ingredient['fraction'] = fraction
+        else:
+            ingredient['fraction'] = f"{num} {fraction}"
+
+        ingredient.pop(value)

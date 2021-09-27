@@ -49,17 +49,22 @@
                                     <table class="table m-0 table-borderless">
                                         <tr>
                                             <td style="width: 100px">
+                                                {% if ingredient.fraction %}{{ ingredient.fraction }}{% endif %}
                                                 {% if ingredient.i %}{{ ingredient.i | no_decimals }}{% endif %}
                                                 {% if ingredient.g %}{{ ingredient.g | no_decimals }}g{% endif %}
                                                 {% if ingredient.kg %}{{ ingredient.kg | no_decimals }}kg{% endif %}
                                                 {% if ingredient.dp %}{{ ingredient.dp | no_decimals }} pinch /
                                                     dash{% endif %}
-                                                {% if ingredient.tsp %}{{ ingredient.tsp | no_decimals }} tsp{% endif %}
+                                                {% if ingredient.tsp %}{{ ingredient.tsp | no_decimals }} tsp
+                                                {% endif %}
                                                 {% if ingredient.tbsp %}{{ ingredient.tbsp | no_decimals }}
                                                     Tbsp{% endif %}
-                                                {% if ingredient.c %}{{ ingredient.c | no_decimals }} cups{% endif %}
-                                                {% if ingredient.ml %}{{ ingredient.ml | no_decimals }} ml{% endif %}
+                                                {% if ingredient.c %}{{ ingredient.c | no_decimals }} cups
+                                                {% endif %}
+                                                {% if ingredient.ml %}{{ ingredient.ml | no_decimals }} ml
+                                                {% endif %}
                                                 {% if ingredient.l %}{{ ingredient.l | no_decimals }} l{% endif %}
+
                                             </td>
                                             <td>{{ ingredient.ingredient_name }}</td>
                                         </tr>

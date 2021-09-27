@@ -5,6 +5,7 @@ from django.views.generic import View
 from .forms import RecipeIngredientCreateForm, RecipeIngredientUpdateForm
 from .models import RecipeIngredient
 from app.recipes.models import Recipe
+from .lib import recipe_ingredient
 
 
 class RecipeIngredientCreateView(View):
@@ -18,6 +19,8 @@ class RecipeIngredientCreateView(View):
         recipes = Recipe.objects.select_related('code_category').order_by('name')
         recipe = recipes.filter(id=self.kwargs['fk']).first()
         form = RecipeIngredientCreateForm()
+
+        recipe_ingredient.get_fraction(recipe_ingredients)
 
         context = {
             'recipe_ingredients': recipe_ingredients,
