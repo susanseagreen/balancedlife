@@ -71,10 +71,10 @@
                         </a>
                     </td>
                     <td>
-                        {{ recipe_ingredient.code_ingredient.name }}
+                        {% if recipe_ingredient.description %}{{ recipe_ingredient.description }}{% endif %}
                     </td>
                     <td>
-                        {{ recipe_ingredient.description }}
+                        {{ recipe_ingredient.code_ingredient.name }}
                     </td>
                 </tr>
             {% endfor %}
