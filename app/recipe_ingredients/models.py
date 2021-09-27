@@ -3,7 +3,6 @@ from common.choices import measurement_type_choices
 
 
 class RecipeIngredient(models.Model):
-    added = models.BooleanField(default=True, blank=True)
     code_recipe = models.ForeignKey('recipes.Recipe', verbose_name='Recipe', on_delete=models.PROTECT,
                                     related_name='recipe_item')
     code_ingredient = models.ForeignKey('ingredients.Ingredient', verbose_name='Ingredient', on_delete=models.PROTECT,

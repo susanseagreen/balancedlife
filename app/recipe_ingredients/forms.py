@@ -13,9 +13,8 @@ class RecipeIngredientCreateForm(forms.ModelForm):
 
     class Meta:
         model = RecipeIngredient
-        fields = ['code_recipe', 'added', 'measurement_value', 'measurement_type', 'code_ingredient', 'description']
+        fields = ['code_recipe', 'measurement_value', 'measurement_type', 'code_ingredient', 'description']
         labels = {
-            'added': '',
             'description': 'Preparation',
             'measurement_value': 'Amount',
             'measurement_type': '',
@@ -30,9 +29,8 @@ class RecipeIngredientCreateForm(forms.ModelForm):
         self.helper.layout = Layout(
             Row(
                 HTML('<input type="hidden" name="code_recipe" id="id_code_recipe" value="{{ fk }}">'),
-                Column('added', css_class='form-group col-sm-1 col-1 fake-label mb-0'),
                 Column('measurement_value', css_class='form-group col-4 mb-0'),
-                Column('measurement_type', css_class='form-group col-7 fake-label mb-0'),
+                Column('measurement_type', css_class='form-group col-8 fake-label mb-0'),
                 css_class='form-row'
             ),
             Row(
@@ -50,9 +48,8 @@ class RecipeIngredientUpdateForm(forms.ModelForm):
 
     class Meta:
         model = RecipeIngredient
-        fields = ['added', 'measurement_value', 'measurement_type']
+        fields = ['measurement_value', 'measurement_type']
         labels = {
-            'added': '',
             'measurement_value': 'Amount',
             'measurement_type': 'Measurement',
         }
@@ -62,9 +59,8 @@ class RecipeIngredientUpdateForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Row(
-                Column('added', css_class='form-group col-sm-1 col-1 fake-label'),
-                Column('measurement_value', css_class='form-group col-sm-2 col-3'),
-                Column('measurement_type', css_class='form-group col-sm-3 col-8'),
+                Column('measurement_value', css_class='form-group col-sm-2 col-4'),
+                Column('measurement_type', css_class='form-group col-sm-4 col-8'),
                 HTML('<div class="col form-group col-sm-6 col-12">'),
                 HTML('<div id="div_id_ingredient_name" class="form-group">'),
                 HTML('<label for="id_ingredient_name">Ingredient</label><div class="">'),

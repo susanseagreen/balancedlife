@@ -31,7 +31,7 @@ class ShoppingListRecipeItemCreateView(View):
             meal = ','.join(form.cleaned_data['meal'])
             recipe_ingredients = RecipeIngredient.objects.filter(code_recipe_id=recipe.pk)
             for recipe_ingredient in recipe_ingredients:
-                if recipe_ingredient.added:
+                if recipe_ingredient.code_ingredient.name.lower() != 'water':
                     ShoppingListItem.objects.create(
                         code_shopping_list_id=self.kwargs['fk'],
                         code_ingredient_id=recipe_ingredient.code_ingredient_id,
@@ -42,7 +42,7 @@ class ShoppingListRecipeItemCreateView(View):
                         meal=meal,
                     )
                 else:
-                    message = f"{recipe_ingredient.code_ingredient.name} wasn't added to shopping list"
+                    message = "Water wasn't added to shopping list"
                     messages.success(self.request, message)
 
         return redirect(self.request.META['HTTP_REFERER'])

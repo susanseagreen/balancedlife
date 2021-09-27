@@ -1,9 +1,11 @@
 .alert {
     z-index: 9;
 }
+
 .top-0 {
     top: 0 !important;
 }
+
 .mw-65 {
     min-width: 65px;
 }
@@ -148,6 +150,8 @@ a {
 }
 
 .meal_img {
-  background-repeat: no-repeat;
-    background-size: contain;
+    min-height: 200px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
 }
