@@ -116,7 +116,7 @@ def convert_up(ingredient, bigger, smaller, diff):
 
 def get_fraction(ingredient, value):
 
-    if '.' in str(ingredient[value]):
+    if value in ingredient and '.' in str(ingredient[value]):
         num, dec = str(ingredient[value]).split('.')
         fraction = ''
         if dec == '25':
