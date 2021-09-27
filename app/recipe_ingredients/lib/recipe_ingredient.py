@@ -7,15 +7,15 @@ def get_fraction(recipe_ingredients):
         if '.' in str(recipe_ingredient.measurement_value):
             num, dec = str(recipe_ingredient.measurement_value).split('.')
             fraction = ''
-            if dec == '.25':
+            if dec == '25':
                 fraction = '1/4'
-            if dec == '.5':
+            if dec == '50':
                 fraction = '1/2'
-            if dec == '.75':
+            if dec == '75':
                 fraction = '3/4'
-            if '.3' <= dec <= '0.34':
+            if '3' in dec:
                 fraction = '1/3'
-            if '.6' <= dec <= '0.67':
+            if '6' in dec:
                 fraction = '2/3'
 
             if num == '0':
