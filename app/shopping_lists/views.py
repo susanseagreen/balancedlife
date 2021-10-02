@@ -5,6 +5,7 @@ from django.views.generic import View
 from .forms import ShoppingListCreateForm, ShoppingListUpdateForm
 from .models import ShoppingList
 from .lib import shopping_list_items
+from datetime import timedelta
 
 
 class ShoppingListCreateView(View):
@@ -26,6 +27,8 @@ class ShoppingListCreateView(View):
 
         if form.is_valid():
             instance = form.save(commit=False)
+            if instance.date_from:
+                instance.date_to = instance.date_from + timedelta(days=7)
             instance.save()
 
             return redirect(reverse_lazy('shopping_lists:update', kwargs={'pk': instance.pk}))
@@ -48,28 +51,7 @@ class ShoppingListUpdateView(View):
 
         context = {
             'pk': self.kwargs['pk'],
-            'ingredient_list': ingredient_list,
-            'form': form,
-        }
-
-        return render(request, template_name=self.template_name, context=context)
-
-
-class ShoppingListView(View):
-    template_name = 'shopping_lists/shopping_list.html'
-
-    def get(self, request, *args, **kwargs):
-
-        ingredient_list = {}
-
-        shopping_list_items.build_shopping_list(self, ingredient_list)
-
-        shopping_list = ShoppingList.objects.get(id=self.kwargs['pk'])
-
-        form = ShoppingListUpdateForm(instance=shopping_list)
-
-        context = {
-            'pk': self.kwargs['pk'],
+            'shopping_list': shopping_list,
             'ingredient_list': ingredient_list,
             'form': form,
         }
@@ -83,6 +65,50 @@ class ShoppingListView(View):
         form = ShoppingListUpdateForm(request.POST, instance=shopping_list)
 
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            if instance.date_from:
+                instance.date_to = instance.date_from + timedelta(days=7)
+            instance.save()
 
-        return redirect(reverse_lazy('shopping_lists:create', kwargs={'fk': self.kwargs['pk']}))
+        return redirect(reverse_lazy('shopping_lists:update', kwargs={'pk': self.kwargs['pk']}))
+
+
+class ShoppingListView(View):
+    template_name = 'shopping_lists/shopping_list.html'
+
+    def get(self, request, *args, **kwargs):
+
+        ingredient_list = {}
+
+        shopping_list_items.build_shopping_list(self, ingredient_list)
+
+        shopping_list = ShoppingList.objects.get(id=self.kwargs['pk'])
+
+        context = {
+            'pk': self.kwargs['pk'],
+            'shopping_list': shopping_list,
+            'ingredient_list': ingredient_list,
+        }
+
+        return render(request, template_name=self.template_name, context=context)
+
+
+class ShoppingListFoodDiaryView(View):
+    template_name = 'shopping_lists/shopping_list_food_diary.html'
+
+    def get(self, request, *args, **kwargs):
+
+        food_diary = {}
+
+        shopping_list = ShoppingList.objects.get(id=self.kwargs['pk'])
+
+        shopping_list_items.build_diary(food_diary)
+        shopping_list_items.build_food_diary(self, food_diary)
+
+        context = {
+            'pk': self.kwargs['pk'],
+            'shopping_list': shopping_list,
+            'food_diary': food_diary,
+        }
+
+        return render(request, template_name=self.template_name, context=context)

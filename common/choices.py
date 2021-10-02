@@ -23,12 +23,14 @@ days_of_week = [
     ('5', 'Friday'),
     ('6', 'Saturday'),
     ('7', 'Sunday'),
+    ('0', 'Other'),
 ]
 
 meals = [
     ('1', 'Breakfast'),
-    ('2', 'Lunch'),
-    ('3', 'Dinner'),
-    ('4', 'Brunch'),
-    ('5', 'Snack'),
+    ('2', 'Brunch'),
+    ('3', 'Lunch'),
+    ('4', 'Snack'),
+    ('5', 'Dinner'),
+    ('0', 'Other'),
 ]

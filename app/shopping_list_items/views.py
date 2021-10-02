@@ -65,6 +65,8 @@ class ShoppingListIngredientItemCreateView(View):
     def post(self, request, *args, **kwargs):
 
         form = ShoppingListIngredientItemForm(request.POST)
+        day_of_week = str(','.join(form.cleaned_data['day_of_week']))
+        meal = str(','.join(form.cleaned_data['meal']))
 
         if form.is_valid():
             ShoppingListItem.objects.create(
@@ -73,6 +75,8 @@ class ShoppingListIngredientItemCreateView(View):
                 code_recipe_ingredient_id=None,
                 measurement_value=form.cleaned_data['measurement_value'],
                 measurement_type=form.cleaned_data['measurement_type'],
+                day_of_week=day_of_week,
+                meal=meal,
             )
 
         return redirect(self.request.META['HTTP_REFERER'])
@@ -99,8 +103,13 @@ class ShoppingListItemModalUpdateView(View):
         shopping_list_item = ShoppingListItem.objects.get(id=self.kwargs['pk'])
 
         form = ShoppingListUpdateItemForm(request.POST, instance=shopping_list_item)
+        day_of_week = str(','.join(form.cleaned_data['day_of_week']))
+        meal = str(','.join(form.cleaned_data['meal']))
 
         if form.is_valid():
+            instance = form.save(commit=False)
+            instance.day_of_week = day_of_week
+            instance.meal = meal
             form.save()
 
         return redirect(self.request.META['HTTP_REFERER'])

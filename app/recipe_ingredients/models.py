@@ -10,7 +10,15 @@ class RecipeIngredient(models.Model):
     measurement_value = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     measurement_type = models.CharField(choices=measurement_type_choices, default='', max_length=5, blank=True,
                                         null=True)
-    description = models.CharField(default='', max_length=40, blank=True, null=True)
+    preparation = models.CharField(default='', max_length=40, blank=True, null=True)
+
+    def __str__(self):
+        return self.code_recipe
+
+    def save(self, *args, **kwargs):
+        if self.preparation:
+            self.preparation = self.preparation.title()
+        return super(RecipeIngredient, self).save(*args, **kwargs)
 
     class Meta:
         constraints = [

@@ -78,7 +78,7 @@
 
                 <div class="col-lg-4 col-12">
                     <div>
-                        {% block list %}
+                        {% block recipes %}
                             <div class="col-12">
                                 <h4>Recipes</h4>
                             </div>
@@ -87,24 +87,34 @@
                                     {% for recipe in recipes %}
                                         {% ifchanged recipe.code_category.name %}
                                             <tr>
-                                                <th>{{ recipe.code_category.name }}</th>
+                                                <th colspan="2">{{ recipe.code_category.name }}</th>
                                             </tr>
                                         {% endifchanged %}
                                         <tr>
-                                            <td><a href="{% url 'recipes:update' recipe.id %}">{{ recipe.name }}</a>
+                                            <td>
+                                                <div>
+                                                    <a href="{% url 'recipes:update' recipe.id %}">{{ recipe.name }}</a>
+                                                </div>
                                             </td>
                                             <td>
-                                                <a href="{% url 'recipe_ingredients:create' recipe.id %}">Ingredients</a>
+                                                <div>
+                                                    <a href="{% url 'recipe_ingredients:create' recipe.id %}">Ingredients</a>
+                                                </div>
                                             </td>
                                         </tr>
                                     {% endfor %}
                                 </table>
                             {% else %}
-                                <div class="col-12">
-                                    No recipes created
-                                </div>
+                                <table class="table border">
+                                    <tr>
+                                        <td>
+                                            No recipes created
+                                        </td>
+                                    </tr>
+                                </table>
                             {% endif %}
-                        {% endblock list %}
+                        {% endblock recipes %}
+
                     </div>
                 </div>
 

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static crispy_forms_tags get_display %}
 
-{% block container %}
+{% block content %}
 
     <div id="myModal" class="modal fade">
         <div class="modal-dialog">
@@ -12,164 +12,171 @@
         </div>
     </div>
 
-    <div class="container mt-5 mb-5">
-
-        <div class="row">
-            <div class="col">
-                <div>
-                    <a class="btn btn-info mb-5" href="{% url 'shopping_lists:list' pk %}">
-                        View Shopping List
-                    </a>
-                </div>
-
-                <form method="post" action="{% url 'shopping_lists:update' pk %}">
-                    {% csrf_token %}
-                    <fieldset>
-                        {% crispy form %}
-                    </fieldset>
-                </form>
-
-                <div class="d-flex justify-content-center">
-                    <a class="modal_create_recipe btn btn-dark m-1" data-toggle="modal" href="javascript:void(0);">
-                        Add Recipe Ingredients
-                    </a>
-                    <a class="modal_create_ingredient btn btn-dark m-1" data-toggle="modal" href="javascript:void(0);">
-                        Add Other Ingredient
-                    </a>
-                </div>
-
-                <br>
-
-                <table class="table m-0 table-bordered">
-                    {% for id, ingredient in ingredient_list.items %}
-                        <tr>
-                            <td class="p-0" style="width: 100px">
-                                <a class="cursor-pointer" title="See More"
-                                   onclick="return showItems(this,'{{ ingredient.id }}')">
-                                    <table class="table m-0 table-borderless">
-                                        <tr>
-                                            <td style="width: 100px">
-                                                {% if ingredient.fraction %}{{ ingredient.fraction }}{% endif %}
-                                                {% if ingredient.i %}{{ ingredient.i | no_decimals }}{% endif %}
-                                                {% if ingredient.g %}{{ ingredient.g | no_decimals }}g{% endif %}
-                                                {% if ingredient.kg %}{{ ingredient.kg | no_decimals }}kg{% endif %}
-                                                {% if ingredient.dp %}{{ ingredient.dp | no_decimals }} pinch /
-                                                    dash{% endif %}
-                                                {% if ingredient.tsp %}{{ ingredient.tsp | no_decimals }} tsp
-                                                {% endif %}
-                                                {% if ingredient.tbsp %}{{ ingredient.tbsp | no_decimals }}
-                                                    Tbsp{% endif %}
-                                                {% if ingredient.c %}{{ ingredient.c | no_decimals }} cups
-                                                {% endif %}
-                                                {% if ingredient.ml %}{{ ingredient.ml | no_decimals }} ml
-                                                {% endif %}
-                                                {% if ingredient.l %}{{ ingredient.l | no_decimals }} l{% endif %}
-
-                                            </td>
-                                            <td>{{ ingredient.ingredient_name }}</td>
-                                        </tr>
-                                    </table>
-                                </a>
-                            </td>
-                        <tr>
-                            <td colspan="2" class="p-0">
-                                <div style='width:100%;display:none;' id='d_{{ ingredient.id }}'>
-                                    <table class="table m-0 table-borderless small">
-                                        {% for added in ingredient.added %}
-                                            <tr class="border-bottom">
-                                                <td class="p-2" style="width: 100px">
-                                                    <a class="modal_update_ingredient p-2 cursor-pointer"
-                                                       data-toggle="modal"
-                                                       href="javascript:void(0);"
-                                                       id="{% url 'shopping_list_items:update_ingredient_modal' added.id %}">
-                                                        {% if added.measurement_value or added.measurement_type %}
-                                                            <span {% if added.measurement_value %}
-                                                                title="{{ added.measurement_type | measurement_type_display }}"
-                                                            {% endif %}>
-                                                                {% if added.measurement_value %}
-                                                                    {{ added.measurement_value | no_decimals }}
-                                                                {% endif %}
-                                                                {% if added.measurement_type %}
-                                                                    {{ added.measurement_type }}
-                                                                {% endif %}
-                                                            </span>
-                                                        {% else %}
-                                                            -
-                                                        {% endif %}
-                                                    </a>
-                                                </td>
-                                                <td class="p-2 small cursor-pointer"
-                                                    {% if added.servings %}title="{{ added.servings }}"{% endif %}>
-                                                    {% if added.code_recipe_ingredient__code_recipe__name %}
-                                                        {{ added.code_recipe_ingredient__code_recipe__name }}
-                                                    {% else %}
-                                                        {{ added.code_ingredient__name }}
-                                                    {% endif %}
-                                                </td>
-                                                <td class="p-2 small">
-                                                    {% for day_of_week in added.day_of_week %}
-                                                        <span class="day_of_week">{{ day_of_week | day_of_week_display }}</span>
-                                                    {% endfor %}
-                                                </td>
-                                                <td class="p-2 small text-right">
-                                                    {% for meal in added.meal %}
-                                                        <span class="meal">{{ meal | meal_display }}</span>
-                                                    {% endfor %}
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                        {% for removed in ingredient.removed %}
-                                            <tr class="border-bottom">
-                                                <td class="p-2" style="width: 100px">
-                                                    <a class="modal_update_ingredient p-2 cursor-pointer"
-                                                       data-toggle="modal"
-                                                       href="javascript:void(0);" style="color: red"
-                                                       id="{% url 'shopping_list_items:update_ingredient_modal' removed.id %}">
-                                                        {% if removed.measurement_value or removed.measurement_type %}
-                                                            {% if removed.measurement_value %}
-                                                                {{ removed.measurement_value | no_decimals }}
-                                                            {% endif %}
-                                                            {% if removed.measurement_type %}
-                                                                <span title="{{ removed.measurement_type | measurement_type_display }}">
-                                                                    {{ removed.measurement_type }}
-                                                                </span>
-                                                            {% endif %}
-                                                        {% else %}
-                                                            -
-                                                        {% endif %}
-                                                    </a>
-                                                </td>
-                                                <td class="p-2 small cursor-pointer"
-                                                    {% if removed.servings %}title="{{ removed.servings }}"{% endif %}>
-                                                    {% if removed.code_recipe_ingredient__code_recipe__name %}
-                                                        {{ removed.code_recipe_ingredient__code_recipe__name }}
-                                                    {% else %}
-                                                        {{ removed.code_ingredient__name }}
-                                                    {% endif %}
-                                                </td>
-                                                <td class="p-2 small">
-                                                    {% for day_of_week in removed.day_of_week %}
-                                                        <span class="day_of_week">{{ day_of_week | day_of_week_display }}</span>
-                                                    {% endfor %}
-                                                </td>
-                                                <td class="p-2 small text-right">
-                                                    {% for meal in removed.meal %}
-                                                        <span class="meal">{{ meal | meal_display }}</span>
-                                                    {% endfor %}
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                    </table>
-                                </div>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </table>
-
-            </div>
-        </div>
-
+    <div class="d-flex justify-content-center mb-5">
+        <a class="btn btn-info m-1" href="{% url 'shopping_lists:list' pk %}">
+            View Shopping List
+        </a>
+        <a class="btn btn-info m-1" href="{% url 'shopping_lists:food_diary' pk %}">
+            View Food Diary
+        </a>
     </div>
+
+    <form method="post" action="{% url 'shopping_lists:update' pk %}">
+        {% csrf_token %}
+        <fieldset>
+            {% crispy form %}
+        </fieldset>
+    </form>
+
+    <div class="d-flex justify-content-center">
+        <a class="modal_create_recipe btn btn-dark m-1" data-toggle="modal" href="javascript:void(0);">
+            Add Recipe Ingredients
+        </a>
+        <a class="modal_create_ingredient btn btn-dark m-1" data-toggle="modal" href="javascript:void(0);">
+            Add Other Ingredient
+        </a>
+    </div>
+
+    <br>
+
+    <div class="text-center">
+        {{ shopping_list.date_from | date:"D d M Y" }} - {{ shopping_list.date_to | date:"D d M Y" }}
+    </div>
+    <br>
+    <table class="table m-0 table-bordered">
+        {% for id, ingredient in ingredient_list.items %}
+            <tr>
+                <td class="p-0" style="width: 100px">
+                    <a class="cursor-pointer" title="See More"
+                       onclick="return showItems(this,'{{ ingredient.id }}')">
+                        <table class="table m-0 table-borderless">
+                            <tr>
+                                <td style="width: 100px">
+                                    {% if ingredient.measurement_type.fraction %}
+                                        {{ ingredient.measurement_type.fraction }}
+                                    {% endif %}
+                                    {% if ingredient.i %}{{ ingredient.i | no_decimals }}{% endif %}
+                                    {% if ingredient.g %}{{ ingredient.g | no_decimals }}{% endif %}
+                                    {% if ingredient.kg %}{{ ingredient.kg | no_decimals }}{% endif %}
+                                    {% if ingredient.dp %}{{ ingredient.dp | no_decimals }}{% endif %}
+                                    {% if ingredient.tsp %}{{ ingredient.tsp | no_decimals }}{% endif %}
+                                    {% if ingredient.tbsp %}{{ ingredient.tbsp | no_decimals }}{% endif %}
+                                    {% if ingredient.c %}{{ ingredient.c | no_decimals }}
+                                    {% endif %}
+                                    {% if ingredient.ml %}{{ ingredient.ml | no_decimals }}
+                                    {% endif %}
+                                    {% if ingredient.l %}{{ ingredient.l | no_decimals }}{% endif %}
+                                    {% if ingredient.measurement_type %}
+                                        {{ ingredient.measurement_type.measurement_type }}
+                                    {% endif %}
+
+                                </td>
+                                <td>{{ ingredient.ingredient_name }}</td>
+                            </tr>
+                        </table>
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="p-0">
+                    <div style='width:100%;display:none;' id='d_{{ ingredient.id }}'>
+                        <table class="table m-0 table-borderless small">
+                            {% for added in ingredient.added %}
+                                <tr class="border-bottom">
+                                    <td class="p-2" style="width: 100px">
+                                        <a class="modal_update_ingredient p-2 cursor-pointer"
+                                           data-toggle="modal"
+                                           href="javascript:void(0);"
+                                           id="{% url 'shopping_list_items:update_ingredient_modal' added.id %}">
+                                            {% if added.measurement_value or added.measurement_type %}
+                                                <span {% if added.measurement_value %}
+                                                    title="{{ added.measurement_type | measurement_type_display }}"
+                                                {% endif %}>
+                                                    {% if added.measurement_value %}
+                                                        {{ added.measurement_value | no_decimals }}
+                                                    {% else %}
+                                                        {{ added.fraction }}
+                                                    {% endif %}
+                                                    {% if added.measurement_type %}
+                                                        {{ added.measurement_type }}
+                                                    {% endif %}
+                                                </span>
+                                            {% else %}
+                                                -
+                                            {% endif %}
+                                        </a>
+                                    </td>
+                                    <td class="p-2 small cursor-pointer"
+                                        {% if added.servings %}title="{{ added.servings }}"{% endif %}>
+                                        {% if added.code_recipe_ingredient__code_recipe__name %}
+                                            {{ added.code_recipe_ingredient__code_recipe__name }}
+                                        {% else %}
+                                            {{ added.code_ingredient__name }}
+                                        {% endif %}
+                                    </td>
+                                    <td class="p-2 small">
+                                        {% for day_of_week in added.day_of_week %}
+                                            <span class="day_of_week">{{ day_of_week | day_of_week_display }}</span>
+                                        {% endfor %}
+                                    </td>
+                                    <td class="p-2 small text-right">
+                                        {% for meal in added.meal %}
+                                            <span class="meal">{{ meal | meal_display }}</span>
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            {% for removed in ingredient.removed %}
+                                <tr class="border-bottom">
+                                    <td class="p-2" style="width: 100px">
+                                        <a class="modal_update_ingredient p-2 cursor-pointer"
+                                           data-toggle="modal"
+                                           href="javascript:void(0);" style="color: red"
+                                           id="{% url 'shopping_list_items:update_ingredient_modal' removed.id %}">
+                                            {% if removed.measurement_value or removed.measurement_type %}
+                                                {% if removed.measurement_value %}
+                                                    {{ removed.measurement_value | no_decimals }}
+                                                {% else %}
+                                                    {{ removed.fraction }}
+                                                {% endif %}
+                                                {% if removed.measurement_type %}
+                                                    <span title="{{ removed.measurement_type | measurement_type_display }}">
+                                                        {{ removed.measurement_type }}
+                                                    </span>
+                                                {% endif %}
+                                            {% else %}
+                                                -
+                                            {% endif %}
+                                        </a>
+                                    </td>
+                                    <td class="p-2 small cursor-pointer"
+                                        {% if removed.servings %}title="{{ removed.servings }}"{% endif %}>
+                                        {% if removed.code_recipe_ingredient__code_recipe__name %}
+                                            {{ removed.code_recipe_ingredient__code_recipe__name }}
+                                        {% else %}
+                                            {{ removed.code_ingredient__name }}
+                                        {% endif %}
+                                    </td>
+                                    <td class="p-2 small">
+                                        {% for day_of_week in removed.day_of_week %}
+                                            <span class="day_of_week">{{ day_of_week | day_of_week_display }}</span>
+                                        {% endfor %}
+                                    </td>
+                                    <td class="p-2 small text-right">
+                                        {% for meal in removed.meal %}
+                                            <span class="meal">{{ meal | meal_display }}</span>
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <br>
 
     <script>
         $(document).ready(function () {
@@ -193,4 +200,4 @@
     </script>
     <script src="{% static 'javascript/showitems.js' %}"></script>
 
-{% endblock container %}
+{% endblock content %}

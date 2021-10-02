@@ -7,7 +7,6 @@ class ShoppingListItem(models.Model):
         related_name='shopping_list_item')
 
     added = models.BooleanField(default=True, blank=True)
-    done = models.BooleanField(default=False, blank=True)
 
     code_ingredient = models.ForeignKey(
         'ingredients.Ingredient', verbose_name='Ingredient', on_delete=models.PROTECT,

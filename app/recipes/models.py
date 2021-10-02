@@ -13,7 +13,7 @@ class Recipe(models.Model):
     steps = models.TextField('Cooking Instructions', max_length=1000, null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.pax_serving} pax / {self.servings} serving)"
 
     def save(self, *args, **kwargs):
         self.name = self.name.title()

@@ -10,9 +10,7 @@
         </fieldset>
     </form>
 
-{% endblock content %}
-
-{% block list %}
+    <br>
 
     <div class="col-12">
         <h4>Shopping Lists</h4>
@@ -22,13 +20,23 @@
             {% for shopping_list in shopping_lists %}
                 <tr>
                     <td>
-                        <a href="{% url 'shopping_lists:update' shopping_list.id %}">{{ shopping_list.name }}</a>
+                        <a href="{% url 'shopping_lists:update' shopping_list.id %}">
+                            <div>
+                                {{ shopping_list.name }}
+                            </div>
+                        </a>
                     </td>
                 </tr>
             {% endfor %}
         </table>
     {% else %}
-        <div class="col-12">No shopping lists created</div>
+        <table class="table border">
+            <tr>
+                <td>
+                    No shopping lists created
+                </td>
+            </tr>
+        </table>
     {% endif %}
 
-{% endblock list %}
+{% endblock content %}

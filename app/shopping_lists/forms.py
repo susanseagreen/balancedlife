@@ -9,17 +9,27 @@ class ShoppingListCreateForm(forms.ModelForm):
 
     class Meta:
         model = ShoppingList
-        fields = ['name']
+        fields = ['name', 'date_from', 'date_to']
         labels = {'name': ''}
+
+        widgets = {
+            'date_from': forms.DateInput(attrs={'type': 'date'}),
+            'date_to': forms.DateInput(attrs={'type': 'date'}),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Row(
-                Column('name', css_class='form-group col-sm-10 col-lg-6 col-12 mb-0 pb-0'),
-                Submit('submit', 'Create', css_class='form-group btn btn-dark inline-btn col-sm-2 col-lg-1 mw-65 col-12'),
-                css_class='form-row justify-content-center'
+                Column('name', css_class='form-group col-12 mb-0 pb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('date_from', css_class='form-group col-sm col-12 mb-0 pb-0'),
+                Column('date_to', css_class='form-group col-sm col-12 mb-0 pb-0'),
+                Submit('submit', 'Create', css_class='form-group btn btn-dark inline-btn fake-label col-sm-2 mw-65 col-12'),
+                css_class='form-row'
             ),
         )
 
@@ -28,11 +38,13 @@ class ShoppingListUpdateForm(forms.ModelForm):
 
     class Meta:
         model = ShoppingList
-        fields = ['name']
+        fields = ['name', 'date_from', 'date_to']
         labels = {'name': ''}
 
         widgets = {
             'name': forms.TextInput(attrs={'autofocus': True}),
+            'date_from': forms.DateInput(attrs={'type': 'date'}),
+            'date_to': forms.DateInput(attrs={'type': 'date'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -40,8 +52,13 @@ class ShoppingListUpdateForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Row(
-                Column('name', css_class='form-group col-sm-10 col-lg-6 col-12 mb-0 pb-0'),
-                Submit('submit', 'Update', css_class='form-group btn btn-dark inline-btn col-sm-2 col-lg-1 col-12'),
+                Column('name', css_class='form-group col-12 mb-0 pb-0'),
+                css_class='form-row justify-content-center'
+            ),
+            Row(
+                Column('date_from', css_class='form-group col-sm col-12 mb-0 pb-0'),
+                Column('date_to', css_class='form-group col-sm col-12 mb-0 pb-0'),
+                Submit('submit', 'Update', css_class='form-group btn btn-dark inline-btn fake-label col-sm-2 mw-65 col-12'),
                 css_class='form-row justify-content-center'
             ),
         )
