@@ -19,7 +19,61 @@
             <button class="btn btn-dark">Create</button>
         </fieldset>
     </form>
-    <br>
+
+    <!--Pagination-->
+    {% if ingredients.paginator.num_pages > 1 %}
+        <div class="row">
+            <div class="col">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        {% if ingredients.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ ingredients.previous_page_number }}">Previous</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                            </li>
+                        {% endif %}
+
+                        {% if ingredients.number|add:'-4' > 1 %}
+                            <li class="page-item"><a class="page-link" href="?page={{ ingredients.number|add:'-5' }}">&hellip;</a>
+                            </li>
+                        {% endif %}
+
+                        {% for i in ingredients.paginator.page_range %}
+                            {% if ingredients.number == i %}
+                                <li class="page-item active" aria-current="page">
+                                    <span class="page-link">
+                                        {{ i }}
+                                        <span class="sr-only">(current)</span>
+                                    </span>
+                                </li>
+                            {% elif i > ingredients.number|add:'-5' and i < ingredients.number|add:'5' %}
+                                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if ingredients.paginator.num_pages > ingredients.number|add:'4' %}
+                            <li class="page-item"><a class="page-link" href="?page={{ ingredients.number|add:'5' }}">&hellip;</a>
+                            </li>
+                        {% endif %}
+
+                        {% if ingredients.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ ingredients.next_page_number }}">Next</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    {% endif %}
+    <!--end of Pagination-->
 
     {% if ingredients %}
         <table class="table border mt-5">
@@ -36,6 +90,7 @@
             {% endfor %}
         </table>
     {% endif %}
+    <br>
 
     <script>
         $(document).ready(function () {

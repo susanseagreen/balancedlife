@@ -30,12 +30,16 @@
                     Ingredients
                 </a>
                 <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
+                   href="{% url 'ingredient_categories:create' %}">
+                    Ingredient Categories
+                </a>
+                <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
                    href="{% url 'recipes:create' %}">
                     Recipes
                 </a>
                 <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
-                   href="{% url 'ingredient_categories:create' %}">
-                    Categories
+                   href="{% url 'recipe_categories:create' %}">
+                    Recipe Categories
                 </a>
                 <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
                    href="{% url 'shopping_lists:create' %}">
@@ -97,7 +101,7 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <div>
+                                                <div class="text-right">
                                                     <a href="{% url 'recipe_ingredients:create' recipe.id %}">Ingredients</a>
                                                 </div>
                                             </td>

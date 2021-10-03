@@ -31,7 +31,7 @@ class ShoppingListCreateView(View):
         if form.is_valid():
             instance = form.save(commit=False)
             if instance.date_from:
-                instance.date_to = instance.date_from + timedelta(days=7)
+                instance.date_to = instance.date_from + timedelta(days=6)
             instance.save()
 
             return redirect(reverse_lazy('shopping_lists:update', kwargs={'pk': instance.pk}))
@@ -70,7 +70,7 @@ class ShoppingListUpdateView(View):
         if form.is_valid():
             instance = form.save(commit=False)
             if instance.date_from:
-                instance.date_to = instance.date_from + timedelta(days=7)
+                instance.date_to = instance.date_from + timedelta(days=6)
             instance.save()
 
         return redirect(reverse_lazy('shopping_lists:update', kwargs={'pk': self.kwargs['pk']}))

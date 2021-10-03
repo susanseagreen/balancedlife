@@ -31,10 +31,7 @@
                         </a>
                     </td>
                     <td class="text-right">
-                        {{ shopping_list.date_from | date:"D" }} - {{ shopping_list.date_to | date:"D" }}
-                    </td>
-                    <td class="text-right">
-                        {{ shopping_list.date_from | date:"d M Y" }} - {{ shopping_list.date_to | date:"d M Y" }}
+                        {{ shopping_list.date_from | date:"D d M Y" }} - {{ shopping_list.date_to | date:"D d M Y" }}
                     </td>
                 </tr>
             {% endfor %}

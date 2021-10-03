@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import View
-from .forms import IngredientCategoryModalForm
+from .forms import IngredientCategoryCreateModalForm, IngredientCategoryUpdateModalForm
 from .models import IngredientCategory
 from app.recipes.models import Recipe
 
@@ -12,7 +12,7 @@ class IngredientCategoryCreateView(View):
 
     def get(self, request, *args, **kwargs):
 
-        form = IngredientCategoryModalForm()
+        form = IngredientCategoryCreateModalForm()
 
         ingredient_categories = IngredientCategory.objects.order_by('name')
 
@@ -25,7 +25,7 @@ class IngredientCategoryCreateView(View):
 
     def post(self, request, *args, **kwargs):
 
-        form = IngredientCategoryModalForm(request.POST)
+        form = IngredientCategoryCreateModalForm(request.POST)
 
         if form.is_valid():
             form.save()
@@ -40,7 +40,7 @@ class IngredientCategoryModalUpdateView(View):
 
         ingredient_category = IngredientCategory.objects.get(id=kwargs['pk'])
 
-        form = IngredientCategoryModalForm(instance=ingredient_category)
+        form = IngredientCategoryUpdateModalForm(instance=ingredient_category)
 
         context = {
             'pk': kwargs['pk'],
@@ -53,7 +53,7 @@ class IngredientCategoryModalUpdateView(View):
 
         ingredient_category = IngredientCategory.objects.get(id=kwargs['pk'])
 
-        form = IngredientCategoryModalForm(request.POST, instance=ingredient_category)
+        form = IngredientCategoryUpdateModalForm(request.POST, instance=ingredient_category)
 
         if form.is_valid():
             form.save()

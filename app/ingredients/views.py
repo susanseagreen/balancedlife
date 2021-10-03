@@ -5,6 +5,7 @@ from django.views.generic import View
 from .forms import IngredientForm, IngredientModalForm
 from .models import Ingredient
 from app.recipes.models import Recipe
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 class IngredientCreateView(View):
@@ -16,6 +17,16 @@ class IngredientCreateView(View):
         ingredients = Ingredient.objects.all().order_by('name')
 
         form = IngredientForm()
+
+        paginator = Paginator(ingredients, 10)
+        page_num = request.GET.get('page', 1)
+
+        try:
+            ingredients = paginator.get_page(page_num)
+        except PageNotAnInteger:
+            ingredients = paginator.get_page(1)
+        except EmptyPage:
+            ingredients = paginator.get_page(paginator.num_pages)
 
         context = {
             'recipes': recipes,

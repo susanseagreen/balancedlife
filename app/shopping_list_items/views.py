@@ -34,6 +34,7 @@ class ShoppingListRecipeItemCreateView(View):
             recipe = form.cleaned_data['recipe']
             day_of_week = ','.join(form.cleaned_data['day_of_week'])
             meal = ','.join(form.cleaned_data['meal'])
+            quantity = form.cleaned_data['quantity']
             recipe_ingredients = RecipeIngredient.objects.filter(code_recipe_id=recipe.pk)
             for recipe_ingredient in recipe_ingredients:
                 if recipe_ingredient.code_ingredient.name.lower() != 'water':
@@ -43,6 +44,7 @@ class ShoppingListRecipeItemCreateView(View):
                         code_recipe_ingredient_id=recipe_ingredient.id,
                         measurement_value=recipe_ingredient.measurement_value,
                         measurement_type=recipe_ingredient.measurement_type,
+                        quantity=quantity,
                         day_of_week=day_of_week,
                         meal=meal,
                     )
@@ -72,12 +74,14 @@ class ShoppingListIngredientItemCreateView(View):
         if form.is_valid():
             day_of_week = ','.join(form.cleaned_data['day_of_week'])
             meal = ','.join(form.cleaned_data['meal'])
+            quantity = form.cleaned_data['quantity']
             ShoppingListItem.objects.create(
                 code_shopping_list_id=self.kwargs['fk'],
                 code_ingredient_id=form.cleaned_data['ingredient'].pk,
                 code_recipe_ingredient_id=None,
                 measurement_value=form.cleaned_data['measurement_value'],
                 measurement_type=form.cleaned_data['measurement_type'],
+                quantity=quantity,
                 day_of_week=day_of_week,
                 meal=meal,
             )

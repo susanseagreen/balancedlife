@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 
     'app.ingredients',
     'app.ingredient_categories',
+    'app.recipe_categories',
     'app.recipe_ingredients',
     'app.recipes',
     'app.shopping_list_items',
