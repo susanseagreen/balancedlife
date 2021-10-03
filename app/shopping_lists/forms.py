@@ -10,7 +10,6 @@ class ShoppingListCreateForm(forms.ModelForm):
     class Meta:
         model = ShoppingList
         fields = ['name', 'date_from', 'date_to']
-        labels = {'name': ''}
 
         widgets = {
             'date_from': forms.DateInput(attrs={'type': 'date'}),

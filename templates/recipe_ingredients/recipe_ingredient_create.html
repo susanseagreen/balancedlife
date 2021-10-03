@@ -12,21 +12,6 @@
         </div>
     </div>
 
-    <div>
-        <h3>
-            <a href="{% url 'recipes:update' recipe.id %}">{{ recipe.name }}</a>
-        </h3>
-
-        <i>
-            {{ recipe.code_category.name }}
-        </i>
-        <br>
-        <br>
-        <div>
-            {{ recipe.description|linebreaks }}
-        </div>
-    </div>
-
     <div class="container mt-5 mb-3">
         <div class="row">
             {% if recipe.image %}
@@ -46,6 +31,27 @@
 
     <br>
 
+    <div>
+        <h3>
+            <a href="{% url 'recipes:update' recipe.id %}">{{ recipe.name }}</a>
+        </h3>
+
+        <i>
+            {{ recipe.code_category.name }}
+        </i>
+        <br>
+        <br>
+        <div>
+            {{ recipe.description|linebreaks }}
+        </div>
+    </div>
+
+    {% if recipe.steps %}
+        <h4>Instructions</h4>
+        {{ recipe.steps|linebreaks }}
+        <br>
+    {% endif %}
+
     {% if recipe_ingredients %}
         <table class="table border">
             {% for recipe_ingredient in recipe_ingredients %}
@@ -54,7 +60,7 @@
                         <a class="modal_update" data-toggle="modal"
                            href="javascript:void(0);"
                            id="{% url 'recipe_ingredients:update_modal' recipe_ingredient.code_recipe_id recipe_ingredient.id %}">
-                            {% if recipe_ingredient.measurement_value or recipe_ingredient.measurement_type %}
+                            {% if recipe_ingredient.fraction or recipe_ingredient.measurement_value or recipe_ingredient.measurement_type %}
                                 {% if recipe_ingredient.fraction %}
                                     {{ recipe_ingredient.fraction }}
                                 {% else %}
@@ -81,9 +87,6 @@
         </table>
         <br>
     {% endif %}
-
-    {{ recipe.steps|linebreaks }}
-    <br>
 
     <script>
         $(document).ready(function () {

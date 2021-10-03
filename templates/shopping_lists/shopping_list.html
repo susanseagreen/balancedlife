@@ -38,29 +38,35 @@
                 <table class="table m-0 border">
                     {% for id, ingredient in ingredient_list.items %}
                         <tr>
-                            <td>
+                            <td style="width: 65px">
                                 <input type="checkbox" id="checkbox" class="checkbox"/>
                             </td>
                             <td>
+                                {% if ingredient.ingredient_name %}
+                                    {{ ingredient.ingredient_name }}
+                                {% else %}
+                                    {{ ingredient.name }}
+                                {% endif %}
+                            </td>
+                            <td class="text-right">
                                 {% if ingredient.measurement_type.fraction %}
                                     {{ ingredient.measurement_type.fraction }}
+                                {% elif ingredient.i %}{{ ingredient.i | no_decimals }}
+                                {% elif ingredient.g %}{{ ingredient.g | no_decimals }}
+                                {% elif ingredient.kg %}{{ ingredient.kg | no_decimals }}
+                                {% elif ingredient.dp %}{{ ingredient.dp | no_decimals }}
+                                {% elif ingredient.tsp %}{{ ingredient.tsp | no_decimals }}
+                                {% elif ingredient.tbsp %}{{ ingredient.tbsp | no_decimals }}
+                                {% elif ingredient.c %}{{ ingredient.c | no_decimals }}
+                                {% elif ingredient.ml %}{{ ingredient.ml | no_decimals }}
+                                {% elif ingredient.l %}{{ ingredient.l | no_decimals }}
+                                {% else %}
+                                    {{ ingredient.quantity }}
                                 {% endif %}
-                                {% if ingredient.i %}{{ ingredient.i | no_decimals }}{% endif %}
-                                {% if ingredient.g %}{{ ingredient.g | no_decimals }}{% endif %}
-                                {% if ingredient.kg %}{{ ingredient.kg | no_decimals }}{% endif %}
-                                {% if ingredient.dp %}{{ ingredient.dp | no_decimals }}{% endif %}
-                                {% if ingredient.tsp %}{{ ingredient.tsp | no_decimals }}{% endif %}
-                                {% if ingredient.tbsp %}{{ ingredient.tbsp | no_decimals }}{% endif %}
-                                {% if ingredient.c %}{{ ingredient.c | no_decimals }}
-                                {% endif %}
-                                {% if ingredient.ml %}{{ ingredient.ml | no_decimals }}
-                                {% endif %}
-                                {% if ingredient.l %}{{ ingredient.l | no_decimals }}{% endif %}
-                                {% if ingredient.measurement_type %}
+                                {% if ingredient.measurement_type and ingredient.measurement_type.measurement_type != 'i' %}
                                     {{ ingredient.measurement_type.measurement_type }}
                                 {% endif %}
                             </td>
-                            <td>{{ ingredient.ingredient_name }}</td>
                         </tr>
                     {% endfor %}
                 </table>

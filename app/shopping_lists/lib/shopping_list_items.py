@@ -6,7 +6,7 @@ def build_diary(food_diary):
     for x in range(0, 8):
         food_diary[str(x)] = {}
         for y in range(0, 6):
-            food_diary[str(x)][str(y)] = ''
+            food_diary[str(x)][str(y)] = []
 
     return
 
@@ -41,15 +41,15 @@ def build_food_diary(self, food_diary):
 
                     if shopping_list_item['meal']:
                         for meal in shopping_list_item['meal']:
-                            food_diary[day_of_week][meal] = f"{food_diary[day_of_week][meal]} {recipe_name}"
+                            food_diary[day_of_week][meal].append(recipe_name)
                     else:
-                        food_diary[day_of_week]['0'] = f"{food_diary[day_of_week]['0']} {recipe_name}"
+                        food_diary[day_of_week]['0'].append(recipe_name)
             else:
                 if shopping_list_item['meal']:
                     for meal in shopping_list_item['meal']:
-                        food_diary['0'][meal] = f"{food_diary['0'][meal]} {recipe_name}"
+                        food_diary['0'][meal].append(recipe_name)
                 else:
-                    food_diary['0']['0'] = f"{food_diary['0']['0']} {recipe_name}"
+                    food_diary['0']['0'].append(recipe_name)
 
     return food_diary
 
@@ -60,9 +60,12 @@ def build_shopping_list(self, ingredient_list):
         .values(
             'id',
             'added',
+            'name',
             'code_ingredient_id',
             'code_ingredient__name',
             'code_recipe_ingredient_id',
+            'code_recipe_ingredient__code_recipe__code_category__name',
+            'code_recipe_ingredient__code_recipe_id',
             'code_recipe_ingredient__code_recipe__name',
             'code_recipe_ingredient__code_recipe__servings',
             'code_recipe_ingredient__code_recipe__pax_serving',
@@ -70,13 +73,17 @@ def build_shopping_list(self, ingredient_list):
             'measurement_value',
             'day_of_week',
             'meal'
-        ).order_by('code_ingredient__name')
+        ).order_by('code_recipe_ingredient__code_recipe__code_category__name', 'code_ingredient__name')
 
     if shopping_list_items:
 
         for shopping_list_item in shopping_list_items:
-            ingredient_id = shopping_list_item['code_ingredient_id']
             measurement_type = 'i'  # items
+
+            if shopping_list_item['code_ingredient_id']:
+                ingredient_id = shopping_list_item['code_ingredient_id']
+            else:
+                ingredient_id = shopping_list_item['name'].replace(' ', '').lower()
 
             if ',' in shopping_list_item['day_of_week']:
                 shopping_list_item['day_of_week'] = shopping_list_item['day_of_week'].split(',')
@@ -90,15 +97,19 @@ def build_shopping_list(self, ingredient_list):
             if ingredient_id not in ingredient_list:
                 ingredient_list[ingredient_id] = {
                     'id': shopping_list_item['id'],
+                    'name': shopping_list_item['name'],
                     'ingredient_id': shopping_list_item['code_ingredient_id'],
                     'ingredient_name': shopping_list_item['code_ingredient__name'],
+                    'category_name': shopping_list_item['code_recipe_ingredient__code_recipe__code_category__name'],
                     'recipe_ingredient_id': shopping_list_item['code_recipe_ingredient_id'],
-                    'recipe_name': [],
+                    'day_of_week': shopping_list_item['day_of_week'],
+                    'meal': shopping_list_item['meal'],
+                    'recipe_names': [],
                     'added': [],
                     'removed': [],
-                    'measurement_type': {}
+                    'measurement_type': {},
                 }
-                ingredient_list[ingredient_id]['recipe_name'].append(
+                ingredient_list[ingredient_id]['recipe_names'].append(
                     shopping_list_item['code_recipe_ingredient__code_recipe__name'])
 
             shopping_list_item['servings'] = \
@@ -106,6 +117,10 @@ def build_shopping_list(self, ingredient_list):
                 f"{shopping_list_item['code_recipe_ingredient__code_recipe__servings']} servings"
 
             if shopping_list_item['added']:
+
+                if shopping_list_item['measurement_value']:
+                    shopping_list_item['measurement_value'] = shopping_list_item['measurement_value']
+
                 if measurement_type in ingredient_list[ingredient_id]['measurement_type']:
                     ingredient_list[ingredient_id]['measurement_type'][measurement_type] = \
                         ingredient_list[ingredient_id]['measurement_type'][measurement_type] + \

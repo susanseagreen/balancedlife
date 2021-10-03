@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic import View
 from .forms import ShoppingListCreateForm, ShoppingListUpdateForm
 from .models import ShoppingList
+from app.recipes.models import Recipe
 from .lib import shopping_list_items
 from datetime import timedelta
 
@@ -13,10 +14,12 @@ class ShoppingListCreateView(View):
 
     def get(self, request, *args, **kwargs):
         shopping_lists = ShoppingList.objects.order_by('name')
+        recipes = Recipe.objects.select_related('code_category').order_by('name')
         form = ShoppingListCreateForm()
 
         context = {
             'shopping_lists': shopping_lists,
+            'recipes': recipes,
             'form': form,
         }
 

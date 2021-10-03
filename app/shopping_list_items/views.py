@@ -2,7 +2,12 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import View
-from .forms import ShoppingListRecipeItemForm, ShoppingListIngredientItemForm, ShoppingListUpdateItemForm
+from .forms import (ShoppingListRecipeItemForm,
+                    ShoppingListIngredientItemForm,
+                    ShoppingListUpdateGetIngredientItemForm,
+                    ShoppingListUpdatePostIngredientItemForm,
+                    ShoppingListUpdateOtherItemForm,
+                    ShoppingListOtherItemForm)
 from .models import ShoppingListItem
 from app.recipe_ingredients.models import RecipeIngredient
 
@@ -52,7 +57,6 @@ class ShoppingListIngredientItemCreateView(View):
     template_name = 'shopping_list_items/shopping_list_item_ingredient_create.html'
 
     def get(self, request, *args, **kwargs):
-
         form = ShoppingListIngredientItemForm()
 
         context = {
@@ -63,12 +67,11 @@ class ShoppingListIngredientItemCreateView(View):
         return render(request, template_name=self.template_name, context=context)
 
     def post(self, request, *args, **kwargs):
-
         form = ShoppingListIngredientItemForm(request.POST)
-        day_of_week = str(','.join(form.cleaned_data['day_of_week']))
-        meal = str(','.join(form.cleaned_data['meal']))
 
         if form.is_valid():
+            day_of_week = ','.join(form.cleaned_data['day_of_week'])
+            meal = ','.join(form.cleaned_data['meal'])
             ShoppingListItem.objects.create(
                 code_shopping_list_id=self.kwargs['fk'],
                 code_ingredient_id=form.cleaned_data['ingredient'].pk,
@@ -82,13 +85,12 @@ class ShoppingListIngredientItemCreateView(View):
         return redirect(self.request.META['HTTP_REFERER'])
 
 
-class ShoppingListItemModalUpdateView(View):
-    template_name = 'shopping_list_items/shopping_list_item_update.html'
+class ShoppingListIngredientItemUpdateView(View):
+    template_name = 'shopping_list_items/shopping_list_item_ingredient_update.html'
 
     def get(self, request, *args, **kwargs):
-
         shopping_list_item = ShoppingListItem.objects.get(id=self.kwargs['pk'])
-        form = ShoppingListUpdateItemForm(instance=shopping_list_item)
+        form = ShoppingListUpdateGetIngredientItemForm(instance=shopping_list_item)
 
         context = {
             'pk': self.kwargs['pk'],
@@ -99,17 +101,69 @@ class ShoppingListItemModalUpdateView(View):
         return render(request, template_name=self.template_name, context=context)
 
     def post(self, request, *args, **kwargs):
-
         shopping_list_item = ShoppingListItem.objects.get(id=self.kwargs['pk'])
 
-        form = ShoppingListUpdateItemForm(request.POST, instance=shopping_list_item)
-        day_of_week = str(','.join(form.cleaned_data['day_of_week']))
-        meal = str(','.join(form.cleaned_data['meal']))
+        form = ShoppingListUpdatePostIngredientItemForm(request.POST, instance=shopping_list_item)
 
         if form.is_valid():
+            day_of_week = ','.join(form.cleaned_data['day_of_week'])
+            meal = ','.join(form.cleaned_data['meal'])
             instance = form.save(commit=False)
             instance.day_of_week = day_of_week
             instance.meal = meal
+            instance.save()
+
+        return redirect(self.request.META['HTTP_REFERER'])
+
+
+class ShoppingListOtherItemCreateView(View):
+    template_name = 'shopping_list_items/shopping_list_item_other_create.html'
+
+    def get(self, request, *args, **kwargs):
+        form = ShoppingListOtherItemForm()
+
+        context = {
+            'fk': self.kwargs['fk'],
+            'form': form,
+        }
+
+        return render(request, template_name=self.template_name, context=context)
+
+    def post(self, request, *args, **kwargs):
+        form = ShoppingListOtherItemForm(request.POST)
+
+        if form.is_valid():
+            ShoppingListItem.objects.create(
+                code_shopping_list_id=self.kwargs['fk'],
+                measurement_value=form.cleaned_data['measurement_value'],
+                name=form.cleaned_data['name'],
+                code_ingredient_id=None,
+            )
+
+        return redirect(self.request.META['HTTP_REFERER'])
+
+
+class ShoppingListOtherItemUpdateView(View):
+    template_name = 'shopping_list_items/shopping_list_item_other_update.html'
+
+    def get(self, request, *args, **kwargs):
+        shopping_list_item = ShoppingListItem.objects.get(id=self.kwargs['pk'])
+        form = ShoppingListUpdateOtherItemForm(instance=shopping_list_item)
+
+        context = {
+            'pk': self.kwargs['pk'],
+            'shopping_list_item': shopping_list_item,
+            'form': form,
+        }
+
+        return render(request, template_name=self.template_name, context=context)
+
+    def post(self, request, *args, **kwargs):
+        shopping_list_item = ShoppingListItem.objects.get(id=self.kwargs['pk'])
+
+        form = ShoppingListUpdateOtherItemForm(request.POST, instance=shopping_list_item)
+
+        if form.is_valid():
             form.save()
 
         return redirect(self.request.META['HTTP_REFERER'])

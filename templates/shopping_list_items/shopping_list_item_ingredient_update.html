@@ -1,17 +1,16 @@
 {% extends 'base.html' %}
 {% load static crispy_forms_tags %}
 
-{% block content %}
+{% block nav %}{% endblock nav %}
 
-    <h1>{{ recipe.name }}</h1>
-    <br>
-    <form method="post" action="">
+{% block container %}
+
+    <form method="post" action="{% url 'shopping_list_items:update_ingredient_modal' pk %}">
         {% csrf_token %}
         <fieldset>
             {% crispy form %}
             <button class="btn btn-dark">Update</button>
         </fieldset>
     </form>
-    <br>
 
-{% endblock content %}
+{% endblock container %}

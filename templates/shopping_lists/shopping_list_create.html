@@ -3,6 +3,10 @@
 
 {% block content %}
 
+    <div class="col-12 mb-3">
+        <h4>Create Shopping List</h4>
+    </div>
+
     <form method="post" action="{% url 'shopping_lists:create' %}">
         {% csrf_token %}
         <fieldset>
@@ -25,6 +29,12 @@
                                 {{ shopping_list.name }}
                             </div>
                         </a>
+                    </td>
+                    <td class="text-right">
+                        {{ shopping_list.date_from | date:"D" }} - {{ shopping_list.date_to | date:"D" }}
+                    </td>
+                    <td class="text-right">
+                        {{ shopping_list.date_from | date:"d M Y" }} - {{ shopping_list.date_to | date:"d M Y" }}
                     </td>
                 </tr>
             {% endfor %}
