@@ -23,7 +23,7 @@
             checkbox.change(function () {
                 let count_day_of_week = day_of_week.filter(':checked').length;
                 let count_meal = meal.filter(':checked').length;
-                $('#id_measurement_value').val(count_meal * count_day_of_week);
+                $('#id_quantity').val(count_meal * count_day_of_week);
             });
 
         });

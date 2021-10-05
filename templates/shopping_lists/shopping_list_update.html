@@ -100,28 +100,28 @@
                                         <a class="modal_update_ingredient p-2 cursor-pointer"
                                            data-toggle="modal"
                                            href="javascript:void(0);"
-                                            {% if added.code_ingredient__name %}
-                                                id="{% url 'shopping_list_items:update_ingredient_modal' added.id %}">
-                                            {% else %}
-                                                id="{% url 'shopping_list_items:update_item_modal' added.id %}">
-                                            {% endif %}
+                                                {% if added.code_ingredient__name %}
+                                           id="{% url 'shopping_list_items:update_ingredient_modal' added.id %}">
+                                                {% else %}
+                                                    id="{% url 'shopping_list_items:update_item_modal' added.id %}">
+                                                {% endif %}
 
-                                            {% if added.measurement_value or added.measurement_type %}
-                                                <span {% if added.measurement_value %}
-                                                    title="{{ added.measurement_type | measurement_type_display }}"
-                                                {% endif %}>
+                                        {% if added.measurement_value or added.measurement_type %}
+                                            <span {% if added.measurement_value %}
+                                                title="{{ added.measurement_type | measurement_type_display }}"
+                                            {% endif %}>
                                                     {% if added.measurement_value %}
                                                         {{ added.measurement_value | no_decimals }}
                                                     {% else %}
                                                         {{ added.fraction }}
                                                     {% endif %}
-                                                    {% if added.measurement_type %}
-                                                        {{ added.measurement_type }}
-                                                    {% endif %}
+                                                {% if added.measurement_type %}
+                                                    {{ added.measurement_type }}
+                                                {% endif %}
                                                 </span>
-                                            {% else %}
-                                                -
-                                            {% endif %}
+                                        {% else %}
+                                            -
+                                        {% endif %}
                                         </a>
                                     </td>
                                     <td class="p-2 small cursor-pointer"
@@ -154,25 +154,25 @@
                                         <a class="modal_update_ingredient p-2 cursor-pointer"
                                            data-toggle="modal"
                                            href="javascript:void(0);" style="color: red"
-                                            {% if removed.code_ingredient__name %}
-                                                id="{% url 'shopping_list_items:update_ingredient_modal' removed.id %}">
-                                            {% else %}
-                                                id="{% url 'shopping_list_items:update_item_modal' removed.id %}">
-                                            {% endif %}
-                                            {% if removed.measurement_value or removed.measurement_type %}
-                                                {% if removed.measurement_value %}
-                                                    {{ removed.measurement_value | no_decimals }}
+                                                {% if removed.code_ingredient__name %}
+                                           id="{% url 'shopping_list_items:update_ingredient_modal' removed.id %}">
                                                 {% else %}
-                                                    {{ removed.fraction }}
+                                                    id="{% url 'shopping_list_items:update_item_modal' removed.id %}">
                                                 {% endif %}
-                                                {% if removed.measurement_type %}
-                                                    <span title="{{ removed.measurement_type | measurement_type_display }}">
+                                        {% if removed.measurement_value or removed.measurement_type %}
+                                            {% if removed.measurement_value %}
+                                                {{ removed.measurement_value | no_decimals }}
+                                            {% else %}
+                                                {{ removed.fraction }}
+                                            {% endif %}
+                                            {% if removed.measurement_type %}
+                                                <span title="{{ removed.measurement_type | measurement_type_display }}">
                                                         {{ removed.measurement_type }}
                                                     </span>
-                                                {% endif %}
-                                            {% else %}
-                                                -
                                             {% endif %}
+                                        {% else %}
+                                            -
+                                        {% endif %}
                                         </a>
                                     </td>
                                     <td class="p-2 small cursor-pointer"
@@ -249,26 +249,18 @@
     </div>
     {% if ingredient_list %}
         {% for id, ingredient in ingredient_list.items %}
-            {% if ingredient.added %}
-                {% ifchanged ingredient.category_name %}
-                    <h5>{{ ingredient.category_name }}</h5>
-                {% endifchanged %}
+            {% if ingredient.added and ingredient.ingredient_id %}
                 {% ifchanged ingredient.recipe_names %}
                     <table class="table border">
                         {% for recipe_name in ingredient.recipe_names %}
                             <tr>
                                 <td>
-                                    <div>{{ recipe_name }}</div>
                                     <div class="d-flex justify-content-between">
-                                        <div>
-                                            {% for day_of_week in ingredient.day_of_week %}
-                                                <span class="day_of_week">{{ day_of_week | day_of_week_display }}</span>
-                                            {% endfor %}
-                                        </div>
-                                        <div>
-                                            {% for meal in ingredient.meal %}
-                                                <span class="meal">{{ meal | meal_display }}</span>
-                                            {% endfor %}
+                                        <div>{{ recipe_name }}</div>
+                                        <div class="text-right">
+                                            <span class="recipe_category">
+                                            {{ ingredient.category_name }}
+                                            </span>
                                         </div>
                                     </div>
 

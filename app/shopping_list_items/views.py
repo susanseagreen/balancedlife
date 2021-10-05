@@ -35,6 +35,12 @@ class ShoppingListRecipeItemCreateView(View):
             day_of_week = ','.join(form.cleaned_data['day_of_week'])
             meal = ','.join(form.cleaned_data['meal'])
             quantity = form.cleaned_data['quantity']
+            if not quantity:
+                quantity = len(form.cleaned_data['day_of_week']) or len(form.cleaned_data['meal']) or 1
+            if not day_of_week:
+                day_of_week = '0'
+            if not meal:
+                meal = '0'
             recipe_ingredients = RecipeIngredient.objects.filter(code_recipe_id=recipe.pk)
             for recipe_ingredient in recipe_ingredients:
                 if recipe_ingredient.code_ingredient.name.lower() != 'water':
@@ -75,6 +81,12 @@ class ShoppingListIngredientItemCreateView(View):
             day_of_week = ','.join(form.cleaned_data['day_of_week'])
             meal = ','.join(form.cleaned_data['meal'])
             quantity = form.cleaned_data['quantity']
+            if not quantity:
+                quantity = len(form.cleaned_data['day_of_week']) or len(form.cleaned_data['meal']) or 1
+            if not day_of_week:
+                day_of_week = '0'
+            if not meal:
+                meal = '0'
             ShoppingListItem.objects.create(
                 code_shopping_list_id=self.kwargs['fk'],
                 code_ingredient_id=form.cleaned_data['ingredient'].pk,
@@ -112,9 +124,17 @@ class ShoppingListIngredientItemUpdateView(View):
         if form.is_valid():
             day_of_week = ','.join(form.cleaned_data['day_of_week'])
             meal = ','.join(form.cleaned_data['meal'])
+            quantity = form.cleaned_data['quantity']
+            if not quantity:
+                quantity = len(form.cleaned_data['day_of_week']) or len(form.cleaned_data['meal']) or 1
+            if not day_of_week:
+                day_of_week = '0'
+            if not meal:
+                meal = '0'
             instance = form.save(commit=False)
             instance.day_of_week = day_of_week
             instance.meal = meal
+            instance.quantity = quantity
             instance.save()
 
         return redirect(self.request.META['HTTP_REFERER'])

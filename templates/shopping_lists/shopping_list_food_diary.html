@@ -28,8 +28,9 @@
 
         <div class="row">
             {% for weekday, food in food_diary.items %}
-                <div class="col-sm-6 col-md-3 col-lg col-12 border p-3">
-                    <h5>{{ weekday | day_of_week_display }}</h5>
+                <div class="col-sm-6 col-md-3 col-lg col-12 border p-0">
+                    <div class="bg-info text-light p-2">{{ weekday | day_of_week_display }}</div>
+                <div class="p-3">
                     {% for day, recipes in food.items %}
                         {% for recipe in recipes %}
                             {% ifchanged recipe %}
@@ -39,6 +40,7 @@
                             {% if forloop.last %}<br>{% endif %}
                         {% endfor %}
                     {% endfor %}
+                </div>
                 </div>
             {% endfor %}
 

@@ -72,7 +72,8 @@ def build_shopping_list(self, ingredient_list):
             'measurement_type',
             'measurement_value',
             'day_of_week',
-            'meal'
+            'meal',
+            'quantity'
         ).order_by('code_recipe_ingredient__code_recipe__code_category__name', 'code_ingredient__name')
 
     if shopping_list_items:
@@ -80,9 +81,14 @@ def build_shopping_list(self, ingredient_list):
         for shopping_list_item in shopping_list_items:
             measurement_type = 'i'  # items
 
+            if shopping_list_item['measurement_value']:
+                shopping_list_item['measurement_value'] = shopping_list_item['measurement_value'] * \
+                                                          shopping_list_item['quantity']
+
             if shopping_list_item['code_ingredient_id']:
                 ingredient_id = shopping_list_item['code_ingredient_id']
-            else:
+
+            if shopping_list_item['name']:
                 ingredient_id = shopping_list_item['name'].replace(' ', '').lower()
 
             if ',' in shopping_list_item['day_of_week']:
@@ -104,6 +110,7 @@ def build_shopping_list(self, ingredient_list):
                     'recipe_ingredient_id': shopping_list_item['code_recipe_ingredient_id'],
                     'day_of_week': shopping_list_item['day_of_week'],
                     'meal': shopping_list_item['meal'],
+                    'quantity': shopping_list_item['quantity'],
                     'recipe_names': [],
                     'added': [],
                     'removed': [],
@@ -117,9 +124,6 @@ def build_shopping_list(self, ingredient_list):
                 f"{shopping_list_item['code_recipe_ingredient__code_recipe__servings']} servings"
 
             if shopping_list_item['added']:
-
-                if shopping_list_item['measurement_value']:
-                    shopping_list_item['measurement_value'] = shopping_list_item['measurement_value']
 
                 if measurement_type in ingredient_list[ingredient_id]['measurement_type']:
                     ingredient_list[ingredient_id]['measurement_type'][measurement_type] = \

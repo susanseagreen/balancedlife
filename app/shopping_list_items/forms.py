@@ -52,7 +52,8 @@ class ShoppingListIngredientItemForm(forms.Form):
                 css_class='form-row'
             ),
             Row(
-                Column('ingredient', css_class='form-group col-12 mb-0 pb-0'),
+                Column('ingredient', css_class='form-group col-sm-10 col-12 mb-0 pb-0'),
+                Column('quantity', css_class='form-group col-sm-2 col-12 mb-0 pb-0'),
                 css_class='form-row'
             ),
             Row(
@@ -75,7 +76,7 @@ class ShoppingListUpdateGetIngredientItemForm(forms.ModelForm):
 
     class Meta:
         model = ShoppingListItem
-        fields = ['added', 'measurement_value', 'measurement_type', 'code_ingredient', 'day_of_week', 'meal']
+        fields = ['added', 'quantity', 'measurement_value', 'measurement_type', 'code_ingredient', 'day_of_week', 'meal']
         labels = {
             'added': '',
             'code_ingredient': 'Ingredient',
@@ -105,7 +106,8 @@ class ShoppingListUpdateGetIngredientItemForm(forms.ModelForm):
                 css_class='form-row'
             ),
             Row(
-                Column('code_ingredient', css_class='form-group col-12 mb-0 pb-0'),
+                Column('ingredient', css_class='form-group col-sm-10 col-12 mb-0 pb-0'),
+                Column('quantity', css_class='form-group col-sm-2 col-12 mb-0 pb-0'),
                 css_class='form-row'
             ),
             Row(
@@ -128,7 +130,7 @@ class ShoppingListUpdatePostIngredientItemForm(forms.ModelForm):
 
     class Meta:
         model = ShoppingListItem
-        fields = ['added', 'measurement_value', 'measurement_type', 'code_ingredient', 'day_of_week', 'meal']
+        fields = ['added', 'quantity', 'measurement_value', 'measurement_type', 'day_of_week', 'meal']
         labels = {
             'added': '',
             'code_ingredient': 'Ingredient',
@@ -147,7 +149,8 @@ class ShoppingListUpdatePostIngredientItemForm(forms.ModelForm):
                 css_class='form-row'
             ),
             Row(
-                Column('code_ingredient', css_class='form-group col-12 mb-0 pb-0'),
+                Column('ingredient', css_class='form-group col-sm-10 col-12 mb-0 pb-0'),
+                Column('quantity', css_class='form-group col-sm-2 col-12 mb-0 pb-0'),
                 css_class='form-row'
             ),
             Row(
@@ -194,7 +197,7 @@ class ShoppingListUpdateIngredientItemForm(forms.ModelForm):
 
     class Meta:
         model = ShoppingListItem
-        fields = ['added', 'measurement_value', 'measurement_type', 'code_ingredient', 'day_of_week', 'meal']
+        fields = ['added', 'quantity', 'measurement_value', 'measurement_type', 'code_ingredient', 'day_of_week', 'meal']
         labels = {
             'added': '',
             'code_ingredient': 'Ingredient',
@@ -213,7 +216,8 @@ class ShoppingListUpdateIngredientItemForm(forms.ModelForm):
                 css_class='form-row'
             ),
             Row(
-                Column('code_ingredient', css_class='form-group col-12 mb-0 pb-0'),
+                Column('ingredient', css_class='form-group col-sm-10 col-12 mb-0 pb-0'),
+                Column('quantity', css_class='form-group col-sm-2 col-12 mb-0 pb-0'),
                 css_class='form-row'
             ),
             Row(

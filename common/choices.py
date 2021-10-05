@@ -6,10 +6,10 @@ measurement_type_choices = [
     ('tsp', 'teaspoons'),
     ('tbsp', 'tablespoons'),
     ('c', 'cups'),
-    # ('lb', 'pounds'),
-    # ('oz', 'ounces'),
     ('ml', 'millilitres'),
     ('l', 'litres'),
+    # ('lb', 'pounds'),
+    # ('oz', 'ounces'),
     # ('pt', 'pints'),
     # ('qt', 'quarts'),
     # ('gal', 'gallons')
