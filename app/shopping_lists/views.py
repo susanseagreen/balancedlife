@@ -13,7 +13,7 @@ class ShoppingListCreateView(View):
     template_name = 'shopping_lists/shopping_list_create.html'
 
     def get(self, request, *args, **kwargs):
-        shopping_lists = ShoppingList.objects.order_by('name')
+        shopping_lists = ShoppingList.objects.filter(user_id=self.request.user.id).order_by('name')
         recipes = Recipe.objects.select_related('code_category').order_by('name')
         form = ShoppingListCreateForm()
 
@@ -31,6 +31,7 @@ class ShoppingListCreateView(View):
         if form.is_valid():
             instance = form.save(commit=False)
             if instance.date_from:
+                instance.user = self.request.user.id
                 instance.date_to = instance.date_from + timedelta(days=6)
             instance.save()
 
