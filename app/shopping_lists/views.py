@@ -14,7 +14,7 @@ class ShoppingListCreateView(View):
 
     def get(self, request, *args, **kwargs):
         shopping_lists = ShoppingList.objects.filter(user_id=self.request.user.id).order_by('name')
-        recipes = Recipe.objects.select_related('code_category').order_by('name')
+        recipes = Recipe.objects.select_related('code_category').order_by('code_category', 'name')
         form = ShoppingListCreateForm()
 
         context = {

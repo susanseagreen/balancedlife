@@ -16,7 +16,7 @@ class RecipeIngredientCreateView(View):
             .select_related('code_ingredient') \
             .filter(code_recipe_id=self.kwargs['fk']) \
             .order_by('code_ingredient__name')
-        recipes = Recipe.objects.select_related('code_category').order_by('name')
+        recipes = Recipe.objects.select_related('code_category').order_by('code_category', 'name')
         recipe = recipes.filter(id=self.kwargs['fk']).first()
         form = RecipeIngredientCreateForm()
 
