@@ -31,7 +31,10 @@
                         </a>
                     </td>
                     <td class="text-right">
-                        {{ shopping_list.date_from | date:"D d M Y" }} - {{ shopping_list.date_to | date:"D d M Y" }}
+                        {% if shopping_list.date_from %}
+                            {{ shopping_list.date_from | date:"D d M Y" }} -
+                            {{ shopping_list.date_to | date:"D d M Y" }}
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}

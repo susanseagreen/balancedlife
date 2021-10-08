@@ -31,8 +31,10 @@
 
                 <div class="text-center">
                     <h3>{{ shopping_list.name }}</h3>
-                    {{ shopping_list.date_from | date:"D d M Y" }}
-                    - {{ shopping_list.date_to | date:"D d M Y" }}
+                    {% if shopping_list.date_from %}
+                        {{ shopping_list.date_from | date:"D d M Y" }}
+                        - {{ shopping_list.date_to | date:"D d M Y" }}
+                    {% endif %}
                 </div>
                 <br>
                 <table class="table m-0 border">
@@ -51,15 +53,15 @@
                             <td class="text-right">
                                 {% if ingredient.measurement_type.fraction %}
                                     {{ ingredient.measurement_type.fraction }}
-                                {% elif ingredient.i %}{{ ingredient.i | no_decimals }}
-                                {% elif ingredient.g %}{{ ingredient.g | no_decimals }}
-                                {% elif ingredient.kg %}{{ ingredient.kg | no_decimals }}
-                                {% elif ingredient.dp %}{{ ingredient.dp | no_decimals }}
-                                {% elif ingredient.tsp %}{{ ingredient.tsp | no_decimals }}
-                                {% elif ingredient.tbsp %}{{ ingredient.tbsp | no_decimals }}
-                                {% elif ingredient.c %}{{ ingredient.c | no_decimals }}
-                                {% elif ingredient.ml %}{{ ingredient.ml | no_decimals }}
-                                {% elif ingredient.l %}{{ ingredient.l | no_decimals }}
+                                    {% elif ingredient.i %}{{ ingredient.i | no_decimals }}
+                                    {% elif ingredient.g %}{{ ingredient.g | no_decimals }}
+                                    {% elif ingredient.kg %}{{ ingredient.kg | no_decimals }}
+                                    {% elif ingredient.dp %}{{ ingredient.dp | no_decimals }}
+                                    {% elif ingredient.tsp %}{{ ingredient.tsp | no_decimals }}
+                                    {% elif ingredient.tbsp %}{{ ingredient.tbsp | no_decimals }}
+                                    {% elif ingredient.c %}{{ ingredient.c | no_decimals }}
+                                    {% elif ingredient.ml %}{{ ingredient.ml | no_decimals }}
+                                    {% elif ingredient.l %}{{ ingredient.l | no_decimals }}
                                 {% else %}
                                     {{ ingredient.quantity }}
                                 {% endif %}

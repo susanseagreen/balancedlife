@@ -2,22 +2,22 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import View
-from .forms import (ShoppingListRecipeItemForm,
+from .forms import (ShoppingListMealItemForm,
                     ShoppingListIngredientItemForm,
                     ShoppingListUpdateGetIngredientItemForm,
                     ShoppingListUpdatePostIngredientItemForm,
                     ShoppingListUpdateOtherItemForm,
                     ShoppingListOtherItemForm)
 from .models import ShoppingListItem
-from app.recipe_ingredients.models import RecipeIngredient
+from app.meal_ingredients.models import MealIngredient
 
 
-class ShoppingListRecipeItemCreateView(View):
-    template_name = 'shopping_list_items/shopping_list_item_recipe_create.html'
+class ShoppingListMealItemCreateView(View):
+    template_name = 'shopping_list_items/shopping_list_item_meal_create.html'
 
     def get(self, request, *args, **kwargs):
 
-        form = ShoppingListRecipeItemForm()
+        form = ShoppingListMealItemForm()
 
         context = {
             'fk': self.kwargs['fk'],
@@ -28,10 +28,10 @@ class ShoppingListRecipeItemCreateView(View):
 
     def post(self, request, *args, **kwargs):
 
-        form = ShoppingListRecipeItemForm(request.POST)
+        form = ShoppingListMealItemForm(request.POST)
 
         if form.is_valid():
-            recipe = form.cleaned_data['recipe']
+            meal = form.cleaned_data['meal']
             day_of_week = ','.join(form.cleaned_data['day_of_week'])
             meal = ','.join(form.cleaned_data['meal'])
             quantity = form.cleaned_data['quantity']
@@ -41,15 +41,15 @@ class ShoppingListRecipeItemCreateView(View):
                 day_of_week = '0'
             if not meal:
                 meal = '0'
-            recipe_ingredients = RecipeIngredient.objects.filter(code_recipe_id=recipe.pk)
-            for recipe_ingredient in recipe_ingredients:
-                if recipe_ingredient.code_ingredient.name.lower() != 'water':
+            meal_ingredients = MealIngredient.objects.filter(code_meal_id=meal.pk)
+            for meal_ingredient in meal_ingredients:
+                if meal_ingredient.code_ingredient.name.lower() != 'water':
                     ShoppingListItem.objects.create(
                         code_shopping_list_id=self.kwargs['fk'],
-                        code_ingredient_id=recipe_ingredient.code_ingredient_id,
-                        code_recipe_ingredient_id=recipe_ingredient.id,
-                        measurement_value=recipe_ingredient.measurement_value,
-                        measurement_type=recipe_ingredient.measurement_type,
+                        code_ingredient_id=meal_ingredient.code_ingredient_id,
+                        code_meal_ingredient_id=meal_ingredient.id,
+                        measurement_value=meal_ingredient.measurement_value,
+                        measurement_type=meal_ingredient.measurement_type,
                         quantity=quantity,
                         day_of_week=day_of_week,
                         meal=meal,
@@ -90,7 +90,7 @@ class ShoppingListIngredientItemCreateView(View):
             ShoppingListItem.objects.create(
                 code_shopping_list_id=self.kwargs['fk'],
                 code_ingredient_id=form.cleaned_data['ingredient'].pk,
-                code_recipe_ingredient_id=None,
+                code_meal_ingredient_id=None,
                 measurement_value=form.cleaned_data['measurement_value'],
                 measurement_type=form.cleaned_data['measurement_type'],
                 quantity=quantity,

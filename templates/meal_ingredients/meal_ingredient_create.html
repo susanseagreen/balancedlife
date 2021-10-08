@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static crispy_forms_tags get_display %}
+
+{% block content %}
+
+    <div id="myModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5 mb-3">
+        <div class="row">
+            {% if meal.image %}
+                <div class="col-sm-4 col-12 meal_img" style="background-image: url({{ meal.image }})"></div>
+            {% endif %}
+            <div class="col">
+                <form method="post" action="">
+                    {% csrf_token %}
+                    <fieldset>
+                        {% crispy form %}
+                        <button class="btn btn-dark">Add</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <br>
+
+    <div>
+        <h3>
+            <a href="{% url 'meals:update' meal.id %}">{{ meal.name }}</a>
+        </h3>
+
+        <i>
+            {{ meal.code_category.name }}
+        </i>
+        <br>
+        <br>
+        <div>
+            {{ meal.description|linebreaks }}
+        </div>
+    </div>
+
+    {% if meal.steps %}
+        <h4>Instructions</h4>
+        {{ meal.steps|linebreaks }}
+        <br>
+    {% endif %}
+
+    {% if meal_ingredients %}
+        <table class="table border">
+            {% for meal_ingredient in meal_ingredients %}
+                <tr>
+                    <td class="text-nowrap" style="width: 50px">
+                        <a class="modal_update" data-toggle="modal"
+                           href="javascript:void(0);"
+                           id="{% url 'meal_ingredients:update_modal' meal_ingredient.code_meal_id meal_ingredient.id %}">
+                            {% if meal_ingredient.fraction or meal_ingredient.measurement_value or meal_ingredient.measurement_type %}
+                                {% if meal_ingredient.fraction %}
+                                    {{ meal_ingredient.fraction }}
+                                {% else %}
+                                    {{ meal_ingredient.measurement_value | no_decimals }}
+                                {% endif %}
+                                {% if meal_ingredient.measurement_type %}
+                                    <span title="{{ meal_ingredient.measurement_type | measurement_type_display }}">
+                                        {{ meal_ingredient.measurement_type }}
+                                    </span>
+                                {% endif %}
+                            {% else %}
+                                --
+                            {% endif %}
+                        </a>
+                    </td>
+                    <td>
+                        {{ meal_ingredient.code_ingredient.name }}
+                    </td>
+                    <td>
+                        {% if meal_ingredient.preparation %}{{ meal_ingredient.preparation }}{% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br>
+    {% endif %}
+
+    <script>
+        $(document).ready(function () {
+            jQuery('.modal_update').click(function (e) {
+                var linkvar = $(this).attr('id');
+                $('.modal-body').load(linkvar, function (result) {
+                    $('#myModal').modal({show: true});
+                });
+            });
+        });
+    </script>
+
+{% endblock content %}

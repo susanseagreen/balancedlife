@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic import View
 from .forms import IngredientCategoryCreateModalForm, IngredientCategoryUpdateModalForm
 from .models import IngredientCategory
-from app.recipes.models import Recipe
+from app.meals.models import Meal
 
 
 class IngredientCategoryCreateView(View):

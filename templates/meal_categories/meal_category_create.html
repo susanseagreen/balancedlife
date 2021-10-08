@@ -18,7 +18,7 @@
                     </div>
                 </div>
 
-                <form method="post" action="{% url 'ingredient_categories:create' %}">
+                <form method="post" action="{% url 'meal_categories:create' %}">
                     {% csrf_token %}
                     <fieldset>
                         {% crispy form %}
@@ -26,17 +26,22 @@
                 </form>
 
                 <br>
-            </div>
-            {% for ingredient_category in ingredient_categories %}
-                <div class="col-sm-4 col-md-3 col-lg-2 col-6">
-                    <a class="modal_update" data-toggle="modal"
-                       href="javascript:void(0);"
-                       id="{% url 'ingredient_categories:update_modal' ingredient_category.id %}">
-                        {{ ingredient_category.name }}
-                    </a>
-                </div>
-            {% endfor %}
 
+                <table class="table border">
+                    {% for meal_category in meal_categories %}
+                        <tr>
+                            <td class="text-nowrap" style="width: 50px">
+                                <a class="modal_update" data-toggle="modal"
+                                   href="javascript:void(0);"
+                                   id="{% url 'meal_categories:update_modal' meal_category.id %}">
+                                    {{ meal_category.name }}
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+
+            </div>
         </div>
     </div>
 

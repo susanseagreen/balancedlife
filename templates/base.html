@@ -34,12 +34,12 @@
                     Ingredient Categories
                 </a>
                 <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
-                   href="{% url 'recipes:create' %}">
-                    Recipes
+                   href="{% url 'meals:create' %}">
+                    Meals
                 </a>
                 <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
-                   href="{% url 'recipe_categories:create' %}">
-                    Recipe Categories
+                   href="{% url 'meal_categories:create' %}">
+                    Meal Categories
                 </a>
                 <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
                    href="{% url 'shopping_lists:create' %}">
@@ -82,27 +82,27 @@
 
                 <div class="col-lg-4 col-12">
                     <div>
-                        {% block recipes %}
+                        {% block meals %}
                             <div class="col-12">
-                                <h4>Recipes</h4>
+                                <h4>Meals</h4>
                             </div>
-                            {% if recipes %}
+                            {% if meals %}
                                 <table class="table border">
-                                    {% for recipe in recipes %}
-                                        {% ifchanged recipe.code_category.name %}
+                                    {% for meal in meals %}
+                                        {% ifchanged meal.code_category.name %}
                                             <tr>
-                                                <th colspan="2">{{ recipe.code_category.name }}</th>
+                                                <th colspan="2">{{ meal.code_category.name }}</th>
                                             </tr>
                                         {% endifchanged %}
                                         <tr>
                                             <td>
                                                 <div>
-                                                    <a href="{% url 'recipes:update' recipe.id %}">{{ recipe.name }}</a>
+                                                    <a href="{% url 'meals:update' meal.id %}">{{ meal.name }}</a>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="text-right">
-                                                    <a href="{% url 'recipe_ingredients:create' recipe.id %}">Ingredients</a>
+                                                    <a href="{% url 'meal_ingredients:create' meal.id %}">Ingredients</a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -112,12 +112,12 @@
                                 <table class="table border">
                                     <tr>
                                         <td>
-                                            No recipes created
+                                            No meals created
                                         </td>
                                     </tr>
                                 </table>
                             {% endif %}
-                        {% endblock recipes %}
+                        {% endblock meals %}
 
                     </div>
                 </div>

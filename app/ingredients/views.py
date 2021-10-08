@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic import View
 from .forms import IngredientForm, IngredientModalForm
 from .models import Ingredient
-from app.recipes.models import Recipe
+from app.meals.models import Meal
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
@@ -13,7 +13,7 @@ class IngredientCreateView(View):
 
     def get(self, request, *args, **kwargs):
 
-        recipes = Recipe.objects.select_related('code_category').order_by('code_category', 'name')
+        meals = Meal.objects.select_related('code_category').order_by('code_category', 'name')
         ingredients = Ingredient.objects.all().order_by('name')
 
         form = IngredientForm()
@@ -29,7 +29,7 @@ class IngredientCreateView(View):
             ingredients = paginator.get_page(paginator.num_pages)
 
         context = {
-            'recipes': recipes,
+            'meals': meals,
             'ingredients': ingredients,
             'form': form,
         }
@@ -53,13 +53,13 @@ class IngredientUpdateView(View):
 
     def get(self, request, *args, **kwargs):
 
-        recipes = Recipe.objects.select_related('code_category').order_by('code_category', 'name')
+        meals = Meal.objects.select_related('code_category').order_by('code_category', 'name')
         ingredient = Ingredient.objects.get(id=kwargs['pk'])
 
         form = IngredientForm(instance=ingredient)
 
         context = {
-            'recipes': recipes,
+            'meals': meals,
             'form': form,
         }
 

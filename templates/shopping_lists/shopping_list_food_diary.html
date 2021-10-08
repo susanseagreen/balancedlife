@@ -20,8 +20,10 @@
 
                 <div class="text-center">
                     <h3>{{ shopping_list.name }}</h3>
-                    {{ shopping_list.date_from | date:"D d M Y" }}
-                    - {{ shopping_list.date_to | date:"D d M Y" }}
+                    {% if shopping_list.date_from %}
+                        {{ shopping_list.date_from | date:"D d M Y" }}
+                        - {{ shopping_list.date_to | date:"D d M Y" }}
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -30,17 +32,17 @@
             {% for weekday, food in food_diary.items %}
                 <div class="col-sm-6 col-md-3 col-lg col-12 border p-0">
                     <div class="bg-info text-light p-2">{{ weekday | day_of_week_display }}</div>
-                <div class="p-3">
-                    {% for day, recipes in food.items %}
-                        {% for recipe in recipes %}
-                            {% ifchanged recipe %}
-                                <b>{{ day | meal_display }}:</b>
-                                {{ recipe }},
-                            {% endifchanged %}
-                            {% if forloop.last %}<br>{% endif %}
+                    <div class="p-3">
+                        {% for day, meals in food.items %}
+                            {% for meal in meals %}
+                                {% ifchanged meal %}
+                                    <b>{{ day | meal_display }}:</b>
+                                    {{ meal }},
+                                {% endifchanged %}
+                                {% if forloop.last %}<br>{% endif %}
+                            {% endfor %}
                         {% endfor %}
-                    {% endfor %}
-                </div>
+                    </div>
                 </div>
             {% endfor %}
 

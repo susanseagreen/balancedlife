@@ -5,7 +5,7 @@
 
 {% block container %}
 
-    <form method="post" action="{% url 'shopping_list_items:create_recipe_modal' fk %}">
+    <form method="post" action="{% url 'shopping_list_items:create_meal_modal' fk %}">
         {% csrf_token %}
         <fieldset>
             {% crispy form %}

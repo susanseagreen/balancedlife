@@ -15,11 +15,11 @@ def build_food_diary(self, food_diary):
 
     shopping_list_items = ShoppingListItem.objects \
         .filter(code_shopping_list_id=self.kwargs['pk'], added=True) \
-        .exclude(code_recipe_ingredient__code_recipe__name__isnull=True) \
-        .exclude(code_recipe_ingredient__code_recipe__name=None) \
+        .exclude(code_meal_ingredient__code_meal__name__isnull=True) \
+        .exclude(code_meal_ingredient__code_meal__name=None) \
         .values(
             'id',
-            'code_recipe_ingredient__code_recipe__name',
+            'code_meal_ingredient__code_meal__name',
             'day_of_week',
             'meal'
         ).order_by('code_ingredient__name')
@@ -28,7 +28,7 @@ def build_food_diary(self, food_diary):
 
         for shopping_list_item in shopping_list_items:
 
-            recipe_name = shopping_list_item['code_recipe_ingredient__code_recipe__name']
+            meal_name = shopping_list_item['code_meal_ingredient__code_meal__name']
 
             if ',' in shopping_list_item['day_of_week']:
                 shopping_list_item['day_of_week'] = shopping_list_item['day_of_week'].split(',')
@@ -41,15 +41,15 @@ def build_food_diary(self, food_diary):
 
                     if shopping_list_item['meal']:
                         for meal in shopping_list_item['meal']:
-                            food_diary[day_of_week][meal].append(recipe_name)
+                            food_diary[day_of_week][meal].append(meal_name)
                     else:
-                        food_diary[day_of_week]['0'].append(recipe_name)
+                        food_diary[day_of_week]['0'].append(meal_name)
             else:
                 if shopping_list_item['meal']:
                     for meal in shopping_list_item['meal']:
-                        food_diary['0'][meal].append(recipe_name)
+                        food_diary['0'][meal].append(meal_name)
                 else:
-                    food_diary['0']['0'].append(recipe_name)
+                    food_diary['0']['0'].append(meal_name)
 
     return food_diary
 
@@ -63,18 +63,18 @@ def build_shopping_list(self, ingredient_list):
             'name',
             'code_ingredient_id',
             'code_ingredient__name',
-            'code_recipe_ingredient_id',
-            'code_recipe_ingredient__code_recipe__code_category__name',
-            'code_recipe_ingredient__code_recipe_id',
-            'code_recipe_ingredient__code_recipe__name',
-            'code_recipe_ingredient__code_recipe__servings',
-            'code_recipe_ingredient__code_recipe__pax_serving',
+            'code_meal_ingredient_id',
+            'code_meal_ingredient__code_meal__code_category__name',
+            'code_meal_ingredient__code_meal_id',
+            'code_meal_ingredient__code_meal__name',
+            'code_meal_ingredient__code_meal__servings',
+            'code_meal_ingredient__code_meal__pax_serving',
             'measurement_type',
             'measurement_value',
             'day_of_week',
             'meal',
             'quantity'
-        ).order_by('code_recipe_ingredient__code_recipe__code_category__name', 'code_ingredient__name')
+        ).order_by('code_meal_ingredient__code_meal__code_category__name', 'code_ingredient__name')
 
     if shopping_list_items:
 
@@ -106,22 +106,22 @@ def build_shopping_list(self, ingredient_list):
                     'name': shopping_list_item['name'],
                     'ingredient_id': shopping_list_item['code_ingredient_id'],
                     'ingredient_name': shopping_list_item['code_ingredient__name'],
-                    'category_name': shopping_list_item['code_recipe_ingredient__code_recipe__code_category__name'],
-                    'recipe_ingredient_id': shopping_list_item['code_recipe_ingredient_id'],
+                    'category_name': shopping_list_item['code_meal_ingredient__code_meal__code_category__name'],
+                    'meal_ingredient_id': shopping_list_item['code_meal_ingredient_id'],
                     'day_of_week': shopping_list_item['day_of_week'],
                     'meal': shopping_list_item['meal'],
                     'quantity': shopping_list_item['quantity'],
-                    'recipe_names': [],
+                    'meal_names': [],
                     'added': [],
                     'removed': [],
                     'measurement_type': {},
                 }
-                ingredient_list[ingredient_id]['recipe_names'].append(
-                    shopping_list_item['code_recipe_ingredient__code_recipe__name'])
+                ingredient_list[ingredient_id]['meal_names'].append(
+                    shopping_list_item['code_meal_ingredient__code_meal__name'])
 
             shopping_list_item['servings'] = \
-                f"{shopping_list_item['code_recipe_ingredient__code_recipe__pax_serving']} pax for " + \
-                f"{shopping_list_item['code_recipe_ingredient__code_recipe__servings']} servings"
+                f"{shopping_list_item['code_meal_ingredient__code_meal__pax_serving']} pax for " + \
+                f"{shopping_list_item['code_meal_ingredient__code_meal__servings']} servings"
 
             if shopping_list_item['added']:
 

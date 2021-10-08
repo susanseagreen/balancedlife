@@ -18,6 +18,7 @@ class ShoppingListCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
+        self.fields['name'].initial = "Shopping List"
         self.helper.layout = Layout(
             Row(
                 Column('name', css_class='form-group col-sm col-12 mb-0 pb-0'),

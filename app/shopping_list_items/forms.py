@@ -1,6 +1,6 @@
 from django import forms
 from common.choices import measurement_type_choices
-from app.recipes.models import Recipe
+from app.meals.models import Meal
 from app.ingredients.models import Ingredient
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, HTML, Submit, Row, Column, Fieldset
@@ -9,8 +9,8 @@ from django_select2.forms import Select2Widget
 from common.choices import days_of_week, meals
 
 
-class ShoppingListRecipeItemForm(forms.Form):
-    recipe = forms.ModelChoiceField(queryset=Recipe.objects.order_by('name'), widget=Select2Widget)
+class ShoppingListMealItemForm(forms.Form):
+    meal = forms.ModelChoiceField(queryset=Meal.objects.order_by('name'), widget=Select2Widget)
     day_of_week = forms.MultipleChoiceField(choices=days_of_week, initial='0', widget=forms.CheckboxSelectMultiple, required=False)
     meal = forms.MultipleChoiceField(choices=meals, initial='0', widget=forms.CheckboxSelectMultiple, required=False)
     quantity = forms.IntegerField(initial=1, required=False)
@@ -21,7 +21,7 @@ class ShoppingListRecipeItemForm(forms.Form):
         self.helper.layout = Layout(
             Row(
                 Column('quantity', css_class='form-group col-sm-2 col-12 mb-0 pb-0'),
-                Column('recipe', css_class='form-group col-sm-10 col-12 mb-0 pb-0'),
+                Column('meal', css_class='form-group col-sm-10 col-12 mb-0 pb-0'),
                 css_class='form-row'
             ),
             Row(

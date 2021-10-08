@@ -18,7 +18,7 @@ def register(request):
             instance_user.save()
             email_user(request, instance_user)
 
-            subject = "New Member on your Recipes Shopping List heroku site!"
+            subject = "New Member on your Meals Shopping List heroku site!"
             message = f"Someone new has signed up with email {instance_user.email}"
             email_me(request, instance_user, subject, message)
 
@@ -30,7 +30,7 @@ def register(request):
 
 def email_user(request, instance):
     email = instance.email
-    subject = "Recipes Shopping List"
+    subject = "Meals Shopping List"
     context = {
         "instance": instance,
         "path": request.build_absolute_uri('/')[:-1],
@@ -60,7 +60,7 @@ def user_activate(request, user_id, user_code):
         user.is_active = True
         user.save()
         subject = "Your Account has been activated"
-        message = f"Your 'Recipes Shopping List' Account has been activated"
+        message = f"Your 'Meals Shopping List' Account has been activated"
         send_mail(subject, message, email, [user.email])
         messages.success(request, f'{user.username} has been successfully activated')
     else:
@@ -75,7 +75,7 @@ def superuser_activate(request, user_id, user_code):
         user.is_superuser = True
         user.is_staff = True
         user.save()
-        subject = "SUPERUSER: Member on your Recipes Shopping List heroku site!"
+        subject = "SUPERUSER: Member on your Meals Shopping List heroku site!"
         message = f"{user.email} has activated their account"
         email_me(user.email, subject, message)
         messages.success(request, 'You have been successfully activated')

@@ -1,5 +1,5 @@
 from django.urls import path
-from app.shopping_list_items.views import (ShoppingListRecipeItemCreateView,
+from app.shopping_list_items.views import (ShoppingListMealItemCreateView,
                                            ShoppingListIngredientItemCreateView,
                                            ShoppingListIngredientItemUpdateView,
                                            ShoppingListOtherItemCreateView,
@@ -8,7 +8,7 @@ from app.shopping_list_items.views import (ShoppingListRecipeItemCreateView,
 app_name = "shopping_list_items"
 
 urlpatterns = [
-    path('create_recipe_modal/<fk>', ShoppingListRecipeItemCreateView.as_view(), name='create_recipe_modal'),
+    path('create_meal_modal/<fk>', ShoppingListMealItemCreateView.as_view(), name='create_meal_modal'),
 
     path('create_ingredient_modal/<fk>', ShoppingListIngredientItemCreateView.as_view(),
          name='create_ingredient_modal'),
