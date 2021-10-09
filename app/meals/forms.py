@@ -9,7 +9,7 @@ class MealCreateForm(forms.ModelForm):
 
     categories = MealCategory.objects.order_by('name').values_list('id', 'name')
 
-    # meal_categories = forms.MultipleChoiceField(choices=list(categories), widget=forms.CheckboxSelectMultiple, required=False)
+    meal_categories = forms.MultipleChoiceField(choices=list(categories), widget=forms.CheckboxSelectMultiple, required=False)
 
     class Meta:
         model = Meal
@@ -53,7 +53,7 @@ class MealUpateForm(forms.ModelForm):
 
     categories = MealCategory.objects.order_by('name').values_list('id', 'name')
 
-    # meal_categories = forms.MultipleChoiceField(choices=list(categories), widget=forms.CheckboxSelectMultiple, required=False)
+    meal_categories = forms.MultipleChoiceField(choices=list(categories), widget=forms.CheckboxSelectMultiple, required=False)
 
     class Meta:
         model = Meal
