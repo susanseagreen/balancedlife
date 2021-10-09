@@ -1,8 +1,8 @@
 from app.shopping_list_items.models import ShoppingListItem
+from common import categories
 
 
 def build_diary(food_diary):
-
     for x in range(0, 8):
         food_diary[str(x)] = {}
         for y in range(0, 6):
@@ -12,7 +12,6 @@ def build_diary(food_diary):
 
 
 def build_food_diary(self, food_diary):
-
     shopping_list_items = ShoppingListItem.objects \
         .filter(code_shopping_list_id=self.kwargs['pk'], added=True) \
         .exclude(code_meal_ingredient__code_meal__name__isnull=True) \
@@ -64,7 +63,7 @@ def build_shopping_list(self, ingredient_list):
             'code_ingredient_id',
             'code_ingredient__name',
             'code_meal_ingredient_id',
-            'code_meal_ingredient__code_meal__code_category__name',
+            'code_meal_ingredient__code_meal__meal_category',
             'code_meal_ingredient__code_meal_id',
             'code_meal_ingredient__code_meal__name',
             'code_meal_ingredient__code_meal__servings',
@@ -74,14 +73,19 @@ def build_shopping_list(self, ingredient_list):
             'day_of_week',
             'meal',
             'quantity'
-        ).order_by('code_meal_ingredient__code_meal__code_category__name', 'code_ingredient__name')
+        ).order_by('code_ingredient__name')
+
+    meal_category_dict = categories.build_meal_category_dict()
 
     if shopping_list_items:
 
         for shopping_list_item in shopping_list_items:
-            measurement_type = 'i'  # items
 
-            if shopping_list_item['measurement_value']:
+            meal_categories = []
+            measurement_type = 'i'  # items
+            ingredient_id = None
+
+            if shopping_list_item['measurement_value'] and shopping_list_item['quantity']:
                 shopping_list_item['measurement_value'] = shopping_list_item['measurement_value'] * \
                                                           shopping_list_item['quantity']
 
@@ -94,7 +98,17 @@ def build_shopping_list(self, ingredient_list):
             if ',' in shopping_list_item['day_of_week']:
                 shopping_list_item['day_of_week'] = shopping_list_item['day_of_week'].split(',')
 
+            if ',' in shopping_list_item['code_meal_ingredient__code_meal__meal_category']:
+                shopping_list_item['code_meal_ingredient__code_meal__meal_category'] = shopping_list_item[
+                    'code_meal_ingredient__code_meal__meal_category'].split(',')
+
+            for code in shopping_list_item['code_meal_ingredient__code_meal__meal_category']:
+                meal_categories.append(meal_category_dict[code])
+            shopping_list_item['meal_categories'] = meal_categories
+
             if ',' in shopping_list_item['meal']:
+                shopping_list_item['meal'] = shopping_list_item['meal'].split(',')
+                shopping_list_item['meal'] = shopping_list_item['meal'].split(',')
                 shopping_list_item['meal'] = shopping_list_item['meal'].split(',')
 
             if shopping_list_item['measurement_type']:
@@ -106,7 +120,7 @@ def build_shopping_list(self, ingredient_list):
                     'name': shopping_list_item['name'],
                     'ingredient_id': shopping_list_item['code_ingredient_id'],
                     'ingredient_name': shopping_list_item['code_ingredient__name'],
-                    'category_name': shopping_list_item['code_meal_ingredient__code_meal__code_category__name'],
+                    'meal_categories': shopping_list_item['meal_categories'],
                     'meal_ingredient_id': shopping_list_item['code_meal_ingredient_id'],
                     'day_of_week': shopping_list_item['day_of_week'],
                     'meal': shopping_list_item['meal'],
@@ -173,6 +187,7 @@ def build_measurements(ingredient_list):
 
     return ingredient_list
 
+
 def convert_check(ingredient, bigger, smaller, diff):
     if ingredient.get(bigger):
         if not ingredient.get(smaller):
@@ -181,13 +196,14 @@ def convert_check(ingredient, bigger, smaller, diff):
             ingredient[smaller] = round(ingredient[smaller] + (ingredient[bigger] * diff), 2)
         ingredient.pop(bigger)
 
+
 def convert_up(ingredient, bigger, smaller, diff):
     if ingredient.get(smaller) and ingredient.get(smaller) >= diff:
         ingredient[bigger] = round(ingredient[smaller] / diff, 2)
         ingredient.pop(smaller)
 
-def get_fraction(ingredient, value):
 
+def get_fraction(ingredient, value):
     if value in ingredient and '.' in str(ingredient[value]):
         num, dec = str(ingredient[value]).split('.')
         fraction = ''

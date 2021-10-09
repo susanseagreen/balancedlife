@@ -10,6 +10,7 @@ from .forms import (ShoppingListMealItemForm,
                     ShoppingListOtherItemForm)
 from .models import ShoppingListItem
 from app.meal_ingredients.models import MealIngredient
+from app.meals.models import Meal
 
 
 class ShoppingListMealItemCreateView(View):
@@ -29,9 +30,9 @@ class ShoppingListMealItemCreateView(View):
     def post(self, request, *args, **kwargs):
 
         form = ShoppingListMealItemForm(request.POST)
+        meal_servings = Meal.objects.get(id=kwargs['fk']).servings
 
         if form.is_valid():
-            meal = form.cleaned_data['meal']
             day_of_week = ','.join(form.cleaned_data['day_of_week'])
             meal = ','.join(form.cleaned_data['meal'])
             quantity = form.cleaned_data['quantity']
@@ -41,7 +42,10 @@ class ShoppingListMealItemCreateView(View):
                 day_of_week = '0'
             if not meal:
                 meal = '0'
-            meal_ingredients = MealIngredient.objects.filter(code_meal_id=meal.pk)
+            if meal_servings:
+                quantity = meal_servings / quantity
+
+            meal_ingredients = MealIngredient.objects.filter(code_meal_id=kwargs['fk'])
             for meal_ingredient in meal_ingredients:
                 if meal_ingredient.code_ingredient.name.lower() != 'water':
                     ShoppingListItem.objects.create(

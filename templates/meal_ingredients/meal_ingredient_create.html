@@ -35,22 +35,21 @@
         <h3>
             <a href="{% url 'meals:update' meal.id %}">{{ meal.name }}</a>
         </h3>
-
-        <i>
-            {{ meal.code_category.name }}
-        </i>
-        <br>
+        <div class="d-flex justify-content-between">
+            <div>
+                {% for meal_category in meal.meal_categories %}
+                    <span class="meal_category">{{ meal_category }}</span>
+                {% endfor %}
+            </div>
+            <i>
+                {{ meal.pax_serving }} pax per {{ meal.servings }} serving
+            </i>
+        </div>
         <br>
         <div>
             {{ meal.description|linebreaks }}
         </div>
     </div>
-
-    {% if meal.steps %}
-        <h4>Instructions</h4>
-        {{ meal.steps|linebreaks }}
-        <br>
-    {% endif %}
 
     {% if meal_ingredients %}
         <table class="table border">
@@ -85,6 +84,12 @@
                 </tr>
             {% endfor %}
         </table>
+        <br>
+    {% endif %}
+
+    {% if meal.steps %}
+        <h4>Instructions</h4>
+        {{ meal.steps|linebreaks }}
         <br>
     {% endif %}
 

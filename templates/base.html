@@ -89,11 +89,6 @@
                             {% if meals %}
                                 <table class="table border">
                                     {% for meal in meals %}
-                                        {% ifchanged meal.code_category.name %}
-                                            <tr>
-                                                <th colspan="2">{{ meal.code_category.name }}</th>
-                                            </tr>
-                                        {% endifchanged %}
                                         <tr>
                                             <td>
                                                 <div>

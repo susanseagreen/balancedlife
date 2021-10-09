@@ -6,6 +6,7 @@ from .forms import MealIngredientCreateForm, MealIngredientUpdateForm
 from .models import MealIngredient
 from app.meals.models import Meal
 from .lib import meal_ingredient
+from common import categories
 
 
 class MealIngredientCreateView(View):
@@ -16,8 +17,17 @@ class MealIngredientCreateView(View):
             .select_related('code_ingredient') \
             .filter(code_meal_id=self.kwargs['fk']) \
             .order_by('code_ingredient__name')
-        meals = Meal.objects.select_related('code_category').order_by('code_category', 'name')
+        meals = Meal.objects.order_by('name')
+
         meal = meals.filter(id=self.kwargs['fk']).first()
+        if ',' in meal.meal_category:
+            meal.meal_category = meal.meal_category.split(',')
+
+        meal_category_dict = categories.build_meal_category_dict()
+        meal.meal_categories = []
+        for meal_category in meal.meal_category:
+            meal.meal_categories.append(meal_category_dict[meal_category])
+
         form = MealIngredientCreateForm()
 
         meal_ingredient.get_fraction(meal_ingredients)
@@ -47,7 +57,7 @@ class MealIngredientModalUpdateView(View):
     template_name = 'meal_ingredients/meal_ingredient_update_modal.html'
 
     def get(self, request, *args, **kwargs):
-        meal_ingredient = MealIngredient.objects.select_related('code_ingredient').get(id=self.kwargs['pk'])
+        meal_ingredient = MealIngredient.objects.select_related('code_ingredient').order_by('code_ingredient__name').get(id=self.kwargs['pk'])
         form = MealIngredientUpdateForm(instance=meal_ingredient)
 
         context = {

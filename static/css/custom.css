@@ -6,6 +6,10 @@
     top: 0 !important;
 }
 
+.mw-45 {
+    min-width: 45px;
+}
+
 .mw-65 {
     min-width: 65px;
 }
@@ -124,7 +128,7 @@ a {
     width: 100% !important;
 }
 
-#div_id_day_of_week div, #div_id_meal div, #div_id_meal_from div, #div_id_meal_to div {
+#div_id_day_of_week div, #div_id_meal div, #div_id_meal_categories div {
     display: flex;
     flex-wrap: wrap;
 }
@@ -180,4 +184,26 @@ input[type="checkbox"]:checked {
     background-repeat: no-repeat;
     background-color: #245884;
     border-color: #245884;
+}
+
+.border-radius {
+    border-radius: 20px;
+}
+
+.category_display {
+    background-color: #17a2b8!important;
+    border: 1px solid #17a2b8!important;
+    color: #f8f9fa!important;
+    padding: 5px 10px;
+    margin: 5px;
+}
+
+.category_display:hover {
+    background-color: #fff!important;
+    color: #17a2b8!important;
+}
+
+.category_display:active {
+    background-color: #17a2b8!important;
+    color: #f8f9fa!important;
 }

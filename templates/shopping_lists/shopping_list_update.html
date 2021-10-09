@@ -12,7 +12,7 @@
         </div>
     </div>
 
-    <div class="d-flex justify-content-center mb-5">
+    <div class="d-flex justify-content-center mb-2">
         <a class="btn btn-info m-1" href="{% url 'shopping_lists:list' pk %}">
             View Shopping List
         </a>
@@ -21,7 +21,7 @@
         </a>
     </div>
 
-    <form method="post" action="{% url 'shopping_lists:update' pk %}">
+    <form method="post" action="{% url 'shopping_lists:update' pk %}" class="border p-3 mb-3">
         {% csrf_token %}
         <fieldset>
             {% crispy form %}
@@ -30,13 +30,13 @@
 
     <div class="d-flex justify-content-center">
         <a class="modal_create_meal btn btn-dark m-1" data-toggle="modal" href="javascript:void(0);">
-            Add Meal Ingredients
+            Meals
         </a>
         <a class="modal_create_ingredient btn btn-dark m-1" data-toggle="modal" href="javascript:void(0);">
-            Add Other Ingredient
+            Ingredients
         </a>
         <a class="modal_create_other btn btn-dark m-1" data-toggle="modal" href="javascript:void(0);">
-            Add Other Item
+            Other Items
         </a>
     </div>
 
@@ -212,6 +212,7 @@
 
     <script>
         $(document).ready(function () {
+            $('.toggle_dates').hide()
             jQuery('.modal_create_meal').click(function (e) {
                 $('.modal-body').load("{% url 'shopping_list_items:create_meal_modal' pk %}", function (result) {
                     $('#myModal').modal({show: true});
@@ -238,6 +239,10 @@
                 $('.modal-body').load(linkvar, function (result) {
                     $('#myModal').modal({show: true});
                 });
+            });
+            $(".button_toggle_dates").click(function(){
+                $('.toggle_dates').fadeToggle()
+                this.innerText = (this.innerText === '-' ? '+' : '-')
             });
         });
     </script>

@@ -11,7 +11,7 @@ class MealCreateView(View):
 
     def get(self, request, *args, **kwargs):
 
-        meals = Meal.objects.select_related('code_category').order_by('code_category', 'name')
+        meals = Meal.objects.order_by('name')
         form = MealCreateForm()
 
         context = {
@@ -26,7 +26,9 @@ class MealCreateView(View):
         form = MealCreateForm(request.POST)
 
         if form.is_valid():
+            meal_categories = ','.join(form.cleaned_data['meal_categories'])
             instance = form.save(commit=False)
+            instance.meal_category = meal_categories
             instance.save()
 
             return redirect(reverse_lazy('meal_ingredients:create', kwargs={'fk': instance.pk}))
@@ -39,7 +41,7 @@ class MealUpdateView(View):
 
     def get(self, request, *args, **kwargs):
 
-        meals = Meal.objects.select_related('code_category').order_by('code_category', 'name')
+        meals = Meal.objects.order_by('name')
         meal = Meal.objects.get(id=self.kwargs['pk'])
         form = MealUpateForm(instance=meal)
 
@@ -58,6 +60,9 @@ class MealUpdateView(View):
         form = MealUpateForm(request.POST, instance=meal)
 
         if form.is_valid():
-            form.save()
+            meal_categories = ','.join(form.cleaned_data['meal_categories'])
+            instance = form.save(commit=True)
+            instance.meal_category = meal_categories
+            instance.save()
 
         return redirect(reverse_lazy('meal_ingredients:create', kwargs={'fk': self.kwargs['pk']}))

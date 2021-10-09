@@ -13,7 +13,7 @@ class IngredientCreateView(View):
 
     def get(self, request, *args, **kwargs):
 
-        meals = Meal.objects.select_related('code_category').order_by('code_category', 'name')
+        meals = Meal.objects.order_by('name')
         ingredients = Ingredient.objects.all().order_by('name')
 
         form = IngredientForm()
@@ -53,7 +53,7 @@ class IngredientUpdateView(View):
 
     def get(self, request, *args, **kwargs):
 
-        meals = Meal.objects.select_related('code_category').order_by('code_category', 'name')
+        meals = Meal.objects.order_by('name')
         ingredient = Ingredient.objects.get(id=kwargs['pk'])
 
         form = IngredientForm(instance=ingredient)
