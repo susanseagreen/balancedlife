@@ -20,6 +20,10 @@
         </fieldset>
     </form>
 
+    <br>
+    <hr>
+    <br>
+
     <!--Pagination-->
     {% if ingredients.paginator.num_pages > 1 %}
         <div class="row">
@@ -75,20 +79,39 @@
     {% endif %}
     <!--end of Pagination-->
 
+    <div class="row">
+        <div class="col-12">
+            <form method="GET">
+                <fieldset>
+                    <div class="d-flex form-group">
+                        <label class="form-label text-nowrap m-1 pr-2">Ingredient Search</label>
+                        <input name="ingredients_search" class="form-control mr-2" type="text"
+                               value="{{ ingredients_search }}">
+                        <button class="btn btn-info" type="submit">Search</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
     {% if ingredients %}
-        <table class="table border mt-5">
-            <tr>
-                <th>Ingredient</th>
-            </tr>
+
+        <br>
+        {% if ingredients_search %}
+            <div class="text-center">
+                <h5>Results for "{{ ingredients_search }}"</h5>
+            </div>
+        {% endif %}
+        <div class="row justify-content-center">
             {% for ingredient in ingredients %}
-                <tr>
-                    <td>
-                        <a class="modal_update" data-toggle="modal" href="javascript:void(0);"
-                           id="{% url 'ingredients:update_modal' ingredient.id %}">{{ ingredient.name }}</a>
-                    </td>
-                </tr>
+                <a class="modal_update" data-toggle="modal" href="javascript:void(0);"
+                   id="{% url 'ingredients:update_modal' ingredient.id %}">
+                    <div class="category_display border-radius">
+                        {{ ingredient.name }}
+                    </div>
+                </a>
             {% endfor %}
-        </table>
+        </div>
     {% endif %}
     <br>
 

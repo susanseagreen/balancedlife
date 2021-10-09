@@ -1,10 +1,14 @@
 from django import forms
 from app.ingredients.models import Ingredient
+from app.ingredient_categories.models import IngredientCategory
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, HTML, Submit, Row, Column, Fieldset
+from django_select2.forms import Select2Widget
 
 
 class IngredientForm(forms.ModelForm):
+    code_category = forms.ModelChoiceField(label='Category', queryset=IngredientCategory.objects.order_by('name'),
+                                           widget=Select2Widget)
 
     class Meta:
         model = Ingredient
@@ -27,6 +31,7 @@ class IngredientForm(forms.ModelForm):
 
 
 class IngredientModalForm(forms.ModelForm):
+    code_category = forms.ModelChoiceField(label='Category', queryset=IngredientCategory.objects.order_by('name'), widget=Select2Widget)
 
     class Meta:
         model = Ingredient

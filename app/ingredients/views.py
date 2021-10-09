@@ -13,12 +13,15 @@ class IngredientCreateView(View):
 
     def get(self, request, *args, **kwargs):
 
-        meals = Meal.objects.order_by('name')
-        ingredients = Ingredient.objects.all().order_by('name')
+        meals_search = self.request.GET.get('meals_search') or ''
+        meals = Meal.objects.filter(name__icontains=meals_search).order_by('name')
+
+        ingredients_search = self.request.GET.get('ingredients_search') or ''
+        ingredients = Ingredient.objects.filter(name__icontains=ingredients_search).order_by('name')
 
         form = IngredientForm()
 
-        paginator = Paginator(ingredients, 10)
+        paginator = Paginator(ingredients, 100)
         page_num = request.GET.get('page', 1)
 
         try:
@@ -29,6 +32,8 @@ class IngredientCreateView(View):
             ingredients = paginator.get_page(paginator.num_pages)
 
         context = {
+            'meals_search': meals_search,
+            'ingredients_search': ingredients_search,
             'meals': meals,
             'ingredients': ingredients,
             'form': form,
@@ -53,12 +58,25 @@ class IngredientUpdateView(View):
 
     def get(self, request, *args, **kwargs):
 
-        meals = Meal.objects.order_by('name')
+        meals_search = self.request.GET.get('meals_search') or ''
+        meals = Meal.objects.filter(name__icontains=meals_search).order_by('name')
+
         ingredient = Ingredient.objects.get(id=kwargs['pk'])
 
         form = IngredientForm(instance=ingredient)
 
+        paginator = Paginator(meals, 100)
+        page_num = request.GET.get('page', 1)
+
+        try:
+            meals = paginator.get_page(page_num)
+        except PageNotAnInteger:
+            meals = paginator.get_page(1)
+        except EmptyPage:
+            meals = paginator.get_page(paginator.num_pages)
+
         context = {
+            'meals_search': meals_search,
             'meals': meals,
             'form': form,
         }

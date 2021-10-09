@@ -1,6 +1,6 @@
 env/
+.env
 .idea
 *.pyc
 staticfiles
-.env
 db.sqlite3

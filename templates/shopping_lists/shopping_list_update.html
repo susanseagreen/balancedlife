@@ -262,37 +262,92 @@
     <div class="col-12">
         <h3>"{{ shopping_list.name }}" Meals</h3>
     </div>
-    {% if ingredient_list %}
-        {% for id, ingredient in ingredient_list.items %}
-            {% if ingredient.added and ingredient.ingredient_id %}
-                {% ifchanged ingredient.meal_names %}
-                    <table class="table border">
-                        {% for meal_name in ingredient.meal_names %}
-                            <tr>
-                                <td>
-                                    <div class="d-flex justify-content-between">
-                                        <div>{{ meal_name }}</div>
-                                        <div class="text-right">
-                                            {% for meal_category in ingredient.meal_categories %}
-                                                <span class="meal_category">{{ meal_category }}</span>
-                                            {% endfor %}
-                                        </div>
-                                    </div>
 
-                                </td>
-                            </tr>
+    <!--Pagination-->
+    {% if meal_list.paginator.num_pages > 1 %}
+        <div class="row">
+            <div class="col">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        {% if meal_list.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ meal_list.previous_page_number }}">Previous</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                            </li>
+                        {% endif %}
+
+                        {% if meal_list.number|add:'-4' > 1 %}
+                            <li class="page-item"><a class="page-link" href="?page={{ meal_list.number|add:'-5' }}">&hellip;</a>
+                            </li>
+                        {% endif %}
+
+                        {% for i in meal_list.paginator.page_range %}
+                            {% if meal_list.number == i %}
+                                <li class="page-item active" aria-current="page">
+                                    <span class="page-link">
+                                        {{ i }}
+                                        <span class="sr-only">(current)</span>
+                                    </span>
+                                </li>
+                            {% elif i > meal_list.number|add:'-5' and i < meal_list.number|add:'5' %}
+                                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
                         {% endfor %}
-                    </table>
-                {% endifchanged %}
-            {% endif %}
-        {% endfor %}
-    {% else %}
-        <table class="table border">
+
+                        {% if meal_list.paginator.num_pages > meal_list.number|add:'4' %}
+                            <li class="page-item"><a class="page-link" href="?page={{ meal_list.number|add:'5' }}">&hellip;</a>
+                            </li>
+                        {% endif %}
+
+                        {% if meal_list.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ meal_list.next_page_number }}">Next</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    {% endif %}
+    <!--end of Pagination-->
+
+    <div class="row">
+        <div class="col-12">
+            <form method="GET">
+                <fieldset>
+                    <div class="d-flex form-group">
+                        <input name="meals_search" class="form-control mr-2" type="text"
+                               value="{{ meals_search }}">
+                        <button class="btn btn-info" type="submit">Search</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+    <table class="table border">
+        {% if meal_list %}
+            {% for meal in meal_list %}
+                <tr>
+                    <td>
+                        {{ meal }}
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
             <tr>
                 <td>
-                    No meals created
+                    No meals
                 </td>
             </tr>
-        </table>
-    {% endif %}
+        {% endif %}
+    </table>
+
 {% endblock meals %}

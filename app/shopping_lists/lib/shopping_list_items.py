@@ -98,19 +98,24 @@ def build_shopping_list(self, ingredient_list):
             if shopping_list_item['name']:
                 ingredient_id = shopping_list_item['name'].replace(' ', '').lower()
 
-            if ',' in shopping_list_item['day_of_week']:
-                shopping_list_item['day_of_week'] = shopping_list_item['day_of_week'].split(',')
+            if shopping_list_item['day_of_week']:
+                if ',' in shopping_list_item['day_of_week']:
+                    shopping_list_item['day_of_week'] = shopping_list_item['day_of_week'].split(',')
 
-            if ',' in shopping_list_item['code_meal_ingredient__code_meal__meal_category']:
-                shopping_list_item['code_meal_ingredient__code_meal__meal_category'] = shopping_list_item[
-                    'code_meal_ingredient__code_meal__meal_category'].split(',')
+            if shopping_list_item['code_meal_ingredient__code_meal__meal_category']:
+                if ',' in shopping_list_item['code_meal_ingredient__code_meal__meal_category']:
+                    shopping_list_item['code_meal_ingredient__code_meal__meal_category'] = shopping_list_item[
+                        'code_meal_ingredient__code_meal__meal_category'].split(',')
 
-            for code in shopping_list_item['code_meal_ingredient__code_meal__meal_category']:
-                meal_categories.append(meal_category_dict[code])
-            shopping_list_item['meal_categories'] = meal_categories
+                for code in shopping_list_item['code_meal_ingredient__code_meal__meal_category']:
+                    meal_categories.append(meal_category_dict[code])
+                shopping_list_item['meal_categories'] = meal_categories
+            else:
+                shopping_list_item['meal_categories'] = ""
 
-            if ',' in shopping_list_item['meal']:
-                shopping_list_item['meal'] = shopping_list_item['meal'].split(',')
+            if shopping_list_item['meal']:
+                if ',' in shopping_list_item['meal']:
+                    shopping_list_item['meal'] = shopping_list_item['meal'].split(',')
 
             if shopping_list_item['measurement_type']:
                 measurement_type = shopping_list_item['measurement_type']
@@ -131,8 +136,9 @@ def build_shopping_list(self, ingredient_list):
                     'removed': [],
                     'measurement_type': {},
                 }
-                ingredient_list[ingredient_id]['meal_names'].append(
-                    shopping_list_item['code_meal_ingredient__code_meal__name'])
+                if shopping_list_item['code_meal_ingredient__code_meal__name']:
+                    ingredient_list[ingredient_id]['meal_names'].append(
+                        shopping_list_item['code_meal_ingredient__code_meal__name'])
 
             shopping_list_item['servings'] = \
                 f"{shopping_list_item['code_meal_ingredient__code_meal__pax_serving']} pax for " + \

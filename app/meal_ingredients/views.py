@@ -7,6 +7,7 @@ from .models import MealIngredient
 from app.meals.models import Meal
 from .lib import meal_ingredient
 from common import categories
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 class MealIngredientCreateView(View):
@@ -17,7 +18,9 @@ class MealIngredientCreateView(View):
             .select_related('code_ingredient') \
             .filter(code_meal_id=self.kwargs['fk']) \
             .order_by('code_ingredient__name')
-        meals = Meal.objects.order_by('name')
+
+        meals_search = self.request.GET.get('meals_search') or ''
+        meals = Meal.objects.filter(name__icontains=meals_search).order_by('name')
 
         meal = meals.filter(id=self.kwargs['fk']).first()
         if ',' in meal.meal_category:
@@ -32,7 +35,18 @@ class MealIngredientCreateView(View):
 
         meal_ingredient.get_fraction(meal_ingredients)
 
+        paginator = Paginator(meals, 100)
+        page_num = request.GET.get('page', 1)
+
+        try:
+            meals = paginator.get_page(page_num)
+        except PageNotAnInteger:
+            meals = paginator.get_page(1)
+        except EmptyPage:
+            meals = paginator.get_page(paginator.num_pages)
+
         context = {
+            'meals_search': meals_search,
             'meal_ingredients': meal_ingredients,
             'meals': meals,
             'meal': meal,

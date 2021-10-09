@@ -7,17 +7,33 @@ from .models import ShoppingList
 from app.meals.models import Meal
 from .lib import shopping_list_items
 from datetime import timedelta
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 class ShoppingListCreateView(View):
     template_name = 'shopping_lists/shopping_list_create.html'
 
     def get(self, request, *args, **kwargs):
+
+        meals_search = self.request.GET.get('meals_search') or ''
+        meals = Meal.objects.filter(name__icontains=meals_search).order_by('name')
+
         shopping_lists = ShoppingList.objects.filter(code_user_id=self.request.user.id).order_by('name')
-        meals = Meal.objects.order_by('name')
+
         form = ShoppingListCreateForm()
 
+        paginator = Paginator(meals, 100)
+        page_num = request.GET.get('page', 1)
+
+        try:
+            meals = paginator.get_page(page_num)
+        except PageNotAnInteger:
+            meals = paginator.get_page(1)
+        except EmptyPage:
+            meals = paginator.get_page(paginator.num_pages)
+
         context = {
+            'meals_search': meals_search,
             'shopping_lists': shopping_lists,
             'meals': meals,
             'form': form,
@@ -45,11 +61,20 @@ class ShoppingListUpdateView(View):
 
     def get(self, request, *args, **kwargs):
 
+        meal_list = []
         ingredient_list = {}
+        meals_search = self.request.GET.get('meals_search') or ''
 
         shopping_list_items.build_shopping_list(self, ingredient_list)
 
         shopping_list = ShoppingList.objects.get(id=self.kwargs['pk'])
+
+        for key, meal in ingredient_list.items():
+            for meal_added in meal['added']:
+                meal_names = meal_added['code_meal_ingredient__code_meal__name']
+                if meal_names and meal_names not in meal_list:
+                    if meals_search.lower() in meal_names.lower():
+                        meal_list.append(meal_names)
 
         if shopping_list.date_from:
             form = ShoppingListUpdateDatesForm(instance=shopping_list)
@@ -58,7 +83,9 @@ class ShoppingListUpdateView(View):
 
         context = {
             'pk': self.kwargs['pk'],
+            'meals_search': meals_search,
             'shopping_list': shopping_list,
+            'meal_list': meal_list,
             'ingredient_list': ingredient_list,
             'form': form,
         }

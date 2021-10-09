@@ -134,7 +134,7 @@ a {
 }
 
 [for^="id_day_of_week_"], [for^="id_meal_"] {
-    width: 90px;
+    margin-right: 20px;
     font-size: 12px;
     padding-top: 4px;
 }

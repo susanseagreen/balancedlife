@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic import View
 from .forms import MealCreateForm, MealUpateForm
 from .models import Meal
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 class MealCreateView(View):
@@ -11,10 +12,23 @@ class MealCreateView(View):
 
     def get(self, request, *args, **kwargs):
 
-        meals = Meal.objects.order_by('name')
+        meals_search = self.request.GET.get('meals_search') or ''
+        meals = Meal.objects.filter(name__icontains=meals_search).order_by('name')
+
         form = MealCreateForm()
 
+        paginator = Paginator(meals, 100)
+        page_num = request.GET.get('page', 1)
+
+        try:
+            meals = paginator.get_page(page_num)
+        except PageNotAnInteger:
+            meals = paginator.get_page(1)
+        except EmptyPage:
+            meals = paginator.get_page(paginator.num_pages)
+
         context = {
+            'meals_search': meals_search,
             'meals': meals,
             'form': form,
         }
@@ -41,11 +55,24 @@ class MealUpdateView(View):
 
     def get(self, request, *args, **kwargs):
 
-        meals = Meal.objects.order_by('name')
+        meals_search = self.request.GET.get('meals_search') or ''
+        meals = Meal.objects.filter(name__icontains=meals_search).order_by('name')
+
         meal = Meal.objects.get(id=self.kwargs['pk'])
         form = MealUpateForm(instance=meal)
 
+        paginator = Paginator(meals, 100)
+        page_num = request.GET.get('page', 1)
+
+        try:
+            meals = paginator.get_page(page_num)
+        except PageNotAnInteger:
+            meals = paginator.get_page(1)
+        except EmptyPage:
+            meals = paginator.get_page(paginator.num_pages)
+
         context = {
+            'meals_search': meals_search,
             'meals': meals,
             'meal': meal,
             'form': form,
