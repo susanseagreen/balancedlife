@@ -9,7 +9,7 @@ class ShoppingListItem(models.Model):
     added = models.BooleanField(default=True, blank=True)
 
     name = models.CharField(max_length=50, blank=True, null=True)
-    quantity = models.IntegerField(default=1)
+    quantity = models.DecimalField(max_digits=5, default=1, decimal_places=2, blank=True, null=True)
     code_ingredient = models.ForeignKey(
         'ingredients.Ingredient', verbose_name='Ingredient', on_delete=models.PROTECT,
         related_name='shopping_list_item', blank=True, null=True)

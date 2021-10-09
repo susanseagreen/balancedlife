@@ -43,7 +43,7 @@ class ShoppingListMealItemCreateView(View):
             if not meal:
                 meal = '0'
             if meal_servings:
-                quantity = meal_servings / quantity
+                quantity = quantity / meal_servings
 
             meal_ingredients = MealIngredient.objects.filter(code_meal_id=kwargs['fk'])
             for meal_ingredient in meal_ingredients:

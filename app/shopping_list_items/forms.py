@@ -19,9 +19,9 @@ class ShoppingListMealItemForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
+            Column('quantity', css_class='d-none'),
             Row(
-                Column('quantity', css_class='form-group col-sm-2 col-12 mb-0 pb-0'),
-                Column('meals', css_class='form-group col-sm-10 col-12 mb-0 pb-0'),
+                Column('meals', css_class='form-group col-12 mb-0 pb-0'),
                 css_class='form-row'
             ),
             Row(
@@ -41,19 +41,20 @@ class ShoppingListIngredientItemForm(forms.Form):
     ingredient = forms.ModelChoiceField(queryset=Ingredient.objects.order_by('name'))
     day_of_week = forms.MultipleChoiceField(choices=days_of_week, initial='0', widget=forms.CheckboxSelectMultiple, required=False)
     meal = forms.MultipleChoiceField(choices=meal_choices, initial='0', widget=forms.CheckboxSelectMultiple, required=False)
+    quantity = forms.IntegerField(initial=1, required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
+            Column('quantity', css_class='d-none'),
             Row(
                 Column('measurement_value', css_class='form-group col-4 mb-0 pb-0'),
                 Column('measurement_type', css_class='form-group col-8 mb-0 pb-0'),
                 css_class='form-row'
             ),
             Row(
-                Column('ingredient', css_class='form-group col-sm-10 col-12 mb-0 pb-0'),
-                Column('quantity', css_class='form-group col-sm-2 col-12 mb-0 pb-0'),
+                Column('ingredient', css_class='form-group col-12 mb-0 pb-0'),
                 css_class='form-row'
             ),
             Row(

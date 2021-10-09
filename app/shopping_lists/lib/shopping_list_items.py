@@ -62,6 +62,7 @@ def build_shopping_list(self, ingredient_list):
             'name',
             'code_ingredient_id',
             'code_ingredient__name',
+            'code_ingredient__code_category__name',
             'code_meal_ingredient_id',
             'code_meal_ingredient__code_meal__meal_category',
             'code_meal_ingredient__code_meal_id',
@@ -73,7 +74,7 @@ def build_shopping_list(self, ingredient_list):
             'day_of_week',
             'meal',
             'quantity'
-        ).order_by('code_ingredient__name')
+        ).order_by('code_ingredient__code_category__name', 'code_ingredient__name')
 
     meal_category_dict = categories.build_meal_category_dict()
 
@@ -85,9 +86,11 @@ def build_shopping_list(self, ingredient_list):
             measurement_type = 'i'  # items
             ingredient_id = None
 
+            shopping_list_item['quantity'] = float(shopping_list_item['quantity'])
+            shopping_list_item['measurement_value'] = float(shopping_list_item['measurement_value'])
+
             if shopping_list_item['measurement_value'] and shopping_list_item['quantity']:
-                shopping_list_item['measurement_value'] = shopping_list_item['measurement_value'] * \
-                                                          shopping_list_item['quantity']
+                shopping_list_item['measurement_value'] = float(shopping_list_item['measurement_value'] * shopping_list_item['quantity'])
 
             if shopping_list_item['code_ingredient_id']:
                 ingredient_id = shopping_list_item['code_ingredient_id']
@@ -107,8 +110,6 @@ def build_shopping_list(self, ingredient_list):
             shopping_list_item['meal_categories'] = meal_categories
 
             if ',' in shopping_list_item['meal']:
-                shopping_list_item['meal'] = shopping_list_item['meal'].split(',')
-                shopping_list_item['meal'] = shopping_list_item['meal'].split(',')
                 shopping_list_item['meal'] = shopping_list_item['meal'].split(',')
 
             if shopping_list_item['measurement_type']:

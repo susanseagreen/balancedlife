@@ -140,12 +140,16 @@
                                     </td>
                                     <td class="p-2 small">
                                         {% for day_of_week in added.day_of_week %}
-                                            <span class="day_of_week">{{ day_of_week | day_of_week_display }}</span>
+                                            {% if day_of_week != '0' %}
+                                                <span class="day_of_week">{{ day_of_week | day_of_week_display }}</span>
+                                            {% endif %}
                                         {% endfor %}
                                     </td>
                                     <td class="p-2 small text-right">
                                         {% for meal in added.meal %}
-                                            <span class="meal">{{ meal | meal_display }}</span>
+                                            {% if meal != '0' %}
+                                                <span class="meal">{{ meal | meal_display }}</span>
+                                            {% endif %}
                                         {% endfor %}
                                     </td>
                                 </tr>
@@ -191,12 +195,16 @@
                                     </td>
                                     <td class="p-2 small">
                                         {% for day_of_week in removed.day_of_week %}
-                                            <span class="day_of_week">{{ day_of_week | day_of_week_display }}</span>
+                                            {% if day_of_week != '0' %}
+                                                <span class="day_of_week">{{ day_of_week | day_of_week_display }}</span>
+                                            {% endif %}
                                         {% endfor %}
                                     </td>
                                     <td class="p-2 small text-right">
                                         {% for meal in removed.meal %}
-                                            <span class="meal">{{ meal | meal_display }}</span>
+                                            {% if meal != '0' %}
+                                                <span class="meal">{{ meal | meal_display }}</span>
+                                            {% endif %}
                                         {% endfor %}
                                     </td>
                                 </tr>
@@ -240,7 +248,7 @@
                     $('#myModal').modal({show: true});
                 });
             });
-            $(".button_toggle_dates").click(function(){
+            $(".button_toggle_dates").click(function () {
                 $('.toggle_dates').fadeToggle()
                 this.innerText = (this.innerText === '-' ? '+' : '-')
             });
@@ -252,7 +260,7 @@
 
 {% block meals %}
     <div class="col-12">
-        <h3>Meals in this List</h3>
+        <h3>"{{ shopping_list.name }}" Meals</h3>
     </div>
     {% if ingredient_list %}
         {% for id, ingredient in ingredient_list.items %}
@@ -265,9 +273,9 @@
                                     <div class="d-flex justify-content-between">
                                         <div>{{ meal_name }}</div>
                                         <div class="text-right">
-                                            <span class="meal_category">
-                                            {{ ingredient.category_name }}
-                                            </span>
+                                            {% for meal_category in ingredient.meal_categories %}
+                                                <span class="meal_category">{{ meal_category }}</span>
+                                            {% endfor %}
                                         </div>
                                     </div>
 

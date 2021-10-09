@@ -28,13 +28,13 @@
                 <br>
             </div>
             {% for ingredient_category in ingredient_categories %}
-                <div class="col-sm-4 col-md-3 col-lg-2 col-6">
-                    <a class="modal_update" data-toggle="modal"
-                       href="javascript:void(0);"
-                       id="{% url 'ingredient_categories:update_modal' ingredient_category.id %}">
+                <a class="modal_update" data-toggle="modal"
+                   href="javascript:void(0);"
+                   id="{% url 'ingredient_categories:update_modal' ingredient_category.id %}">
+                    <div class="category_display border-radius">
                         {{ ingredient_category.name }}
-                    </a>
-                </div>
+                    </div>
+                </a>
             {% endfor %}
 
         </div>

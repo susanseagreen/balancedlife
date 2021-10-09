@@ -37,13 +37,11 @@
                     {% endif %}
                 </div>
                 <br>
-                <table class="table m-0 border">
+                <table class="table m-0 border todo">
                     {% for id, ingredient in ingredient_list.items %}
                         <tr>
-                            <td style="width: 65px">
-                                <input type="checkbox" id="checkbox" class="checkbox"/>
-                            </td>
                             <td>
+                                <input style="display: none" type="checkbox" id="checkbox" class="checkbox"/>
                                 {% if ingredient.ingredient_name %}
                                     {{ ingredient.ingredient_name }}
                                 {% else %}
@@ -72,6 +70,8 @@
                         </tr>
                     {% endfor %}
                 </table>
+                <table class="table m-0 border done">
+                </table>
 
             </div>
         </div>
@@ -79,16 +79,11 @@
     </div>
 
     <script type="application/javascript">
-        $('.checkbox').change(function () {
-            if (this.checked) {
-                $(this).closest('tr').find('td:nth-child(2)').css("text-decoration", "line-through");
-                $(this).closest('tr').find('td:nth-child(3)').css("text-decoration", "line-through");
-            } else {
-                $(this).closest('tr').find('td:nth-child(2)').css("text-decoration", "none");
-                $(this).closest('tr').find('td:nth-child(3)').css("text-decoration", "none");
-            }
-        });
-        $(".checkbox").change(function () {
+        $('.todo tr').click(function () {
+            $(this).closest('tr').find('input').attr("checked", "checked")
+            let text = $(this).html()
+            $('.done').append('<tr class="bg-light strikeout">' + text + '</tr>')
+            $(this).remove()
             if ($('input.checkbox').not(':checked').length === 0) {
                 $('#myModal').modal({show: true});
             }

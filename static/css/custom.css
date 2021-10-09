@@ -143,21 +143,21 @@ a {
     font-size: 8px;
     color: white;
     background: yellowgreen;
-    padding: 2px 4px;
+    padding: 2px 5px;
 }
 
 .meal {
     font-size: 8px;
     color: white;
     background: cadetblue;
-    padding: 2px 4px;
+    padding: 2px 5px;
 }
 
 .meal_category {
     font-size: 8px;
     color: white;
     background: maroon;
-    padding: 2px 4px;
+    padding: 2px 5px;
 }
 
 .select2 .select2-container .select2-container--default {
@@ -206,4 +206,18 @@ input[type="checkbox"]:checked {
 .category_display:active {
     background-color: #17a2b8!important;
     color: #f8f9fa!important;
+}
+
+td {
+    position: relative;
+    padding: 5px 10px;
+}
+
+tr.strikeout td:before {
+    content: " ";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    border-bottom: 1px solid #111;
+    width: 100%;
 }
