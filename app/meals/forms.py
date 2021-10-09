@@ -7,9 +7,7 @@ from app.meal_categories.models import MealCategory
 
 class MealCreateForm(forms.ModelForm):
 
-    categories = MealCategory.objects.order_by('name').values_list('id', 'name')
-
-    meal_categories = forms.MultipleChoiceField(choices=list(categories), widget=forms.CheckboxSelectMultiple, required=False)
+    meal_categories = forms.MultipleChoiceField(choices='', widget=forms.CheckboxSelectMultiple, required=False)
 
     class Meta:
         model = Meal
@@ -26,6 +24,8 @@ class MealCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
+        categories = MealCategory.objects.order_by('name').values_list('id', 'name')
+        self.fields['meal_categories'].choices = list(categories)
         self.helper.layout = Layout(
             Row(
                 Column('image', css_class='form-group col-12 mb-0 pb-0'),
@@ -51,9 +51,7 @@ class MealCreateForm(forms.ModelForm):
 
 class MealUpateForm(forms.ModelForm):
 
-    categories = MealCategory.objects.order_by('name').values_list('id', 'name')
-
-    meal_categories = forms.MultipleChoiceField(choices=list(categories), widget=forms.CheckboxSelectMultiple, required=False)
+    meal_categories = forms.MultipleChoiceField(choices='', widget=forms.CheckboxSelectMultiple, required=False)
 
     class Meta:
         model = Meal
@@ -73,7 +71,9 @@ class MealUpateForm(forms.ModelForm):
         tagged = Meal.objects.get(id=self.instance.id).meal_category
         if ',' in tagged:
             tagged = tagged.split(',')
+        categories = MealCategory.objects.order_by('name').values_list('id', 'name')
         self.fields['meal_categories'].initial = tagged
+        self.fields['meal_categories'].choices = list(categories)
         self.helper.layout = Layout(
             Row(
                 Column('image', css_class='form-group col-12 mb-0 pb-0'),
