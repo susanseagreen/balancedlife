@@ -14,8 +14,12 @@
 
     <div class="container mt-5 mb-3">
         <div class="row">
-            {% if meal.image %}
-                <div class="col-sm-4 col-12 meal_img" style="background-image: url({{ meal.image }})"></div>
+            {% if meal.image_link %}
+                <div class="col-sm-4 col-12 meal_img" style="background-image: url({{ meal.image_link }})"></div>
+            {% else %}
+                {% if meal.image %}
+                    <div class="col-sm-4 col-12 meal_img" style="background-image: url({{ meal.image.url }})"></div>
+                {% endif %}
             {% endif %}
             <div class="col">
                 <form method="post" action="">

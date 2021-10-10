@@ -11,14 +11,15 @@ class MealCreateForm(forms.ModelForm):
 
     class Meta:
         model = Meal
-        fields = ['image', 'name', 'servings', 'pax_serving', 'description', 'steps']
+        fields = ['image_link', 'image', 'name', 'servings', 'pax_serving', 'description', 'steps']
 
         widgets = {
             'description': forms.Textarea(attrs={'rows': 4}),
             'steps': forms.Textarea(attrs={'rows': 4}),
         }
         labels = {
-            'image': 'Image URL'
+            'image_link': 'Image URL',
+            'image': 'Image Upload',
         }
 
     def __init__(self, *args, **kwargs):
@@ -28,6 +29,7 @@ class MealCreateForm(forms.ModelForm):
         self.fields['meal_categories'].choices = list(categories)
         self.helper.layout = Layout(
             Row(
+                Column('image_link', css_class='form-group col-12 mb-0 pb-0'),
                 Column('image', css_class='form-group col-12 mb-0 pb-0'),
                 css_class='form-row'
             ),
@@ -55,14 +57,15 @@ class MealUpateForm(forms.ModelForm):
 
     class Meta:
         model = Meal
-        fields = ['image', 'name', 'servings', 'pax_serving', 'description', 'steps']
+        fields = ['image_link', 'image', 'name', 'servings', 'pax_serving', 'description', 'steps']
 
         widgets = {
             'description': forms.Textarea(attrs={'rows': 4}),
             'steps': forms.Textarea(attrs={'rows': 4}),
         }
         labels = {
-            'image': 'Image URL'
+            'image_link': 'Image URL',
+            'image': 'Image Upload',
         }
 
     def __init__(self, *args, **kwargs):
@@ -76,6 +79,7 @@ class MealUpateForm(forms.ModelForm):
         self.fields['meal_categories'].choices = list(categories)
         self.helper.layout = Layout(
             Row(
+                Column('image_link', css_class='form-group col-12 mb-0 pb-0'),
                 Column('image', css_class='form-group col-12 mb-0 pb-0'),
                 css_class='form-row'
             ),

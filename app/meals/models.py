@@ -3,7 +3,8 @@ from django.db import models
 
 class Meal(models.Model):
     name = models.CharField(max_length=50)
-    image = models.CharField(max_length=255, blank=True, null=True)  # image = models.ImageField(max_length=255)
+    image_link = models.CharField(max_length=255, blank=True, null=True)
+    image = models.ImageField(default='default.png', blank=True)
     servings = models.IntegerField(default=1, blank=True, null=True)
     pax_serving = models.IntegerField("Pax per serving", default=2, blank=True, null=True)
     meal_category = models.CharField(max_length=50)
