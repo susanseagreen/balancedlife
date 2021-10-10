@@ -4,3 +4,4 @@ env/
 *.pyc
 staticfiles
 db.sqlite3
+media
