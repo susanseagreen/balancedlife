@@ -19,11 +19,15 @@ class Meal(models.Model):
         self.name = self.name.title()
         super().save()  # saving image first
 
-        img = Image.open(self.image.path) # Open image using self
+        try:
+            img = Image.open(self.image.path) # Open image using self
 
-        if img.height > 300 or img.width > 300:
-            new_img = (300, 300)
-            img.thumbnail(new_img)
-            img.save(self.image.path)  # saving image at the same path
+            if img.height > 300 or img.width > 300:
+                new_img = (300, 300)
+                img.thumbnail(new_img)
+                img.save(self.image.path)  # saving image at the same path
+
+        except FileNotFoundError:
+            pass
 
         return super(Meal, self).save(*args, **kwargs)

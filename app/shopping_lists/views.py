@@ -8,6 +8,7 @@ from app.meals.models import Meal
 from .lib import shopping_list_items
 from datetime import timedelta
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from app.shared_accounts.models import SharedAccount
 
 
 class ShoppingListCreateView(View):
@@ -18,7 +19,19 @@ class ShoppingListCreateView(View):
         meals_search = self.request.GET.get('meals_search') or ''
         meals = Meal.objects.filter(name__icontains=meals_search).order_by('name')
 
-        shopping_lists = ShoppingList.objects.filter(code_user_id=self.request.user.id).order_by('name')
+        shared_accounts = SharedAccount.objects.filter(code_user_id=self.request.user.id, is_active=True)
+
+        shared_accounts_list = {}
+        for shared_account in shared_accounts:
+            shopping_list_id = shared_account.code_shopping_list_id
+            if shopping_list_id not in shared_accounts_list:
+                shared_accounts_list[shopping_list_id] = []
+            shared_accounts_list[shopping_list_id].append(shared_account.code_user)
+
+        shopping_lists = ShoppingList.objects.filter(id__in=shared_accounts).order_by('name')
+
+        for shopping_list in shopping_lists:
+            shopping_list.shared_account_names = shared_accounts_list[shopping_list.id]
 
         form = ShoppingListCreateForm()
 
@@ -50,6 +63,11 @@ class ShoppingListCreateView(View):
                 instance.code_user_id = self.request.user.id
                 instance.date_to = instance.date_from + timedelta(days=6)
             instance.save()
+
+            shared_account = SharedAccount()
+            shared_account.code_user_id = self.request.user.id
+            shared_account.code_shopping_lists_id = instance.id
+            shared_account.save()
 
             return redirect(reverse_lazy('shopping_lists:update', kwargs={'pk': instance.pk}))
 
@@ -116,7 +134,6 @@ class ShoppingListView(View):
     template_name = 'shopping_lists/shopping_list.html'
 
     def get(self, request, *args, **kwargs):
-
         ingredient_list = {}
 
         shopping_list_items.build_shopping_list(self, ingredient_list)
@@ -136,7 +153,6 @@ class ShoppingListFoodDiaryView(View):
     template_name = 'shopping_lists/shopping_list_food_diary.html'
 
     def get(self, request, *args, **kwargs):
-
         food_diary = {}
 
         shopping_list = ShoppingList.objects.get(id=self.kwargs['pk'])

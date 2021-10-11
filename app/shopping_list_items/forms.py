@@ -37,7 +37,7 @@ class ShoppingListMealItemForm(forms.Form):
 
 class ShoppingListIngredientItemForm(forms.Form):
     measurement_value = forms.DecimalField(label='Amount', initial=1, max_digits=5, decimal_places=2, required=False)
-    measurement_type = forms.ChoiceField(label='Measurement', choices=measurement_type_choices, required=False)
+    measurement_type = forms.ChoiceField(label='Measurement', choices=measurement_type_choices, widget=Select2Widget, required=False)
     ingredient = forms.ModelChoiceField(queryset=Ingredient.objects.order_by('name'))
     day_of_week = forms.MultipleChoiceField(choices=days_of_week, initial='0', widget=forms.CheckboxSelectMultiple, required=False)
     meal = forms.MultipleChoiceField(choices=meal_choices, initial='0', widget=forms.CheckboxSelectMultiple, required=False)
@@ -70,7 +70,7 @@ class ShoppingListIngredientItemForm(forms.Form):
 
 class ShoppingListUpdateGetIngredientItemForm(forms.ModelForm):
     measurement_value = forms.DecimalField(label='Amount', max_digits=5, decimal_places=2, required=False)
-    measurement_type = forms.ChoiceField(label='Measurement', choices=measurement_type_choices, required=False)
+    measurement_type = forms.ChoiceField(label='Measurement', choices=measurement_type_choices, widget=Select2Widget, required=False)
     ingredient = forms.CharField(widget=forms.TextInput(attrs={'readonly': True}), required=False)
     day_of_week = forms.MultipleChoiceField(choices=days_of_week, widget=forms.CheckboxSelectMultiple, required=False)
     meal = forms.MultipleChoiceField(choices=meal_choices, widget=forms.CheckboxSelectMultiple, required=False)
@@ -124,7 +124,7 @@ class ShoppingListUpdateGetIngredientItemForm(forms.ModelForm):
 
 class ShoppingListUpdatePostIngredientItemForm(forms.ModelForm):
     measurement_value = forms.DecimalField(label='Amount', max_digits=5, decimal_places=2, required=False)
-    measurement_type = forms.ChoiceField(label='Measurement', choices=measurement_type_choices, required=False)
+    measurement_type = forms.ChoiceField(label='Measurement', choices=measurement_type_choices, widget=Select2Widget, required=False)
     ingredient = forms.CharField(widget=forms.TextInput(attrs={'readonly': True}), required=False)
     day_of_week = forms.MultipleChoiceField(choices=days_of_week, widget=forms.CheckboxSelectMultiple, required=False)
     meal = forms.MultipleChoiceField(choices=meal_choices, widget=forms.CheckboxSelectMultiple, required=False)
@@ -192,7 +192,7 @@ class ShoppingListUpdateOtherItemForm(forms.ModelForm):
 
 class ShoppingListUpdateIngredientItemForm(forms.ModelForm):
     measurement_value = forms.DecimalField(label='Amount', initial=1, max_digits=5, decimal_places=2, required=False)
-    measurement_type = forms.ChoiceField(label='Measurement', choices=measurement_type_choices, required=False)
+    measurement_type = forms.ChoiceField(label='Measurement', choices=measurement_type_choices, widget=Select2Widget, required=False)
     day_of_week = forms.MultipleChoiceField(choices=days_of_week, widget=forms.CheckboxSelectMultiple, required=False)
     meal = forms.MultipleChoiceField(choices=meal_choices, widget=forms.CheckboxSelectMultiple, required=False)
 

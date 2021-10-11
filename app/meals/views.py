@@ -37,7 +37,10 @@ class MealCreateView(View):
 
     def post(self, request, *args, **kwargs):
 
-        form = MealCreateForm(request.POST, request.FILES)
+        if request.FILES:
+            form = MealCreateForm(request.POST, request.FILES)
+        else:
+            form = MealCreateForm(request.POST)
 
         if form.is_valid():
             meal_categories = ','.join(form.cleaned_data['meal_categories'])
@@ -84,7 +87,10 @@ class MealUpdateView(View):
 
         meal = Meal.objects.get(id=self.kwargs['pk'])
 
-        form = MealUpateForm(request.POST, request.FILES, instance=meal)
+        if request.FILES:
+            form = MealUpateForm(request.POST, request.FILES, instance=meal)
+        else:
+            form = MealUpateForm(request.POST, instance=meal)
 
         if form.is_valid():
             meal_categories = ','.join(form.cleaned_data['meal_categories'])

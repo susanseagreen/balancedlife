@@ -9,6 +9,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/', include('app.registration.urls')),
+    path('share/', include('app.shared_accounts.urls')),
     path('', include('app.shopping_lists.urls')),
     path('meals/', include('app.meals.urls')),
     path('meal_categories/', include('app.meal_categories.urls')),

@@ -3,6 +3,15 @@
 
 {% block content %}
 
+    <div id="myModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="col-12 mb-3">
         <h4>Create Shopping List</h4>
     </div>
@@ -36,6 +45,15 @@
                             {{ shopping_list.date_to | date:"D d M Y" }}
                         {% endif %}
                     </td>
+                    <td class="text-right">
+                        {% for name in shopping_list.shared_account_names %}
+                            <span class="meal">{{ name }}</span>
+                        {% endfor %}
+                    </td>
+                    <td class="text-right">
+                        <a class="modal_create" data-toggle="modal" href="javascript:void(0);"
+                           id="{% url 'shared_accounts:create_modal' shopping_list.id %}">Share</a>
+                    </td>
                 </tr>
             {% endfor %}
         </table>
@@ -48,5 +66,16 @@
             </tr>
         </table>
     {% endif %}
+
+    <script>
+        $(document).ready(function () {
+            jQuery('.modal_create').click(function (e) {
+                var linkvar = $(this).attr('id');
+                $('.modal-body').load(linkvar, function (result) {
+                    $('#myModal').modal({show: true});
+                });
+            });
+        });
+    </script>
 
 {% endblock content %}
