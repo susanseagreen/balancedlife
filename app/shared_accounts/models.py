@@ -7,3 +7,6 @@ class SharedAccount(models.Model):
                                   related_name='shared_accounts')
     code_shopping_list = models.ForeignKey('shopping_lists.ShoppingList', on_delete=models.PROTECT, default=1,
                                            related_name='shared_accounts')
+
+    def __str__(self):
+        return {self.code_user.username}

@@ -45,7 +45,7 @@
     <br>
 
     <div class="text-center">
-        <h3>{{ shopping_list.name }}</h3>
+        <h3>{{ shopping_list.name }} {% if not shopping_list.is_active %}<i class="text-danger">(Inactive List)</i>{% endif %}</h3>
 
         <br>
 
@@ -349,5 +349,9 @@
             </tr>
         {% endif %}
     </table>
+
+    <script type="application/javascript">
+        $('#div_id_is_active').parent().parent().removeClass('col')
+    </script>
 
 {% endblock meals %}

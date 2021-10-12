@@ -19,16 +19,17 @@ class ShoppingListCreateView(View):
         meals_search = self.request.GET.get('meals_search') or ''
         meals = Meal.objects.filter(name__icontains=meals_search).order_by('name')
 
-        shared_accounts = SharedAccount.objects.filter(code_user_id=self.request.user.id, is_active=True)
+        # shared_accounts = SharedAccount.objects.filter(code_user_id=self.request.user.id, is_active=True)
+        shared_accounts = SharedAccount.objects.filter(is_active=True)
 
         shared_accounts_list = {}
         for shared_account in shared_accounts:
             shopping_list_id = shared_account.code_shopping_list_id
             if shopping_list_id not in shared_accounts_list:
                 shared_accounts_list[shopping_list_id] = []
-            shared_accounts_list[shopping_list_id].append(shared_account.code_user)
+            shared_accounts_list[shopping_list_id].append(shared_account.code_user.username)
 
-        shopping_lists = ShoppingList.objects.filter(id__in=shared_accounts).order_by('name')
+        shopping_lists = ShoppingList.objects.filter(id__in=shared_accounts).order_by('name', 'is_active')
 
         for shopping_list in shopping_lists:
             shopping_list.shared_account_names = shared_accounts_list[shopping_list.id]

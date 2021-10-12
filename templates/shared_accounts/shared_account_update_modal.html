@@ -5,10 +5,22 @@
 
 {% block container %}
 
-    <form method="post" action="{% url 'shared_accounts:update_modal' pk %}">
+    <form method="post" action="{% url 'shared_accounts:update_modal' shopping_list_id %}">
         {% csrf_token %}
         <fieldset>
-            {% crispy form %}
+            {% for shared_account in shared_accounts %}
+                <div class="form-row form-row">
+                    <div class="form-group mb-0 pb-0">
+                        <input class="m-1" type="checkbox" name="{{ shared_account.id }}"
+                                {% if shared_account.is_active %}checked{% endif %}>
+                    </div>
+                    <div class="form-group col mb-0 pb-0">
+                        <input type="text" name="name" value="{{ shared_account.code_user.username }}" autofocus=""
+                               maxlength="50"
+                               class="textinput textInput form-control" required="" id="id_name" readonly>
+                    </div>
+                </div>
+            {% endfor %}
             <button class="btn btn-dark">Update</button>
         </fieldset>
     </form>

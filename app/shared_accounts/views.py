@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import View
-from .forms import SharedAccountCreateModalForm, SharedAccountUpdateModalForm
+from .forms import SharedAccountCreateModalForm
 from .models import SharedAccount
 
 
@@ -40,24 +40,23 @@ class SharedAccountModalUpdateView(View):
 
     def get(self, request, *args, **kwargs):
 
-        shared_account = SharedAccount.objects.get(id=kwargs['pk'])
-
-        form = SharedAccountUpdateModalForm(instance=shared_account)
+        shared_accounts = SharedAccount.objects.select_related('code_user').filter(code_shopping_list_id=kwargs['shopping_list_id'])
 
         context = {
-            'pk': kwargs['pk'],
-            'form': form,
+            'shopping_list_id': kwargs['shopping_list_id'],
+            'shared_accounts': shared_accounts,
         }
 
         return render(request, template_name=self.template_name, context=context)
 
     def post(self, request, *args, **kwargs):
 
-        shared_account = SharedAccount.objects.get(id=kwargs['pk'])
-
-        form = SharedAccountUpdateModalForm(request.POST, instance=shared_account)
-
-        if form.is_valid():
-            form.save()
+        shared_accounts = SharedAccount.objects.filter(code_shopping_list_id=kwargs['shopping_list_id'])
+        for shared_account in shared_accounts:
+            if str(shared_account.id) in self.request.POST:
+                shared_account.is_active = True
+            else:
+                shared_account.is_active = False
+            shared_account.save()
 
         return redirect(self.request.META['HTTP_REFERER'])
