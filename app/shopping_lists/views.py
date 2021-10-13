@@ -4,11 +4,10 @@ from django.urls import reverse_lazy
 from django.views.generic import View
 from .forms import ShoppingListCreateForm, ShoppingListUpdateDatesForm, ShoppingListUpdateNoDatesForm
 from .models import ShoppingList
-from app.meals.models import Meal
-from .lib import shopping_list_items
+from .lib import shopping_list_items, user_accounts
 from datetime import timedelta
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from app.shared_accounts.models import SharedAccount
+from app.user_accounts.models import UserAccount
 
 
 class ShoppingListCreateView(View):
@@ -16,40 +15,17 @@ class ShoppingListCreateView(View):
 
     def get(self, request, *args, **kwargs):
 
-        meals_search = self.request.GET.get('meals_search') or ''
-        meals = Meal.objects.filter(name__icontains=meals_search).order_by('name')
+        user_accounts_list = user_accounts.get_user_accounts(self)
+        user_account_ids, user_account_choices = user_accounts.build_lookup_dict(self, user_accounts_list)
+        user_account_tuple = user_accounts.build_user_account_tuple(user_account_choices)
 
-        # shared_accounts = SharedAccount.objects.filter(code_user_id=self.request.user.id, is_active=True)
-        shared_accounts = SharedAccount.objects.filter(is_active=True)
+        filters = {
+            'user_account_tuple': user_account_tuple,
+        }
 
-        shared_accounts_list = {}
-        for shared_account in shared_accounts:
-            shopping_list_id = shared_account.code_shopping_list_id
-            if shopping_list_id not in shared_accounts_list:
-                shared_accounts_list[shopping_list_id] = []
-            shared_accounts_list[shopping_list_id].append(shared_account.code_user.username)
-
-        shopping_lists = ShoppingList.objects.filter(id__in=shared_accounts).order_by('name', 'is_active')
-
-        for shopping_list in shopping_lists:
-            shopping_list.shared_account_names = shared_accounts_list[shopping_list.id]
-
-        form = ShoppingListCreateForm()
-
-        paginator = Paginator(meals, 100)
-        page_num = request.GET.get('page', 1)
-
-        try:
-            meals = paginator.get_page(page_num)
-        except PageNotAnInteger:
-            meals = paginator.get_page(1)
-        except EmptyPage:
-            meals = paginator.get_page(paginator.num_pages)
+        form = ShoppingListCreateForm(initial={'filters': filters})
 
         context = {
-            'meals_search': meals_search,
-            'shopping_lists': shopping_lists,
-            'meals': meals,
             'form': form,
         }
 
@@ -61,14 +37,8 @@ class ShoppingListCreateView(View):
         if form.is_valid():
             instance = form.save(commit=False)
             if instance.date_from:
-                instance.code_user_id = self.request.user.id
                 instance.date_to = instance.date_from + timedelta(days=6)
             instance.save()
-
-            shared_account = SharedAccount()
-            shared_account.code_user_id = self.request.user.id
-            shared_account.code_shopping_lists_id = instance.id
-            shared_account.save()
 
             return redirect(reverse_lazy('shopping_lists:update', kwargs={'pk': instance.pk}))
 
@@ -86,7 +56,16 @@ class ShoppingListUpdateView(View):
 
         shopping_list_items.build_shopping_list(self, ingredient_list)
 
+        user_accounts_list = user_accounts.get_user_accounts(self)
+        user_account_ids, user_account_choices = user_accounts.build_lookup_dict(self, user_accounts_list)
+        user_account_tuple = user_accounts.build_user_account_tuple(user_account_choices)
+
         shopping_list = ShoppingList.objects.get(id=self.kwargs['pk'])
+
+        filters = {
+            'user_account_tuple': user_account_tuple,
+            'user_account_id': shopping_list.code_user_account_id,
+        }
 
         for key, meal in ingredient_list.items():
             for meal_added in meal['added']:
@@ -96,9 +75,9 @@ class ShoppingListUpdateView(View):
                         meal_list.append(meal_names)
 
         if shopping_list.date_from:
-            form = ShoppingListUpdateDatesForm(instance=shopping_list)
+            form = ShoppingListUpdateDatesForm(initial={'filters': filters}, instance=shopping_list)
         else:
-            form = ShoppingListUpdateNoDatesForm(instance=shopping_list)
+            form = ShoppingListUpdateNoDatesForm(initial={'filters': filters}, instance=shopping_list)
 
         context = {
             'pk': self.kwargs['pk'],
@@ -128,7 +107,7 @@ class ShoppingListUpdateView(View):
                 instance.date_to = None
             instance.save()
 
-        return redirect(reverse_lazy('shopping_lists:update', kwargs={'pk': self.kwargs['pk']}))
+        return redirect(self.request.META['HTTP_REFERER'])
 
 
 class ShoppingListView(View):
@@ -168,3 +147,59 @@ class ShoppingListFoodDiaryView(View):
         }
 
         return render(request, template_name=self.template_name, context=context)
+
+
+class UserAccountShoppingListModalCreateView(View):
+    template_name = 'shopping_list/user_account_create_modal.html'
+
+    def get(self, request, *args, **kwargs):
+
+        form = UserAccountCreateModalForm()
+
+        user_accounts = UserAccount.objects.all()
+
+        context = {
+            'pk': kwargs['shopping_list_id'],
+            'user_accounts': user_accounts,
+            'form': form,
+        }
+
+        return render(request, template_name=self.template_name, context=context)
+
+    def post(self, request, *args, **kwargs):
+
+        form = UserAccountCreateModalForm(request.POST)
+
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.code_shopping_list_id = kwargs['shopping_list_id']
+            instance.save()
+
+        return redirect(self.request.META['HTTP_REFERER'])
+
+
+class UserAccountShoppingListModalUpdateView(View):
+    template_name = 'shopping_list/user_account_update_modal.html'
+
+    def get(self, request, *args, **kwargs):
+
+        user_accounts = UserAccount.objects.select_related('code_user_account').filter(id=kwargs['pk'])
+
+        context = {
+            'shopping_list_id': kwargs['shopping_list_id'],
+            'user_accounts': user_accounts,
+        }
+
+        return render(request, template_name=self.template_name, context=context)
+
+    def post(self, request, *args, **kwargs):
+
+        user_accounts = UserAccount.objects.filter(code_shopping_list_id=kwargs['shopping_list_id'])
+        for user_account in user_accounts:
+            if str(user_account.id) in self.request.POST:
+                user_account.is_active = True
+            else:
+                user_account.is_active = False
+            user_account.save()
+
+        return redirect(self.request.META['HTTP_REFERER'])

@@ -33,7 +33,7 @@ class UserForm(forms.ModelForm):
             raise forms.ValidationError("Passwords don't match")
         return password2
 
-    def save(self, commit=True):
+    def save(self, commit=False):
         user = super(UserForm, self).save(commit=False)
         user.username = self.cleaned_data['username']
         user.email = self.cleaned_data['email']

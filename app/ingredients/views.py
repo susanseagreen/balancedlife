@@ -46,7 +46,8 @@ class IngredientCreateView(View):
         form = IngredientForm(request.POST)
 
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            instance.save()
         else:
             messages.success(self.request, "The ingredient already exists")
 
@@ -87,14 +88,20 @@ class IngredientUpdateView(View):
 
         ingredient = Ingredient.objects.get(id=kwargs['pk'])
 
-        form = IngredientForm(request.POST, instance=ingredient)
+        if self.request.user.id == ingredient.code_user_id:
 
-        if form.is_valid():
-            form.save()
+            form = IngredientForm(request.POST, instance=ingredient)
+
+            if form.is_valid():
+                form.save()
+            else:
+                messages.success(self.request, "The ingredient already exists")
+
+            return redirect(reverse_lazy('ingredients:create'))
+
         else:
-            messages.success(self.request, "The ingredient already exists")
-
-        return redirect(reverse_lazy('ingredients:create'))
+            messages.success(self.request, "Only the user that created this can edit it")
+            return redirect(self.request.META['HTTP_REFERER'])
 
 
 class IngredientModalCreateView(View):

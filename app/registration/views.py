@@ -6,6 +6,7 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.contrib import messages
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from app.user_accounts.models import UserAccount, UserAccountName
 
 
 def register(request):
@@ -57,12 +58,26 @@ def user_activate(request, user_id, user_code):
     user = User.objects.filter(id=user_id, user_code=user_code).first()
     email = 'holiday.planner.help@gmail.com'
     if user:
+        user_account_name = UserAccountName()
+        user_account_name.name = user.username
+        user_account_name.save()
+
+        user.code_user_account_name_id = user_account_name.id
         user.is_active = True
         user.save()
+
+        user_account = UserAccount()
+        user_account.code_user_account_id = user_account_name.id
+        user_account.code_user_id = user_id
+        user_account.bool_main_user = True
+        user_account.bool_permissions = True
+        user_account.save()
+
         subject = "Your Account has been activated"
         message = f"Your 'Meals Shopping List' Account has been activated"
         send_mail(subject, message, email, [user.email])
         messages.success(request, f'{user.username} has been successfully activated')
+
     else:
         messages.success(request, f"Something went wrong. Please contact {email} for assistance")
 

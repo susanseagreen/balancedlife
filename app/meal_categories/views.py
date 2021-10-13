@@ -28,7 +28,9 @@ class MealCategoryCreateView(View):
         form = MealCategoryCreateModalForm(request.POST)
 
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            instance.code_user_account_id = self.request.user.code_user_account_name.id
+            instance.save()
 
         return redirect(self.request.META['HTTP_REFERER'])
 
@@ -53,9 +55,14 @@ class MealCategoryModalUpdateView(View):
 
         meal_category = MealCategory.objects.get(id=kwargs['pk'])
 
-        form = MealCategoryUpdateModalForm(request.POST, instance=meal_category)
+        if self.request.user.code_user_account_name.id == meal_category.code_user_account_id:
 
-        if form.is_valid():
-            form.save()
+            form = MealCategoryUpdateModalForm(request.POST, instance=meal_category)
+
+            if form.is_valid():
+                form.save()
+
+        else:
+            messages.success(self.request, "Only the user that created this can edit it")
 
         return redirect(self.request.META['HTTP_REFERER'])

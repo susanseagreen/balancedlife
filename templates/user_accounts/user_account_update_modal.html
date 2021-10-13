@@ -5,7 +5,7 @@
 
 {% block container %}
 
-    <form method="post" action="{% url 'shopping_lists:update' pk %}">
+    <form method="post" class="mb-2" action="{% url 'user_accounts:update_modal' shopping_list_id %}">
         {% csrf_token %}
         <fieldset>
             {% crispy form %}
@@ -14,11 +14,6 @@
     </form>
 
     <script type="application/javascript">
-        $('.toggle_dates').hide()
-        $(".button_toggle_dates").click(function () {
-            $('.toggle_dates').fadeToggle()
-            this.innerText = (this.innerText === '-' ? '+' : '-')
-        });
         $('#div_id_is_active').parent().parent().removeClass('col')
     </script>
 

@@ -1,95 +1,16 @@
 {% extends 'base.html' %}
-{% load static crispy_forms_tags get_display %}
+{% load static crispy_forms_tags %}
 
-{% block content %}
+{% block nav %}{% endblock nav %}
 
-    <div id="myModal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-12 mb-3">
-        <h4>Create Shopping List</h4>
-    </div>
+{% block container %}
 
     <form method="post" action="{% url 'shopping_lists:create' %}">
         {% csrf_token %}
         <fieldset>
             {% crispy form %}
+            <button class="btn btn-dark">Create</button>
         </fieldset>
     </form>
 
-    <br>
-
-    <div class="col-12">
-        <h4>Shopping Lists</h4>
-    </div>
-    {% if shopping_lists %}
-        <table class="table border">
-            {% for shopping_list in shopping_lists %}
-                <tr>
-                    <td {% if not shopping_list.is_active %}style="text-decoration:line-through"{% endif %}>
-                        <a href="{% url 'shopping_lists:update' shopping_list.id %}">
-                            <div>
-                                {{ shopping_list.name }}
-                            </div>
-                        </a>
-                    </td>
-                    <td class="text-right">
-                        {% if shopping_list.date_from %}
-                            {{ shopping_list.date_from | date:"D d M Y" }} -
-                            {{ shopping_list.date_to | date:"D d M Y" }}
-                        {% endif %}
-                    </td>
-                    <td class="text-right">
-                        {% if shopping_list.shared_account_names %}
-                            <a class="modal_update" data-toggle="modal" href="javascript:void(0);"
-                               title="Update"
-                               id="{% url 'shared_accounts:update_modal' shopping_list.id %}">
-                                {% for name in shopping_list.shared_account_names %}
-                                    <span class="username">
-                                    {{ name }}
-                                </span>
-                                {% endfor %}
-                            </a>
-                        {% endif %}
-                        &nbsp;
-                        <a class="modal_create" data-toggle="modal" href="javascript:void(0);"
-                           title="Share Shopping List"
-                           id="{% url 'shared_accounts:create_modal' shopping_list.id %}">{% include 'include/share.svg' %}</a>
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
-    {% else %}
-        <table class="table border">
-            <tr>
-                <td>
-                    No shopping lists
-                </td>
-            </tr>
-        </table>
-    {% endif %}
-
-    <script>
-        $(document).ready(function () {
-            jQuery('.modal_create').click(function (e) {
-                var linkvar = $(this).attr('id');
-                $('.modal-body').load(linkvar, function (result) {
-                    $('#myModal').modal({show: true});
-                });
-            });
-            jQuery('.modal_update').click(function (e) {
-                var linkvar = $(this).attr('id');
-                $('.modal-body').load(linkvar, function (result) {
-                    $('#myModal').modal({show: true});
-                });
-            });
-        });
-    </script>
-
-{% endblock content %}
+{% endblock container %}

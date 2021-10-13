@@ -60,7 +60,8 @@ class MealIngredientCreateView(View):
         form = MealIngredientCreateForm(request.POST)
 
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            instance.save()
         else:
             messages.success(self.request, f"Ingredient already exists on this Meal")
 
@@ -86,9 +87,14 @@ class MealIngredientModalUpdateView(View):
     def post(self, request, *args, **kwargs):
         meal_ingredient = MealIngredient.objects.get(id=self.kwargs['pk'])
 
-        form = MealIngredientUpdateForm(request.POST, instance=meal_ingredient)
+        if self.request.user.id == meal_ingredient.code_user_id:
 
-        if form.is_valid():
-            form.save()
+            form = MealIngredientUpdateForm(request.POST, instance=meal_ingredient)
+
+            if form.is_valid():
+                form.save()
+
+        else:
+            messages.success(self.request, "Only the user that created this can edit it")
 
         return redirect(self.request.META['HTTP_REFERER'])

@@ -53,9 +53,13 @@ class IngredientCategoryModalUpdateView(View):
 
         ingredient_category = IngredientCategory.objects.get(id=kwargs['pk'])
 
-        form = IngredientCategoryUpdateModalForm(request.POST, instance=ingredient_category)
+        if self.request.user.id == ingredient_category.code_user_id:
+            form = IngredientCategoryUpdateModalForm(request.POST, instance=ingredient_category)
 
-        if form.is_valid():
-            form.save()
+            if form.is_valid():
+                form.save()
+
+        else:
+            messages.success(self.request, "Only the user that created this can edit it")
 
         return redirect(self.request.META['HTTP_REFERER'])

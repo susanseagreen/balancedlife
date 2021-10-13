@@ -3,6 +3,8 @@ from PIL import Image
 
 
 class Meal(models.Model):
+    code_user_account = models.ForeignKey('user_accounts.UserAccountName', on_delete=models.PROTECT, default=1,
+                                          related_name='meal')
     name = models.CharField(max_length=50)
     image_link = models.CharField(max_length=255, blank=True, null=True)
     image = models.ImageField(default='default.png', blank=True)
@@ -20,7 +22,7 @@ class Meal(models.Model):
         super().save()  # saving image first
 
         try:
-            img = Image.open(self.image.path) # Open image using self
+            img = Image.open(self.image.path)  # Open image using self
 
             if img.height > 300 or img.width > 300:
                 new_img = (300, 300)
