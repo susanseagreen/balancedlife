@@ -5,7 +5,9 @@ from django.views.generic import View
 from .forms import IngredientForm, IngredientModalForm
 from .models import Ingredient
 from app.meals.models import Meal
+from app.ingredient_categories.models import IngredientCategory
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Q
 
 
 class IngredientCreateView(View):
@@ -17,11 +19,21 @@ class IngredientCreateView(View):
         meals = Meal.objects.filter(name__icontains=meals_search).order_by('name')
 
         ingredients_search = self.request.GET.get('ingredients_search') or ''
-        ingredients = Ingredient.objects.filter(name__icontains=ingredients_search).order_by('name')
+        category_search = self.request.GET.get('category_search') or ''
+
+        ingredients = Ingredient.objects \
+            .select_related('code_category') \
+            .filter(
+                Q(name__icontains=ingredients_search) |
+                Q(code_category__name__icontains=category_search)
+            ) \
+            .order_by('code_category__name', 'name')
+
+        categories = IngredientCategory.objects.all()
 
         form = IngredientForm()
 
-        paginator = Paginator(ingredients, 100)
+        paginator = Paginator(ingredients, 50)
         page_num = request.GET.get('page', 1)
 
         try:
@@ -34,6 +46,8 @@ class IngredientCreateView(View):
         context = {
             'meals_search': meals_search,
             'ingredients_search': ingredients_search,
+            'category_search': category_search,
+            'categories': categories,
             'meals': meals,
             'ingredients': ingredients,
             'form': form,
@@ -101,7 +115,6 @@ class IngredientModalCreateView(View):
     template_name = 'ingredients/ingredient_create_modal.html'
 
     def get(self, request, *args, **kwargs):
-
         form = IngredientModalForm()
 
         context = {
@@ -111,7 +124,6 @@ class IngredientModalCreateView(View):
         return render(request, template_name=self.template_name, context=context)
 
     def post(self, request, *args, **kwargs):
-
         form = IngredientModalForm(request.POST)
 
         if form.is_valid():
@@ -124,7 +136,6 @@ class IngredientModalUpdateView(View):
     template_name = 'ingredients/ingredient_update_modal.html'
 
     def get(self, request, *args, **kwargs):
-
         ingredient = Ingredient.objects.get(id=kwargs['pk'])
 
         form = IngredientModalForm(instance=ingredient)
@@ -137,7 +148,6 @@ class IngredientModalUpdateView(View):
         return render(request, template_name=self.template_name, context=context)
 
     def post(self, request, *args, **kwargs):
-
         ingredient = Ingredient.objects.get(id=kwargs['pk'])
 
         form = IngredientModalForm(request.POST, instance=ingredient)

@@ -24,6 +24,38 @@
     <hr>
     <br>
 
+    <div class="row">
+        <div class="col-12">
+            <form method="GET">
+                <fieldset>
+                    <div class="form-group m-1 row">
+                        <label class="form-label text-nowrap mt-1 pl-0 pr-2 mw-145 col-sm-3 col-12">Ingredient
+                            Search</label>
+                        <input name="ingredients_search" class="form-control mr-2 col" type="text"
+                               value="{{ ingredients_search }}">
+                        <button class="btn btn-info" type="submit">Search</button>
+                    </div>
+
+                </fieldset>
+            </form>
+
+            {% if categories %}
+                <br>
+                <div class="text-center">
+                    {% for category in categories %}
+                        <a class="m-3"
+                           href="{% url 'ingredients:create' %}?category_search={{ category.name }}">{{ category.name }}
+                        </a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <br>
+    <hr>
+    <br>
+
     <!--Pagination-->
     {% if ingredients.paginator.num_pages > 1 %}
         <div class="row">
@@ -76,34 +108,23 @@
                 </nav>
             </div>
         </div>
+
+        <br>
     {% endif %}
     <!--end of Pagination-->
 
-    <div class="row">
-        <div class="col-12">
-            <form method="GET">
-                <fieldset>
-                    <div class="form-group m-1 row">
-                        <label class="form-label text-nowrap mt-1 pl-0 pr-2 mw-145 col-sm-3 col-12">Ingredient Search</label>
-                        <input name="ingredients_search" class="form-control mr-2 col" type="text"
-                               value="{{ ingredients_search }}">
-                        <button class="btn btn-info" type="submit">Search</button>
-                    </div>
-                </fieldset>
-            </form>
-        </div>
-    </div>
-
     {% if ingredients %}
-
-        <br>
         {% if ingredients_search %}
             <div class="text-center">
                 <h5>Results for "{{ ingredients_search }}"</h5>
             </div>
         {% endif %}
+
         <div class="row justify-content-center">
             {% for ingredient in ingredients %}
+                {% ifchanged ingredient.code_category %}
+                    <b class="col-12 mt-3 text-center">{{ ingredient.code_category.name }}</b>
+                {% endifchanged %}
                 <a class="modal_update" data-toggle="modal" href="javascript:void(0);"
                    id="{% url 'ingredients:update_modal' ingredient.id %}">
                     <div class="category_display border-radius">

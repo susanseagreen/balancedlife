@@ -17,7 +17,7 @@ class MealIngredientCreateView(View):
         meal_ingredients = MealIngredient.objects \
             .select_related('code_ingredient') \
             .filter(code_meal_id=self.kwargs['fk']) \
-            .order_by('code_ingredient__name')
+            .order_by('code_ingredient__code_category__name', 'code_ingredient__name')
 
         meals_search = self.request.GET.get('meals_search') or ''
         meals = Meal.objects.filter(name__icontains=meals_search).order_by('name')
