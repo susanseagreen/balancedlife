@@ -19,7 +19,8 @@
                         </div>
                     </div>
 
-                    <form method="post" action="{% url 'shopping_list_items:select_meal_modal' fk %}?create_data={{ create_data }}">
+                    <form method="post"
+                          action="{% url 'shopping_list_items:select_meal_modal' fk %}?create_data={{ create_data }}">
                         {% csrf_token %}
                         <fieldset>
                             {% crispy select_form %}
@@ -29,7 +30,7 @@
                             </div>
                         </fieldset>
                     </form>
-
+                    <br>
                     {% if meal.image and meal.image != 'default.png' %}
                         <div class="col-12 meal_img" style="background-image: url({{ meal.image.url }})"></div>
                     {% else %}
