@@ -87,22 +87,17 @@ class MealUpdateView(View):
 
         meal = Meal.objects.get(id=self.kwargs['pk'])
 
-        if self.request.user.id == meal.code_user_id:
-
-            if request.FILES:
-                form = MealUpateForm(request.POST, request.FILES, instance=meal)
-            else:
-                form = MealUpateForm(request.POST, instance=meal)
-
-            if form.is_valid():
-                meal_categories = ','.join(form.cleaned_data['meal_categories'])
-                instance = form.save(commit=False)
-                instance.meal_category = meal_categories
-                instance.save()
-
-            return redirect(reverse_lazy('meal_ingredients:create', kwargs={'fk': self.kwargs['pk']}))
-
+        if request.FILES:
+            form = MealUpateForm(request.POST, request.FILES, instance=meal)
         else:
-            messages.success(self.request, "Only the user that created this can edit it")
-            return redirect(self.request.META['HTTP_REFERER'])
+            form = MealUpateForm(request.POST, instance=meal)
+
+        if form.is_valid():
+            meal_categories = ','.join(form.cleaned_data['meal_categories'])
+            instance = form.save(commit=False)
+            instance.meal_category = meal_categories
+            instance.save()
+
+        return redirect(reverse_lazy('meal_ingredients:create', kwargs={'fk': self.kwargs['pk']}))
+
 

@@ -3,8 +3,6 @@ from common.choices import measurement_type_choices
 
 
 class MealIngredient(models.Model):
-    code_user_account = models.ForeignKey('user_accounts.UserAccountName', on_delete=models.PROTECT, default=1,
-                                          related_name='meal_ingredient')
     code_meal = models.ForeignKey('meals.Meal', verbose_name='Meal', on_delete=models.PROTECT,
                                   related_name='meal_ingredient')
     code_ingredient = models.ForeignKey('ingredients.Ingredient', verbose_name='Ingredient', on_delete=models.PROTECT,

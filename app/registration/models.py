@@ -10,8 +10,6 @@ from .managers import UserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    code_user_account_name = models.ForeignKey('user_accounts.UserAccountName', on_delete=models.PROTECT, default=1,
-                                               related_name='user')
     username = models.CharField('Username', max_length=255, null=True, unique=True)
     email = models.EmailField(_('email address'), unique=True)
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)

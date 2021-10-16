@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'app.shopping_list_items',
     'app.shopping_lists',
     'app.registration',
-    'app.user_accounts',
     'templates',
 ]
 

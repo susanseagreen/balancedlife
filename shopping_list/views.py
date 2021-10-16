@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.views.generic import View
 from app.meals.models import Meal
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .lib import shopping_list, user_accounts
+from app.shopping_lists.models import ShoppingList
 
 
 class HomeView(View):
@@ -17,10 +17,7 @@ class HomeView(View):
 
             meals_search = self.request.GET.get('meals_search') or ''
             meals = Meal.objects.filter(name__icontains=meals_search).order_by('name')
-
-            user_accounts_list = user_accounts.get_user_accounts(self)
-            user_account_ids, user_account_choices = user_accounts.build_lookup_dict(self, user_accounts_list)
-            shopping_lists = shopping_list.build_shopping_lists(user_account_ids, user_account_choices)
+            shopping_lists = ShoppingList.objects.order_by('name', 'is_active')
 
             paginator = Paginator(meals, 100)
             page_num = request.GET.get('page', 1)

@@ -4,7 +4,6 @@ from django.urls import reverse_lazy
 from django.views.generic import View
 from .forms import MealCategoryCreateModalForm, MealCategoryUpdateModalForm
 from .models import MealCategory
-from app.meals.models import Meal
 
 
 class MealCategoryCreateView(View):
@@ -28,9 +27,7 @@ class MealCategoryCreateView(View):
         form = MealCategoryCreateModalForm(request.POST)
 
         if form.is_valid():
-            instance = form.save(commit=False)
-            instance.code_user_account_id = self.request.user.code_user_account_name.id
-            instance.save()
+            form.save()
 
         return redirect(self.request.META['HTTP_REFERER'])
 
@@ -55,14 +52,9 @@ class MealCategoryModalUpdateView(View):
 
         meal_category = MealCategory.objects.get(id=kwargs['pk'])
 
-        if self.request.user.code_user_account_name.id == meal_category.code_user_account_id:
+        form = MealCategoryUpdateModalForm(request.POST, instance=meal_category)
 
-            form = MealCategoryUpdateModalForm(request.POST, instance=meal_category)
-
-            if form.is_valid():
-                form.save()
-
-        else:
-            messages.success(self.request, "Only the user that created this can edit it")
+        if form.is_valid():
+            form.save()
 
         return redirect(self.request.META['HTTP_REFERER'])

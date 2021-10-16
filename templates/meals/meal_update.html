@@ -15,8 +15,9 @@
     <br>
 
     <script>
-     $('input[name="image"]').removeClass('form-control')
-     $('input[name="image-clear"]').css("font-size", "0.8rem")
+        $("a:contains('default.png')").remove();
+        $('input[name="image"]').removeClass('form-control')
+        $('input[name="image-clear"]').css("font-size", "0.8rem")
     </script>
 
 {% endblock content %}

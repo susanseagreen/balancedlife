@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static crispy_forms_tags get_display %}
+
+{% block container %}
+
+    <div id="myModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h4 class="text-center mb-4">Add Ingredients to Shopping List</h4>
+
+                    <div class="d-flex justify-content-between">
+                        <h4 class="mb-4">{{ meal.name }}</h4>
+                        <div style="line-height: 1; text-align: right">
+                            <div class="small">{{ meal.pax_serving }} pax / {{ meal.servings }} serving</div>
+                            {% for meal_category in meal.meal_category %}
+                                <span class="meal">{{ meal_category | meal_display }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <form method="post" action="{% url 'shopping_list_items:select_meal_modal' fk %}?create_data={{ create_data }}">
+                        {% csrf_token %}
+                        <fieldset>
+                            {% crispy select_form %}
+                            <div class="d-flex justify-content-between mt-2">
+                                <button class="btn btn-dark">Add</button>
+                                <a href="{% url 'shopping_lists:update' fk %}" class="btn btn-danger">Cancel</a>
+                            </div>
+                        </fieldset>
+                    </form>
+
+                    {% if meal.image and meal.image != 'default.png' %}
+                        <div class="col-12 meal_img" style="background-image: url({{ meal.image.url }})"></div>
+                    {% else %}
+                        {% if meal.image_link %}
+                            <div class="col-12 meal_img"
+                                 style="background-image: url({{ meal.image_link }})"></div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="application/javascript">
+        $(document).ready(function () {
+            $('input[type="checkbox"]').attr('checked', true)
+            $('#myModal').modal({show: true});
+        });
+    </script>
+
+{% endblock container %}

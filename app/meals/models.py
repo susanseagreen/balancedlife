@@ -3,8 +3,6 @@ from PIL import Image
 
 
 class Meal(models.Model):
-    code_user_account = models.ForeignKey('user_accounts.UserAccountName', on_delete=models.PROTECT, default=1,
-                                          related_name='meal')
     name = models.CharField(max_length=50)
     image_link = models.CharField(max_length=255, blank=True, null=True)
     image = models.ImageField(default='default.png', blank=True)
@@ -19,7 +17,9 @@ class Meal(models.Model):
 
     def save(self, *args, **kwargs):
         self.name = self.name.title()
-        super().save()  # saving image first
+        self.description = self.description.title()
+        self.steps = self.steps.title()
+        super().save()
 
         try:
             img = Image.open(self.image.path)  # Open image using self

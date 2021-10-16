@@ -11,8 +11,8 @@ from common.choices import days_of_week, meals as meal_choices
 
 class ShoppingListMealItemForm(forms.Form):
     meals = forms.ModelChoiceField(queryset=Meal.objects.order_by('name'), widget=Select2Widget)
-    day_of_week = forms.MultipleChoiceField(choices=days_of_week, initial='0', widget=forms.CheckboxSelectMultiple, required=False)
-    meal = forms.MultipleChoiceField(choices=meal_choices, initial='0', widget=forms.CheckboxSelectMultiple, required=False)
+    day_of_week = forms.MultipleChoiceField(choices=days_of_week, widget=forms.CheckboxSelectMultiple, required=False)
+    meal = forms.MultipleChoiceField(choices=meal_choices, widget=forms.CheckboxSelectMultiple, required=False)
     quantity = forms.IntegerField(initial=1, required=False)
 
     def __init__(self, *args, **kwargs):
@@ -35,12 +35,33 @@ class ShoppingListMealItemForm(forms.Form):
         )
 
 
+class ShoppingListMealItemSelectForm(forms.Form):
+    meal_ingredients = forms.MultipleChoiceField(label="", choices="", widget=forms.CheckboxSelectMultiple, required=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+
+        filters = kwargs.get('initial', None)
+
+        if filters:
+            filters = kwargs['initial']['filters']
+            self.fields['meal_ingredients'].choices = tuple(filters['meal_ingredients'])
+
+        self.helper.layout = Layout(
+            Row(
+                Column('meal_ingredients', css_class='form-group col-12 mb-0 pb-0'),
+                css_class='form-row'
+            ),
+        )
+
+
 class ShoppingListIngredientItemForm(forms.Form):
     measurement_value = forms.DecimalField(label='Amount', initial=1, max_digits=5, decimal_places=2, required=False)
     measurement_type = forms.ChoiceField(label='Measurement', choices=measurement_type_choices, widget=Select2Widget, required=False)
     ingredient = forms.ModelChoiceField(queryset=Ingredient.objects.order_by('name'))
-    day_of_week = forms.MultipleChoiceField(choices=days_of_week, initial='0', widget=forms.CheckboxSelectMultiple, required=False)
-    meal = forms.MultipleChoiceField(choices=meal_choices, initial='0', widget=forms.CheckboxSelectMultiple, required=False)
+    day_of_week = forms.MultipleChoiceField(choices=days_of_week, widget=forms.CheckboxSelectMultiple, required=False)
+    meal = forms.MultipleChoiceField(choices=meal_choices, widget=forms.CheckboxSelectMultiple, required=False)
     quantity = forms.IntegerField(initial=1, required=False)
 
     def __init__(self, *args, **kwargs):

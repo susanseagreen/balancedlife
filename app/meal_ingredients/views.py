@@ -85,16 +85,12 @@ class MealIngredientModalUpdateView(View):
         return render(request, template_name=self.template_name, context=context)
 
     def post(self, request, *args, **kwargs):
+
         meal_ingredient = MealIngredient.objects.get(id=self.kwargs['pk'])
 
-        if self.request.user.id == meal_ingredient.code_user_id:
+        form = MealIngredientUpdateForm(request.POST, instance=meal_ingredient)
 
-            form = MealIngredientUpdateForm(request.POST, instance=meal_ingredient)
-
-            if form.is_valid():
-                form.save()
-
-        else:
-            messages.success(self.request, "Only the user that created this can edit it")
+        if form.is_valid():
+            form.save()
 
         return redirect(self.request.META['HTTP_REFERER'])
