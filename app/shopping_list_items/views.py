@@ -10,6 +10,7 @@ from .forms import (ShoppingListMealItemForm,
                     ShoppingListUpdateOtherItemForm,
                     ShoppingListOtherItemForm)
 from .models import ShoppingListItem
+from app.shopping_lists.models import ShoppingList
 from app.meal_categories.models import MealCategory
 from app.meal_ingredients.models import MealIngredient
 from app.meals.models import Meal
@@ -54,7 +55,7 @@ class ShoppingListMealItemSelectView(View):
 
             meal_category_list = []
             for meal_category in meal.meal_category:
-                meal_category_list.append(meal_category_dict[meal_category])
+                meal_category_list.append(meal_category_dict[int(meal_category)])
 
             meal.meal_category = meal_category_list
 
@@ -268,5 +269,45 @@ class ShoppingListOtherItemUpdateView(View):
 
         if form.is_valid():
             form.save()
+
+        return redirect(self.request.META['HTTP_REFERER'])
+
+
+class ShoppingListDeleteMealView(View):
+    template_name = 'shopping_list_items/shopping_list_item_meal_delete.html'
+
+    def get(self, request, *args, **kwargs):
+
+        shopping_list = ShoppingList.objects.get(id=self.kwargs['fk'])
+
+        shopping_list_items = ShoppingListItem.objects \
+            .select_related('code_ingredient') \
+            .filter(
+                code_shopping_list_id=self.kwargs['fk'],
+                code_meal_ingredient__code_meal_id=self.kwargs['meal_id'],
+                added=True
+            ).order_by('code_ingredient__name')
+
+        context = {
+            'shopping_list': shopping_list,
+            'shopping_list_items': shopping_list_items,
+            'fk': self.kwargs['fk'],
+            'meal_id': self.kwargs['meal_id'],
+        }
+
+        return render(request, template_name=self.template_name, context=context)
+
+    def post(self, request, *args, **kwargs):
+
+        shopping_list_items = ShoppingListItem.objects \
+            .filter(
+                code_shopping_list_id=self.kwargs['fk'],
+                code_meal_ingredient__code_meal_id=self.kwargs['meal_id'],
+                added=True
+            )
+
+        for shopping_list_item in shopping_list_items:
+            shopping_list_item.added = False
+            shopping_list_item.save()
 
         return redirect(self.request.META['HTTP_REFERER'])

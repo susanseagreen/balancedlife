@@ -40,7 +40,7 @@ class ShoppingListUpdateView(View):
 
     def get(self, request, *args, **kwargs):
 
-        meal_list = []
+        meal_list = {}
         ingredient_list = {}
         meals_search = self.request.GET.get('meals_search') or ''
 
@@ -50,10 +50,11 @@ class ShoppingListUpdateView(View):
 
         for key, meal in ingredient_list.items():
             for meal_added in meal['added']:
-                meal_names = meal_added['code_meal_ingredient__code_meal__name']
-                if meal_names and meal_names not in meal_list:
-                    if meals_search.lower() in meal_names.lower():
-                        meal_list.append(meal_names)
+                meal_id = meal_added['code_meal_ingredient__code_meal_id']
+                meal_name = meal_added['code_meal_ingredient__code_meal__name']
+                if meal_name and meal_name not in meal_list:
+                    if meals_search.lower() in meal_name.lower():
+                        meal_list[meal_id] = meal_name
 
         if shopping_list.date_from:
             form = ShoppingListUpdateDatesForm(instance=shopping_list)
