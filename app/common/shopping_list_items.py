@@ -87,7 +87,8 @@ def build_shopping_list(self, ingredient_list):
             ingredient_id = None
 
             shopping_list_item['quantity'] = float(shopping_list_item['quantity'])
-            shopping_list_item['measurement_value'] = float(shopping_list_item['measurement_value'])
+            if shopping_list_item['measurement_value']:
+                shopping_list_item['measurement_value'] = float(shopping_list_item['measurement_value'])
 
             if shopping_list_item['measurement_value'] and shopping_list_item['quantity']:
                 shopping_list_item['measurement_value'] = float(shopping_list_item['measurement_value'] * shopping_list_item['quantity'])
