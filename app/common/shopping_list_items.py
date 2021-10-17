@@ -17,6 +17,7 @@ def build_food_diary(self, food_diary):
         .filter(code_shopping_list_id=self.kwargs['pk'], added=True) \
         .values(
             'id',
+            'name',
             'code_ingredient_id',
             'code_ingredient__name',
             'code_meal_ingredient__code_meal_id',
@@ -29,33 +30,35 @@ def build_food_diary(self, food_diary):
 
         for shopping_list_item in shopping_list_items:
 
-            name = shopping_list_item['code_meal_ingredient__code_meal__name'] or \
-                   shopping_list_item['code_ingredient__name']
+            if not shopping_list_item['name']:
 
-            if ',' in shopping_list_item['day_of_week']:
-                shopping_list_item['day_of_week'] = shopping_list_item['day_of_week'].split(',')
+                name = shopping_list_item['code_meal_ingredient__code_meal__name'] or \
+                       shopping_list_item['code_ingredient__name']
 
-            if ',' in shopping_list_item['meal']:
-                shopping_list_item['meal'] = shopping_list_item['meal'].split(',')
+                if ',' in shopping_list_item['day_of_week']:
+                    shopping_list_item['day_of_week'] = shopping_list_item['day_of_week'].split(',')
 
-            if shopping_list_item['day_of_week']:
-                for day_of_week in shopping_list_item['day_of_week']:
+                if ',' in shopping_list_item['meal']:
+                    shopping_list_item['meal'] = shopping_list_item['meal'].split(',')
 
+                if shopping_list_item['day_of_week']:
+                    for day_of_week in shopping_list_item['day_of_week']:
+
+                        if shopping_list_item['meal']:
+                            for meal in shopping_list_item['meal']:
+                                if name not in food_diary[day_of_week][meal]:
+                                    food_diary[day_of_week][meal].append(name)
+                        else:
+                            if name not in food_diary[day_of_week]['0']:
+                                food_diary[day_of_week]['0'].append(name)
+                else:
                     if shopping_list_item['meal']:
                         for meal in shopping_list_item['meal']:
-                            if name not in food_diary[day_of_week][meal]:
-                                food_diary[day_of_week][meal].append(name)
+                            if name not in food_diary['0'][meal]:
+                                food_diary['0'][meal].append(name)
                     else:
-                        if name not in food_diary[day_of_week]['0']:
-                            food_diary[day_of_week]['0'].append(name)
-            else:
-                if shopping_list_item['meal']:
-                    for meal in shopping_list_item['meal']:
-                        if name not in food_diary['0'][meal]:
-                            food_diary['0'][meal].append(name)
-                else:
-                    if name not in food_diary['0']['0']:
-                        food_diary['0']['0'].append(name)
+                        if name not in food_diary['0']['0']:
+                            food_diary['0']['0'].append(name)
 
     return food_diary
 
