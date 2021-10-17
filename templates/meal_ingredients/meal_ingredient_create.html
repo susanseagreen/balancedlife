@@ -42,17 +42,21 @@
         <div class="d-flex justify-content-between">
             <div>
                 {% for meal_category in meal.meal_categories %}
-                    <span class="meal_category">{{ meal_category }}</span>
+                    {% if meal_category %}
+                        <span class="meal_category">{{ meal_category }}</span>
+                    {% endif %}
                 {% endfor %}
             </div>
             <i>
                 {{ meal.pax_serving }} pax per {{ meal.servings }} serving
             </i>
         </div>
-        <br>
-        <div>
-            {{ meal.description|linebreaks }}
-        </div>
+        {% if meal.description %}
+            <br>
+            <div>
+                {{ meal.description|linebreaks }}
+            </div>
+        {% endif %}
     </div>
 
     {% if meal_ingredients %}
@@ -66,7 +70,7 @@
                             {% if meal_ingredient.fraction or meal_ingredient.measurement_value or meal_ingredient.measurement_type %}
                                 {% if meal_ingredient.fraction %}
                                     {{ meal_ingredient.fraction }}
-                                {% else %}
+                                {% elif meal_ingredient.measurement_value %}
                                     {{ meal_ingredient.measurement_value | no_decimals }}
                                 {% endif %}
                                 {% if meal_ingredient.measurement_type %}

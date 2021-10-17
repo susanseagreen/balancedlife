@@ -18,5 +18,5 @@ urlpatterns = [
          name='update_ingredient_modal'),
 
     path('create_item_modal/<fk>', ShoppingListOtherItemCreateView.as_view(), name='create_item_modal'),
-    path('update_item_modal/<pk>', ShoppingListOtherItemUpdateView.as_view(), name='update_item_modal'),
+    path('update_item_modal/<fk>', ShoppingListOtherItemUpdateView.as_view(), name='update_item_modal'),
 ]

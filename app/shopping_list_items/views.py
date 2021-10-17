@@ -38,6 +38,7 @@ class ShoppingListMealItemSelectView(View):
 
         if create_form.is_valid():
 
+            meal_id = f"meal_id:{create_form.cleaned_data['meals'].id}"
             day_of_week = f"day_of_week:{','.join(create_form.cleaned_data['day_of_week'])}"
             meal_days = f"meal:{','.join(create_form.cleaned_data['meal'])}"
             quantity = f"quantity:{create_form.cleaned_data['quantity']}"
@@ -58,7 +59,7 @@ class ShoppingListMealItemSelectView(View):
                 context = {
                     'fk': kwargs['fk'],
                     'meal': meal,
-                    'create_data': f"{day_of_week}|{meal_days}|{quantity}",
+                    'create_data': f"{meal_id}|{day_of_week}|{meal_days}|{quantity}",
                     'select_form': select_form,
                 }
 
@@ -81,7 +82,7 @@ class ShoppingListMealItemSelectView(View):
             create_data[label] = values
 
         meal_ingredients = MealIngredient.objects \
-            .filter(code_meal_id=self.kwargs['fk']) \
+            .filter(code_meal_id=create_data['meal_id']) \
             .values_list('id', 'code_ingredient__name')
 
         filters = {"meal_ingredients": meal_ingredients}
@@ -89,7 +90,7 @@ class ShoppingListMealItemSelectView(View):
         select_form = ShoppingListMealItemSelectForm(request.POST, initial={'filters': filters})
 
         if select_form.is_valid():
-            meal_servings = Meal.objects.get(id=kwargs['fk']).servings
+            meal_servings = Meal.objects.get(id=create_data['meal_id']).servings
             quantity = int(create_data['quantity'])
             ingredients = select_form.cleaned_data['meal_ingredients']
 
@@ -106,7 +107,7 @@ class ShoppingListMealItemSelectView(View):
             if meal_servings:
                 quantity = quantity / meal_servings
 
-            meal_ingredients = MealIngredient.objects.filter(code_meal_id=kwargs['fk'])
+            meal_ingredients = MealIngredient.objects.filter(code_meal_id=create_data['meal_id'])
             for meal_ingredient in meal_ingredients:
                 if str(meal_ingredient.id) in ingredients:
                     added = True
@@ -124,7 +125,7 @@ class ShoppingListMealItemSelectView(View):
                     added=added,
                 )
 
-        return redirect(reverse_lazy('shopping_lists:update', kwargs={'fk': self.kwargs['fk']}))
+        return redirect(reverse_lazy('shopping_lists:update', kwargs={'pk': self.kwargs['fk']}))
 
 
 class ShoppingListIngredientItemCreateView(View):
@@ -237,11 +238,11 @@ class ShoppingListOtherItemUpdateView(View):
     template_name = 'shopping_list_items/shopping_list_item_other_update.html'
 
     def get(self, request, *args, **kwargs):
-        shopping_list_item = ShoppingListItem.objects.get(id=self.kwargs['pk'])
+        shopping_list_item = ShoppingListItem.objects.get(id=self.kwargs['fk'])
         form = ShoppingListUpdateOtherItemForm(instance=shopping_list_item)
 
         context = {
-            'pk': self.kwargs['pk'],
+            'fk': self.kwargs['fk'],
             'shopping_list_item': shopping_list_item,
             'form': form,
         }

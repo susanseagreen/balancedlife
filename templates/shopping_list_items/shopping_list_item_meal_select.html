@@ -14,7 +14,9 @@
                         <div style="line-height: 1; text-align: right">
                             <div class="small">{{ meal.pax_serving }} pax / {{ meal.servings }} serving</div>
                             {% for meal_category in meal.meal_category %}
-                                <span class="meal">{{ meal_category | meal_display }}</span>
+                                {% if meal_category %}
+                                    <span class="meal">{{ meal_category | meal_display }}</span>
+                                {% endif %}
                             {% endfor %}
                         </div>
                     </div>

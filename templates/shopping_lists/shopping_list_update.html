@@ -56,7 +56,7 @@
                 <tr>
                     <td class="p-0" style="width: 100px">
                         <a class="cursor-pointer" title="See More"
-                           onclick="return showItems(this,'{{ ingredient.id }}')">
+                           onclick="return showItems(this,'added_{{ ingredient.id }}')">
                             <table class="table m-0 table-borderless">
                                 <tr>
                                     <td style="width: 100px">
@@ -90,7 +90,7 @@
                 </tr>
                 <tr>
                     <td colspan="2" class="p-0">
-                        <div style='width:100%;display:none;' id='d_{{ ingredient.id }}'>
+                        <div style='width:100%;display:none;' id='d_added_{{ ingredient.id }}'>
                             <table class="table m-0 table-borderless small">
                                 {% for added in ingredient.added %}
                                     <tr class="border-bottom">
@@ -136,14 +136,14 @@
                                         </td>
                                         <td class="p-2 small">
                                             {% for day_of_week in added.day_of_week %}
-                                                {% if day_of_week != '0' %}
+                                                {% if day_of_week != '0' and day_of_week %}
                                                     <span class="day_of_week">{{ day_of_week | day_of_week_display }}</span>
                                                 {% endif %}
                                             {% endfor %}
                                         </td>
                                         <td class="p-2 small text-right">
                                             {% for meal in added.meal %}
-                                                {% if meal != '0' %}
+                                                {% if meal != '0' and meal %}
                                                     <span class="meal">{{ meal | meal_display }}</span>
                                                 {% endif %}
                                             {% endfor %}
@@ -168,7 +168,7 @@
                 <tr>
                     <td class="p-0" style="width: 100px">
                         <a class="cursor-pointer" title="See More"
-                           onclick="return showItems(this,'{{ ingredient.id }}')">
+                           onclick="return showItems(this,'removed_{{ ingredient.id }}')">
                             <table class="table m-0 table-borderless">
                                 <tr>
                                     <td style="width: 100px">
@@ -202,7 +202,7 @@
                 </tr>
                 <tr>
                     <td colspan="2" class="p-0">
-                        <div style='width:100%;display:none;' id='d_{{ ingredient.id }}'>
+                        <div style='width:100%;display:none;' id='d_removed_{{ ingredient.id }}'>
                             <table class="table m-0 table-borderless small">
                                 {% for removed in ingredient.removed %}
                                     <tr class="border-bottom">
@@ -246,14 +246,14 @@
                                         </td>
                                         <td class="p-2 small">
                                             {% for day_of_week in removed.day_of_week %}
-                                                {% if day_of_week != '0' %}
+                                                {% if day_of_week != '0' and day_of_week %}
                                                     <span class="day_of_week">{{ day_of_week | day_of_week_display }}</span>
                                                 {% endif %}
                                             {% endfor %}
                                         </td>
                                         <td class="p-2 small text-right">
                                             {% for meal in removed.meal %}
-                                                {% if meal != '0' %}
+                                                {% if meal != '0' and meal %}
                                                     <span class="meal">{{ meal | meal_display }}</span>
                                                 {% endif %}
                                             {% endfor %}
