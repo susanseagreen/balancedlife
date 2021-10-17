@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static crispy_forms_tags %}
+
+{% block container %}
+    <div class="container mt-5">
+
+        <div class="row">
+
+            <div class="col">
+                <div class="mb-4 text-center">
+                    <a class="btn btn-info m-1" href="{% url 'meals:create' %}">
+                        Create Meal
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-12 text-center">
+                <h4>Meals</h4>
+            </div>
+            <div class="col-12">
+                <form method="GET">
+                    <fieldset>
+                        <div class="d-flex justify-content-center form-group">
+                            <input name="meals_search" class="form-control mr-2" type="text"
+                                   value="{{ meals_search }}">
+                            <button class="btn btn-info" type="submit">Search</button>
+                            <a class="btn btn-danger ml-2" href="{% url 'meals:list' %}">Clear</a>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+
+        {% if meals %}
+
+            {% if meals_search %}
+                <div class="text-center">
+                    <h5>Results for "{{ meals_search }}"</h5>
+                </div>
+            {% endif %}
+
+            <!--Pagination-->
+            {% if meals.paginator.num_pages > 1 %}
+                <div class="row">
+                    <div class="col">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                {% if meals.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           href="?page={{ meals.previous_page_number }}">Previous</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1"
+                                           aria-disabled="true">Previous</a>
+                                    </li>
+                                {% endif %}
+
+                                {% if meals.number|add:'-4' > 1 %}
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           href="?page={{ meals.number|add:'-5' }}">&hellip;</a>
+                                    </li>
+                                {% endif %}
+
+                                {% for i in meals.paginator.page_range %}
+                                    {% if meals.number == i %}
+                                        <li class="page-item active" aria-current="page">
+                                                                <span class="page-link">
+                                                                    {{ i }}
+                                                                    <span class="sr-only">(current)</span>
+                                                                </span>
+                                        </li>
+                                    {% elif i > meals.number|add:'-5' and i < meals.number|add:'5' %}
+                                        <li class="page-item"><a class="page-link"
+                                                                 href="?page={{ i }}">{{ i }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if meals.paginator.num_pages > meals.number|add:'4' %}
+                                    <li class="page-item"><a class="page-link"
+                                                             href="?page={{ meals.number|add:'5' }}">&hellip;</a>
+                                    </li>
+                                {% endif %}
+
+                                {% if meals.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           href="?page={{ meals.next_page_number }}">Next</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1"
+                                           aria-disabled="true">Next</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            {% endif %}
+            <!--end of Pagination-->
+
+            <table class="table border">
+                {% for meal in meals %}
+                    <tr>
+                        <td>
+                            <div>
+                                <a href="{% url 'meals:update' meal.id %}">{{ meal.name }}</a>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="text-right">
+                                <a href="{% url 'meal_ingredients:create' meal.id %}">Ingredients</a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <table class="table border">
+                <tr>
+                    <td>
+                        No meals
+                    </td>
+                </tr>
+            </table>
+        {% endif %}
+
+    </div>
+
+{% endblock container %}

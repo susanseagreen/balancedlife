@@ -34,21 +34,11 @@
                         <input name="ingredients_search" class="form-control mr-2 col" type="text"
                                value="{{ ingredients_search }}">
                         <button class="btn btn-info" type="submit">Search</button>
+                        <a class="btn btn-danger ml-2" href="{% url 'ingredients:create' %}">Clear</a>
                     </div>
 
                 </fieldset>
             </form>
-
-            {% if categories %}
-                <br>
-                <div class="text-center">
-                    {% for category in categories %}
-                        <a class="m-3"
-                           href="{% url 'ingredients:create' %}?category_search={{ category.name }}">{{ category.name }}
-                        </a>
-                    {% endfor %}
-                </div>
-            {% endif %}
         </div>
     </div>
 
@@ -120,10 +110,12 @@
             </div>
         {% endif %}
 
-        <div class="row justify-content-center">
+        <div class="row">
             {% for ingredient in ingredients %}
                 {% ifchanged ingredient.code_category %}
-                    <b class="col-12 mt-3 text-center">{{ ingredient.code_category.name }}</b>
+                    <a class="col-12 mt-3 font-weight-bold" href="{% url 'ingredients:create' %}?ingredients_search={{ ingredient.code_category.name.lower }}">
+                        {{ ingredient.code_category.name }}
+                    </a>
                 {% endifchanged %}
                 <a class="modal_update" data-toggle="modal" href="javascript:void(0);"
                    id="{% url 'ingredients:update_modal' ingredient.id %}">

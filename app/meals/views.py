@@ -7,6 +7,32 @@ from .models import Meal
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
+class MealListView(View):
+    template_name = 'meals/meal_list.html'
+
+    def get(self, request, *args, **kwargs):
+
+        meals_search = self.request.GET.get('meals_search') or ''
+        meals = Meal.objects.filter(name__icontains=meals_search).order_by('name')
+
+        paginator = Paginator(meals, 30)
+        page_num = request.GET.get('page', 1)
+
+        try:
+            meals = paginator.get_page(page_num)
+        except PageNotAnInteger:
+            meals = paginator.get_page(1)
+        except EmptyPage:
+            meals = paginator.get_page(paginator.num_pages)
+
+        context = {
+            'meals_search': meals_search,
+            'meals': meals,
+        }
+
+        return render(request, template_name=self.template_name, context=context)
+
+
 class MealCreateView(View):
     template_name = 'meals/meal_create.html'
 

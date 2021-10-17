@@ -19,17 +19,14 @@ class IngredientCreateView(View):
         meals = Meal.objects.filter(name__icontains=meals_search).order_by('name')
 
         ingredients_search = self.request.GET.get('ingredients_search') or ''
-        category_search = self.request.GET.get('category_search') or ''
 
         ingredients = Ingredient.objects \
             .select_related('code_category') \
             .filter(
                 Q(name__icontains=ingredients_search) |
-                Q(code_category__name__icontains=category_search)
+                Q(code_category__name__icontains=ingredients_search)
             ) \
             .order_by('code_category__name', 'name')
-
-        categories = IngredientCategory.objects.all()
 
         form = IngredientForm()
 
@@ -46,8 +43,6 @@ class IngredientCreateView(View):
         context = {
             'meals_search': meals_search,
             'ingredients_search': ingredients_search,
-            'category_search': category_search,
-            'categories': categories,
             'meals': meals,
             'ingredients': ingredients,
             'form': form,
