@@ -10,6 +10,7 @@ from .forms import (ShoppingListMealItemForm,
                     ShoppingListUpdateOtherItemForm,
                     ShoppingListOtherItemForm)
 from .models import ShoppingListItem
+from app.meal_categories.models import MealCategory
 from app.meal_ingredients.models import MealIngredient
 from app.meals.models import Meal
 
@@ -45,6 +46,17 @@ class ShoppingListMealItemSelectView(View):
 
             meal = Meal.objects \
                 .get(id=create_form.cleaned_data['meals'].id)
+
+            meal_category_dict = {}
+            meal_categories = MealCategory.objects.all()
+            for category in meal_categories:
+                meal_category_dict[category.id] = category.name
+
+            meal_category_list = []
+            for meal_category in meal.meal_category:
+                meal_category_list.append(meal_category_dict[meal_category])
+
+            meal.meal_category = meal_category_list
 
             meal_ingredients = MealIngredient.objects \
                 .filter(code_meal_id=create_form.cleaned_data['meals'].id) \

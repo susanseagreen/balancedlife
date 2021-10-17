@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import View
-from .forms import MealCreateForm, MealUpateForm
+from .forms import MealCreateForm, MealUpdateForm
 from .models import Meal
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -88,7 +88,7 @@ class MealUpdateView(View):
         meals = Meal.objects.filter(name__icontains=meals_search).order_by('name')
 
         meal = Meal.objects.get(id=self.kwargs['pk'])
-        form = MealUpateForm(instance=meal)
+        form = MealUpdateForm(instance=meal)
 
         paginator = Paginator(meals, 100)
         page_num = request.GET.get('page', 1)
@@ -114,9 +114,9 @@ class MealUpdateView(View):
         meal = Meal.objects.get(id=self.kwargs['pk'])
 
         if request.FILES:
-            form = MealUpateForm(request.POST, request.FILES, instance=meal)
+            form = MealUpdateForm(request.POST, request.FILES, instance=meal)
         else:
-            form = MealUpateForm(request.POST, instance=meal)
+            form = MealUpdateForm(request.POST, instance=meal)
 
         if form.is_valid():
             meal_categories = ','.join(form.cleaned_data['meal_categories'])

@@ -51,7 +51,7 @@ class MealCreateForm(forms.ModelForm):
         )
 
 
-class MealUpateForm(forms.ModelForm):
+class MealUpdateForm(forms.ModelForm):
 
     meal_categories = forms.MultipleChoiceField(choices='', widget=forms.CheckboxSelectMultiple, required=False)
 
