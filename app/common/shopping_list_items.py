@@ -12,22 +12,25 @@ def build_diary(food_diary):
 
 
 def build_food_diary(self, food_diary):
+
     shopping_list_items = ShoppingListItem.objects \
         .filter(code_shopping_list_id=self.kwargs['pk'], added=True) \
-        .exclude(code_meal_ingredient__code_meal__name__isnull=True) \
-        .exclude(code_meal_ingredient__code_meal__name=None) \
         .values(
             'id',
+            'code_ingredient_id',
+            'code_ingredient__name',
+            'code_meal_ingredient__code_meal_id',
             'code_meal_ingredient__code_meal__name',
             'day_of_week',
             'meal'
-        ).order_by('code_ingredient__name')
+        ).order_by('id')
 
     if shopping_list_items:
 
         for shopping_list_item in shopping_list_items:
 
-            meal_name = shopping_list_item['code_meal_ingredient__code_meal__name']
+            name = shopping_list_item['code_meal_ingredient__code_meal__name'] or \
+                   shopping_list_item['code_ingredient__name']
 
             if ',' in shopping_list_item['day_of_week']:
                 shopping_list_item['day_of_week'] = shopping_list_item['day_of_week'].split(',')
@@ -40,15 +43,19 @@ def build_food_diary(self, food_diary):
 
                     if shopping_list_item['meal']:
                         for meal in shopping_list_item['meal']:
-                            food_diary[day_of_week][meal].append(meal_name)
+                            if name not in food_diary[day_of_week][meal]:
+                                food_diary[day_of_week][meal].append(name)
                     else:
-                        food_diary[day_of_week]['0'].append(meal_name)
+                        if name not in food_diary[day_of_week]['0']:
+                            food_diary[day_of_week]['0'].append(name)
             else:
                 if shopping_list_item['meal']:
                     for meal in shopping_list_item['meal']:
-                        food_diary['0'][meal].append(meal_name)
+                        if name not in food_diary['0'][meal]:
+                            food_diary['0'][meal].append(name)
                 else:
-                    food_diary['0']['0'].append(meal_name)
+                    if name not in food_diary['0']['0']:
+                        food_diary['0']['0'].append(name)
 
     return food_diary
 
@@ -167,21 +174,22 @@ def build_shopping_list(self, ingredient_list):
 def build_measurements(ingredient_list):
     for ingredient_id, ingredient in ingredient_list.items():
 
-        if len(ingredient['measurement_type']) > 1:
-            convert_check(ingredient, 'kg', 'g', 1000)
-            convert_check(ingredient, 'l', 'c', 4)
-            convert_check(ingredient, 'c', 'tbsp', 16)
-            convert_check(ingredient, 'tbsp', 'tsp', 3)
-            convert_check(ingredient, 'tsp', 'ml', 5)
+        convert_check(ingredient['measurement_type'], 'kg', 'g', 1000)
+        convert_check(ingredient['measurement_type'], 'l', 'c', 4)
+        convert_check(ingredient['measurement_type'], 'c', 'tbsp', 16)
+        convert_check(ingredient['measurement_type'], 'tbsp', 'tsp', 3)
+        convert_check(ingredient['measurement_type'], 'tsp', 'ml', 5)
 
     for ingredient_id, ingredient in ingredient_list.items():
 
-        if len(ingredient['measurement_type']) > 1:
-            convert_up(ingredient, 'tsp', 'ml', 5)
-            convert_up(ingredient, 'tbsp', 'tsp', 3)
-            convert_up(ingredient, 'c', 'tbsp', 16)
-            convert_up(ingredient, 'l', 'c', 4)
-            convert_up(ingredient, 'kg', 'g', 1000)
+        convert_up(ingredient['measurement_type'], 'tsp', 'ml', 5)
+        convert_up(ingredient['measurement_type'], 'tbsp', 'tsp', 3)
+        convert_up(ingredient['measurement_type'], 'c', 'tbsp', 16)
+        convert_up(ingredient['measurement_type'], 'l', 'ml', 1000)
+        convert_up(ingredient['measurement_type'], 'c', 'ml', 250)
+        convert_up(ingredient['measurement_type'], 'kg', 'c', 4)
+        convert_up(ingredient['measurement_type'], 'kg', 'g', 1000)
+        convert_up(ingredient['measurement_type'], 'c', 'g', 250)
 
     for ingredient_id, ingredient in ingredient_list.items():
         get_fraction(ingredient['measurement_type'], 'i')

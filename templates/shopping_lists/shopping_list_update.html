@@ -98,28 +98,30 @@
                                             <a class="modal_update_ingredient p-2 cursor-pointer"
                                                data-toggle="modal"
                                                href="javascript:void(0);"
-                                                    {% if added.code_ingredient__name %}
-                                               id="{% url 'shopping_list_items:update_ingredient_modal' added.id %}">
+                                                    {% if added.code_meal_ingredient__code_meal__name != 'None' %}
+                                               id="{% url 'shopping_list_items:update_meal_modal' added.id %}"
+                                                    {% elif added.code_ingredient__name != 'None' %}
+                                               id="{% url 'shopping_list_items:update_ingredient_modal' added.id %}"
                                                     {% else %}
-                                                        id="{% url 'shopping_list_items:update_item_modal' added.id %}">
-                                                    {% endif %}
+                                               id="{% url 'shopping_list_items:update_item_modal' added.id %}"
+                                                    {% endif %}>
 
-                                            {% if added.measurement_value or added.measurement_type %}
-                                                <span {% if added.measurement_value %}
-                                                    title="{{ added.measurement_type | measurement_type_display }}"
-                                                {% endif %}>
+                                                {% if added.measurement_value or added.measurement_type %}
+                                                    <span {% if added.measurement_value %}
+                                                        title="{{ added.measurement_type | measurement_type_display }}"
+                                                    {% endif %}>
                                                     {% if added.measurement_value %}
                                                         {{ added.measurement_value | no_decimals }}
                                                     {% else %}
                                                         {{ added.fraction }}
                                                     {% endif %}
-                                                    {% if added.measurement_type %}
-                                                        {{ added.measurement_type }}
-                                                    {% endif %}
+                                                        {% if added.measurement_type %}
+                                                            {{ added.measurement_type }}
+                                                        {% endif %}
                                                 </span>
-                                            {% else %}
-                                                -
-                                            {% endif %}
+                                                {% else %}
+                                                    -
+                                                {% endif %}
                                             </a>
                                         </td>
                                         <td class="p-2 small cursor-pointer"
@@ -218,28 +220,27 @@
                                                 <a class="modal_update_ingredient p-2 cursor-pointer"
                                                    data-toggle="modal"
                                                    href="javascript:void(0);" style="color: red"
-                                                        {% if removed.code_ingredient__name %}
+                                                        {% if removed.code_meal_ingredient__code_meal__name != 'None' %}
+                                                   id="{% url 'shopping_list_items:update_meal_modal' removed.id %}"
+                                                        {% elif removed.code_ingredient__name != 'None' %}
                                                    id="{% url 'shopping_list_items:update_ingredient_modal' removed.id %}"
-                                                            >
                                                         {% else %}
-                                                            id="
-                                                            {% url 'shopping_list_items:update_item_modal' removed.id %}
-                                                            ">
+                                                   id="{% url 'shopping_list_items:update_item_modal' removed.id %}"
+                                                        {% endif %}>
+                                                    {% if removed.measurement_value or removed.measurement_type %}
+                                                        {% if removed.measurement_value %}
+                                                            {{ removed.measurement_value | no_decimals }}
+                                                        {% else %}
+                                                            {{ removed.fraction }}
                                                         {% endif %}
-                                                {% if removed.measurement_value or removed.measurement_type %}
-                                                    {% if removed.measurement_value %}
-                                                        {{ removed.measurement_value | no_decimals }}
-                                                    {% else %}
-                                                        {{ removed.fraction }}
-                                                    {% endif %}
-                                                    {% if removed.measurement_type %}
-                                                        <span title="{{ removed.measurement_type | measurement_type_display }}">
+                                                        {% if removed.measurement_type %}
+                                                            <span title="{{ removed.measurement_type | measurement_type_display }}">
                                                         {{ removed.measurement_type }}
                                                     </span>
+                                                        {% endif %}
+                                                    {% else %}
+                                                        -
                                                     {% endif %}
-                                                {% else %}
-                                                    -
-                                                {% endif %}
                                                 </a>
                                             </td>
                                             <td class="p-2 small cursor-pointer"

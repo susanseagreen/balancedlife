@@ -17,8 +17,6 @@ class Meal(models.Model):
 
     def save(self, *args, **kwargs):
         self.name = self.name.title()
-        self.description = self.description.capitalize()
-        self.steps = self.steps.capitalize()
         super().save()
 
         try:

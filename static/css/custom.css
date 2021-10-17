@@ -177,7 +177,7 @@ a {
 }
 
 [for^="id_day_of_week_"], [for^="id_meal_"] {
-    margin-right: 20px;
+    margin-right: 12px;
     font-size: 12px;
     padding-top: 4px;
 }
@@ -248,21 +248,19 @@ input[type="checkbox"]:checked {
     border-radius: 10px;
 }
 
-.category_display {
-    background-color: slategray !important;
-    border: 1px solid slategray !important;
-    color: #f8f9fa !important;
-    padding: 0 12px;
+.list_display {
+    background-color: aliceblue;
+    border: 1px solid;
+    padding: 2px 12px;
     margin: 5px;
 }
 
-.category_display:hover {
-    color: slategray !important;
-    background-color: #fff !important;
+.list_display:hover {
+    border: 1px solid aliceblue;
 }
 
-.category_display:active {
-    background-color: slategray !important;
+.list_display:active {
+    background-color: #007bff;
     color: #f8f9fa !important;
 }
 

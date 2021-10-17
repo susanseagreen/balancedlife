@@ -113,13 +113,13 @@
         <div class="row">
             {% for ingredient in ingredients %}
                 {% ifchanged ingredient.code_category %}
-                    <a class="col-12 mt-3 font-weight-bold" href="{% url 'ingredients:create' %}?ingredients_search={{ ingredient.code_category.name.lower }}">
-                        {{ ingredient.code_category.name }}
+                    <a class="col-12 m-0 font-weight-bold" style="padding: 7px" href="{% url 'ingredients:create' %}?ingredients_search={{ ingredient.code_category.name.lower }}">
+                        {{ ingredient.code_category.name }}:
                     </a>
                 {% endifchanged %}
                 <a class="modal_update" data-toggle="modal" href="javascript:void(0);"
                    id="{% url 'ingredients:update_modal' ingredient.id %}">
-                    <div class="category_display border-radius">
+                    <div class="list_display">
                         {{ ingredient.name }}
                     </div>
                 </a>

@@ -53,9 +53,13 @@ class ShoppingListMealItemSelectView(View):
             for category in meal_categories:
                 meal_category_dict[category.id] = category.name
 
-            meal_category_list = []
-            for meal_category in meal.meal_category:
-                meal_category_list.append(meal_category_dict[int(meal_category)])
+            if ',' in meal.meal_category:
+                meal_category_list = []
+                meal.meal_category = meal.meal_category.split(',')
+                for meal_category in meal.meal_category:
+                    meal_category_list.append(meal_category_dict[int(meal_category)])
+            else:
+                meal_category_list = meal_category_dict[int(meal.meal_category)]
 
             meal.meal_category = meal_category_list
 
@@ -198,6 +202,45 @@ class ShoppingListIngredientItemUpdateView(View):
 
     def post(self, request, *args, **kwargs):
         shopping_list_item = ShoppingListItem.objects.get(id=self.kwargs['pk'])
+
+        form = ShoppingListUpdatePostIngredientItemForm(request.POST, instance=shopping_list_item)
+
+        if form.is_valid():
+            day_of_week = ','.join(form.cleaned_data['day_of_week'])
+            meal = ','.join(form.cleaned_data['meal'])
+            quantity = form.cleaned_data['quantity']
+            if not quantity:
+                quantity = len(form.cleaned_data['day_of_week']) or len(form.cleaned_data['meal']) or 1
+            if not day_of_week:
+                day_of_week = '0'
+            if not meal:
+                meal = '0'
+            instance = form.save(commit=False)
+            instance.day_of_week = day_of_week
+            instance.meal = meal
+            instance.quantity = quantity
+            instance.save()
+
+        return redirect(self.request.META['HTTP_REFERER'])
+
+
+class ShoppingListMealItemUpdateView(View):
+    template_name = 'shopping_list_items/shopping_list_item_meal_update.html'
+
+    def get(self, request, *args, **kwargs):
+        shopping_list_item = ShoppingListItem.objects.get(id=self.kwargs['fk'])
+        form = ShoppingListUpdateGetIngredientItemForm(instance=shopping_list_item)
+
+        context = {
+            'fk': self.kwargs['fk'],
+            'shopping_list_item': shopping_list_item,
+            'form': form,
+        }
+
+        return render(request, template_name=self.template_name, context=context)
+
+    def post(self, request, *args, **kwargs):
+        shopping_list_item = ShoppingListItem.objects.get(id=self.kwargs['fk'])
 
         form = ShoppingListUpdatePostIngredientItemForm(request.POST, instance=shopping_list_item)
 

@@ -12,6 +12,7 @@
             <div class="m-4 text-center">
                 <h5>Are you sure you want to delete items in {{ shopping_list.name }}</h5>
                 <br>
+                <b>Ingredients</b><br>
                 {% for shopping_list_item in shopping_list_items %}
                     {% ifchanged shopping_list_item.code_ingredient.name %}
                         {{ shopping_list_item.code_ingredient.name }}<br>
