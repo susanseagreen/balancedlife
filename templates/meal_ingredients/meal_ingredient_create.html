@@ -15,14 +15,11 @@
     <div class="container mt-5 mb-3">
         <div class="row">
             {% if meal.image and meal.image != 'default.png' %}
-                <div class="col-12 meal_img" style="background-image: url({{ meal.image.url }})"></div>
+                <div class="col-sm-4 col-12 meal_img" style="background-image: url({{ meal.image.url }})"></div>
             {% elif meal.image_link %}
-                <div class="col-12 meal_img"
+                <div class="col-sm-4 col-12 meal_img"
                      style="background-image: url({{ meal.image_link }})"></div>
             {% else %}
-                <div class="col-12 meal_img" style="background-color: aliceblue">
-                    {% include 'include/meal.svg' %}
-                </div>
             {% endif %}
             <div class="col">
                 <form method="post" action="">
@@ -43,6 +40,9 @@
                     <a href="{% url 'meals:update' meal.id %}">{{ meal.name }}</a>
                 </h3>
                 <div class="d-flex justify-content-between">
+                    <i>
+                        {{ meal.pax_serving }} pax per {{ meal.servings }} serving
+                    </i>
                     <div>
                         {% for meal_category in meal.meal_categories %}
                             {% if meal_category %}
@@ -50,9 +50,6 @@
                             {% endif %}
                         {% endfor %}
                     </div>
-                    <i>
-                        {{ meal.pax_serving }} pax per {{ meal.servings }} serving
-                    </i>
                 </div>
                 {% if meal.description %}
                     <br>
