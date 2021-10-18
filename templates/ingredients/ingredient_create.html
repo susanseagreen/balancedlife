@@ -34,12 +34,13 @@
                         <form method="GET">
                             <fieldset>
                                 <div class="form-group m-1 row">
-                                    <label class="form-label text-nowrap mt-1 pl-0 pr-2 mw-145 col-sm-3 col-12">Ingredient
-                                        Search</label>
-                                    <input name="ingredients_search" class="form-control mr-2 col" type="text"
+                                    <label class="form-label text-nowrap mt-1 pl-0 pr-2 mw-145 col-sm-3 col-12">
+                                        Ingredient Search
+                                    </label>
+                                    <input name="ingredients_search" class="form-control mr-2 col-sm col-12 mb-2" type="text"
                                            value="{{ ingredients_search }}">
-                                    <button class="btn btn-info" type="submit">Search</button>
-                                    <a class="btn btn-secondary ml-2" href="{% url 'ingredients:create' %}">Clear</a>
+                                    <button class="btn btn-info mb-2" type="submit">Search</button>
+                                    <a class="btn btn-secondary ml-2 mb-2" href="{% url 'ingredients:create' %}">Clear</a>
                                 </div>
 
                             </fieldset>

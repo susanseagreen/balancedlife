@@ -151,7 +151,8 @@
 
                                                     {% if meals.paginator.num_pages > meals.number|add:'4' %}
                                                         <li class="page-item">
-                                                            <a class="page-link" href="?page={{ meals.number|add:'5' }}">&hellip;</a>
+                                                            <a class="page-link"
+                                                               href="?page={{ meals.number|add:'5' }}">&hellip;</a>
                                                         </li>
                                                     {% endif %}
 
@@ -177,7 +178,9 @@
                                 <div class="row">
                                 {% for meal in meals %}
                                     <div class="col-12">
-                                        <a href="{% url 'meal_ingredients:create' meal.id %}">
+                                        <a class="modal_details" data-toggle="modal"
+                                           href="javascript:void(0);"
+                                           id="{% url 'meals:details' meal.id %}">
                                             <table class="table border table_hover">
                                                 {% if meal.image and meal.image != 'default.png' %}
                                                     <tr>
@@ -206,17 +209,19 @@
                                                     </tr>
                                                 {% endif %}
                                                 <tr class="bg-info">
-                                                    <td>
-                                                        <b>
-                                                            <a class="text-light"
-                                                               href="{% url 'meals:update' meal.id %}">{{ meal.name }}</a>
-                                                        </b>
-                                                    </td>
-                                                    <td>
-                                                        <div class="text-right">
-                                                            <a class="text-light"
-                                                               href="{% url 'meal_ingredients:create' meal.id %}">Ingredients</a>
-                                                        </div>
+                                                    <td class="p-0 d-flex justify-content-between">
+                                                        <a class="text-light w-50 border-right p-2"
+                                                           href="{% url 'meals:update' meal.id %}">
+                                                            <b>
+                                                                {{ meal.name }}
+                                                            </b>
+                                                        </a>
+                                                        <a class="text-light w-50"
+                                                           href="{% url 'meal_ingredients:create' meal.id %}">
+                                                            <div class="text-right p-2">
+                                                                Ingredients&nbsp;
+                                                            </div>
+                                                        </a>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -264,6 +269,12 @@
         setTimeout(function () {
             $(".alert-block .alert-danger.alert").slideUp();
         }, 15000);
+        jQuery('.modal_details').click(function (e) {
+            var linkvar = $(this).attr('id');
+            $('.modal-body').load(linkvar, function (result) {
+                $('#myModal').modal({show: true});
+            });
+        });
     });
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
