@@ -66,7 +66,7 @@ class ShoppingListMealItemSelectView(View):
             meal.meal_category = meal_category_list
 
             meal_ingredients = MealIngredient.objects \
-                .filter(code_meal_id=create_form.cleaned_data['meals'].id) \
+                .filter(code_meal_id=int(create_form.cleaned_data['meals'].id)) \
                 .values_list('id', 'code_ingredient__name')
 
             if meal_ingredients:
@@ -88,7 +88,7 @@ class ShoppingListMealItemSelectView(View):
 
         messages.success(self.request, "Something went wrong")
 
-        return redirect(reverse_lazy('shopping_lists:update', kwargs={'fk': self.kwargs['fk']}))
+        return redirect(reverse_lazy('shopping_lists:update', kwargs={'pk': self.kwargs['fk']}))
 
     def post(self, request, *args, **kwargs):
 

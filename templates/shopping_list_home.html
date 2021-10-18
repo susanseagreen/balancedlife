@@ -31,18 +31,20 @@
                 <table class="table border">
                     {% for shopping_list in shopping_lists %}
                         <tr>
-                            <td {% if not shopping_list.is_active %}style="text-decoration:line-through"{% endif %}>
+                            <td class="shopping_list" {% if not shopping_list.is_active %}style="text-decoration:line-through"{% endif %}>
                                 <a href="{% url 'shopping_lists:update' shopping_list.id %}">
-                                    <div>
-                                        {{ shopping_list.name }}
+                                    <div class="p-2 d-flex justify-content-between">
+                                        <div>
+                                            {{ shopping_list.name }}
+                                        </div>
+                                        <div class="text-right">
+                                            {% if shopping_list.date_from %}
+                                                {{ shopping_list.date_from | date:"D d/m/y" }} -
+                                                {{ shopping_list.date_to | date:"D d/m/y" }}
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 </a>
-                            </td>
-                            <td class="text-right">
-                                {% if shopping_list.date_from %}
-                                    {{ shopping_list.date_from | date:"D d M Y" }} -
-                                    {{ shopping_list.date_to | date:"D d M Y" }}
-                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}

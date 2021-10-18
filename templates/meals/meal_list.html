@@ -27,7 +27,7 @@
                             <input name="meals_search" class="form-control mr-2" type="text"
                                    value="{{ meals_search }}">
                             <button class="btn btn-info" type="submit">Search</button>
-                            <a class="btn btn-danger ml-2" href="{% url 'meals:list' %}">Clear</a>
+                            <a class="btn btn-secondary ml-2" href="{% url 'meals:list' %}">Clear</a>
                         </div>
                     </fieldset>
                 </form>
@@ -131,7 +131,7 @@
                                 <tr>
                                     <td colspan="2">
                                         <div class="col-12 meal_img"
-                                             style="background-color: aliceblue">
+                                             style="background-color: #e8fafc">
                                             {% include 'include/meal.svg' %}
                                         </div>
                                     </td>

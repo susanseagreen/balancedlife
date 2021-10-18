@@ -9,11 +9,20 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
-                    <div class="text-center m-3">
-                        <h3>YAY! You're done</h3>
-                        <br>
-                        <h5>Head to the checkout line</h5>
-                    </div>
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <fieldset>
+                            <div class="text-center m-3">
+                                <h3>YAY! You're done</h3>
+                                <br>
+                                <h5>Head to the checkout line</h5>
+                                <div class="d-flex justify-content-between mt-5">
+                                    <button class="btn btn-dark">Mark as Complete</button>
+                                    <a href="{% url 'home' %}" class="btn btn-secondary">Use Again?</a>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
                 </div>
             </div>
         </div>

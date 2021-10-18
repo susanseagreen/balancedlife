@@ -17,9 +17,9 @@ class HomeView(View):
 
             meals_search = self.request.GET.get('meals_search') or ''
             meals = Meal.objects.filter(name__icontains=meals_search).order_by('name')
-            shopping_lists = ShoppingList.objects.order_by('name', 'is_active')
+            shopping_lists = ShoppingList.objects.order_by('-is_active', 'date_from', 'name')
 
-            paginator = Paginator(meals, 5)
+            paginator = Paginator(meals, 10)
             page_num = request.GET.get('page', 1)
 
             try:

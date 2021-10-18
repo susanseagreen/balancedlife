@@ -35,8 +35,8 @@
 
 .custom-control-input:checked ~ .custom-control-label::before {
     color: #f8f9fa;
-    border-color: #007bff;
-    background-color: #007bff;
+    border-color: #17a2b8;
+    background-color: #17a2b8;
 }
 
 .custom-checkbox .custom-control-label::before {
@@ -103,26 +103,15 @@ a.btn {
 }
 
 a:hover {
-    color: #007bff !important;
+    color: #17a2b8 !important;
 }
 
 a.btn:hover {
-    color: #6c757d !important;
+    color: #f8f9fa !important;
 }
 
 a.nav-link:hover {
     color: #f8f9fa !important;
-}
-
-.top-link {
-    padding: 0 10px 5px 10px;
-    border-radius: 0 0 10px 10px;
-    background: #343a40 !important;
-    color: #f8f9fa;
-}
-
-.top-link:hover {
-    color: #6c757d;
 }
 
 .open_close {
@@ -231,6 +220,14 @@ a:hover .username {
     width: 100% !important;
 }
 
+.shopping_list {
+    padding: 0 !important;
+}
+
+.shopping_list:hover {
+    background: #e8fafc;
+}
+
 .meal_img {
     min-height: 200px;
     background-repeat: no-repeat;
@@ -239,11 +236,11 @@ a:hover .username {
 }
 
 .meal_img svg {
-    fill: lightblue;
+    fill: #17a2b8;
     max-height: 200px;
     margin: auto;
     display: flex;
-    opacity: 0.3;
+    opacity: 0.2;
 }
 
 input[type="checkbox"] {
@@ -266,19 +263,20 @@ input[type="checkbox"]:checked {
 }
 
 .list_display {
-    background-color: aliceblue;
-    border: 1px solid;
+    background-color: #e8fafc;
+    border: 1px solid #17a2b8;
+    color: #17a2b8;
     padding: 2px 12px;
     margin: 5px;
 }
 
 .list_display:hover {
-    border: 1px solid #007bff;
+    border: 1px solid #e8fafc;
 }
 
 .list_display:active {
-    border: 1px solid #293d3d;
-    background-color: #293d3d;
+    border: 1px solid #17a2b8;
+    background-color: #17a2b8;
     color: #f8f9fa !important;
 }
 

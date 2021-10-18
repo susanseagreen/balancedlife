@@ -155,6 +155,15 @@ class ShoppingListView(View):
 
         return render(request, template_name=self.template_name, context=context)
 
+    def post(self, request, *args, **kwargs):
+
+        shopping_list = ShoppingList.objects.get(id=self.kwargs['pk'])
+
+        shopping_list.is_active = False
+        shopping_list.save()
+
+        return redirect(reverse_lazy('home'))
+
 
 class ShoppingListFoodDiaryView(View):
     template_name = 'shopping_lists/shopping_list_food_diary.html'
