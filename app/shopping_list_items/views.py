@@ -61,7 +61,7 @@ class ShoppingListMealItemSelectView(View):
                 for meal_category in meal.meal_category:
                     meal_category_list.append(meal_category_dict[int(meal_category)])
             else:
-                meal_category_list = meal_category_dict[int(meal.meal_category)]
+                meal_category_list = [meal_category_dict[int(meal.meal_category)]]
 
             meal.meal_category = meal_category_list
 

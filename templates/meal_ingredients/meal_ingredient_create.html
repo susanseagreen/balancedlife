@@ -13,6 +13,10 @@
     </div>
 
     <div class="container mt-5 mb-3">
+        <div class="text-center mb-5">
+            <h4>{{ meal.name }} Ingredients</h4>
+        </div>
+
         <div class="row">
             {% if meal.image and meal.image != 'default.png' %}
                 <div class="col-sm-4 col-12 meal_img" style="background-image: url({{ meal.image.url }})"></div>
@@ -33,6 +37,7 @@
         </div>
 
         <br>
+        <hr>
 
         <div class="container mt-5 mb-3">
             <div class="mb-3">
@@ -64,7 +69,7 @@
                     {% for meal_ingredient in meal_ingredients %}
                         <tr>
                             <td class="text-nowrap" style="width: 50px">
-                                <a class="modal_update" data-toggle="modal"
+                                <a class="modal_update p-2" data-toggle="modal"
                                    href="javascript:void(0);"
                                    id="{% url 'meal_ingredients:update_modal' meal_ingredient.code_meal_id meal_ingredient.id %}">
                                     {% if meal_ingredient.fraction or meal_ingredient.measurement_value or meal_ingredient.measurement_type %}
@@ -96,7 +101,7 @@
             {% endif %}
 
             {% if meal.steps %}
-                <h4>Instructions</h4>
+                <h5>Instructions</h5>
                 {{ meal.steps|linebreaks }}
                 <br>
             {% endif %}

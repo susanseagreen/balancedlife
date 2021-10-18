@@ -178,54 +178,46 @@
                                 <div class="row">
                                 {% for meal in meals %}
                                     <div class="col-12">
-                                        <a class="modal_details" data-toggle="modal"
-                                           href="javascript:void(0);"
-                                           id="{% url 'meals:details' meal.id %}">
-                                            <table class="table border table_hover">
-                                                {% if meal.image and meal.image != 'default.png' %}
-                                                    <tr>
-                                                        <td colspan="2">
+                                        <table class="table border table_hover">
+                                            <tr>
+                                                <td colspan="2">
+                                                    <a class="modal_details" data-toggle="modal"
+                                                       href="javascript:void(0);"
+                                                       id="{% url 'meals:details' meal.id %}">
+                                                        {% if meal.image and meal.image != 'default.png' %}
                                                             <div class="col-12 meal_img"
                                                                  style="background-image: url({{ meal.image.url }})">
                                                             </div>
-                                                        </td>
-                                                    </tr>
-                                                {% elif meal.image_link %}
-                                                    <tr>
-                                                        <td colspan="2">
+                                                        {% elif meal.image_link %}
                                                             <div class="col-12 meal_img"
                                                                  style="background-image: url({{ meal.image_link }})">
                                                             </div>
-                                                        </td>
-                                                    </tr>
-                                                {% else %}
-                                                    <tr>
-                                                        <td colspan="2">
+                                                        {% else %}
                                                             <div class="col-12 meal_img"
                                                                  style="background-color: #e8fafc">
                                                                 {% include 'include/meal.svg' %}
                                                             </div>
-                                                        </td>
-                                                    </tr>
-                                                {% endif %}
-                                                <tr class="bg-info">
-                                                    <td class="p-0 d-flex justify-content-between">
-                                                        <a class="text-light w-50 border-right p-2"
-                                                           href="{% url 'meals:update' meal.id %}">
-                                                            <b>
-                                                                {{ meal.name }}
-                                                            </b>
-                                                        </a>
-                                                        <a class="text-light w-50"
-                                                           href="{% url 'meal_ingredients:create' meal.id %}">
-                                                            <div class="text-right p-2">
-                                                                Ingredients&nbsp;
-                                                            </div>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </a>
+                                                        {% endif %}
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr class="bg-info">
+                                                <td class="p-0 d-flex justify-content-between">
+                                                    <a class="text-light w-50 border-right p-2"
+                                                       href="{% url 'meals:update' meal.id %}">
+                                                        <b>
+                                                            {{ meal.name }}
+                                                        </b>
+                                                    </a>
+                                                    <a class="text-light w-50"
+                                                       href="{% url 'meal_ingredients:create' meal.id %}">
+                                                        <div class="text-right p-2">
+                                                            Ingredients&nbsp;
+                                                        </div>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </div>
                                 {% endfor %}
                             {% else %}
