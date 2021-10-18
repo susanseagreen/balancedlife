@@ -185,16 +185,23 @@
                                                         </div>
                                                     </td>
                                                 </tr>
+                                            {% elif meal.image_link %}
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <div class="col-12 meal_img"
+                                                             style="background-image: url({{ meal.image_link }})">
+                                                        </div>
+                                                    </td>
+                                                </tr>
                                             {% else %}
-                                                {% if meal.image_link %}
-                                                    <tr>
-                                                        <td colspan="2">
-                                                            <div class="col-12 meal_img"
-                                                                 style="background-image: url({{ meal.image_link }})">
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                {% endif %}
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <div class="col-12 meal_img"
+                                                             style="background-color: aliceblue">
+                                                            {% include 'include/meal.svg' %}
+                                                        </div>
+                                                    </td>
+                                                </tr>
                                             {% endif %}
                                             <tr class="bg-danger">
                                                 <td>

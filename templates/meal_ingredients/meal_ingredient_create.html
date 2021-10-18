@@ -15,11 +15,14 @@
     <div class="container mt-5 mb-3">
         <div class="row">
             {% if meal.image and meal.image != 'default.png' %}
-                <div class="col-sm-4 col-12 meal_img" style="background-image: url({{ meal.image.url }})"></div>
+                <div class="col-12 meal_img" style="background-image: url({{ meal.image.url }})"></div>
+            {% elif meal.image_link %}
+                <div class="col-12 meal_img"
+                     style="background-image: url({{ meal.image_link }})"></div>
             {% else %}
-                {% if meal.image_link %}
-                    <div class="col-sm-4 col-12 meal_img" style="background-image: url({{ meal.image_link }})"></div>
-                {% endif %}
+                <div class="col-12 meal_img" style="background-color: aliceblue">
+                    {% include 'include/meal.svg' %}
+                </div>
             {% endif %}
             <div class="col">
                 <form method="post" action="">
