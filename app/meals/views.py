@@ -3,7 +3,8 @@ from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import View
 from .forms import MealCreateForm, MealUpdateForm
-from .models import Meal
+from app.meals.models import Meal
+from app.meal_ingredients.models import MealIngredient
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
@@ -127,3 +128,24 @@ class MealUpdateView(View):
         return redirect(reverse_lazy('meal_ingredients:create', kwargs={'fk': self.kwargs['pk']}))
 
 
+class MealDetailsView(View):
+    template_name = 'meals/meal_details.html'
+
+    def get(self, request, *args, **kwargs):
+
+        meal = Meal.objects.get(id=self.kwargs['pk'])
+        meal_ingredients = MealIngredient.objects \
+            .select_related('code_ingredient') \
+            .filter(code_meal_id=self.kwargs['pk'])
+
+        if ',' in meal.meal_category:
+            meal.meal_category = meal.meal_category.split(',')
+        else:
+            meal.meal_category = [meal.meal_category]
+
+        context = {
+            'meal_ingredients': meal_ingredients,
+            'meal': meal,
+        }
+
+        return render(request, template_name=self.template_name, context=context)

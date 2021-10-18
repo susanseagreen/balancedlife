@@ -181,22 +181,8 @@
                                onclick="return showItems(this,'removed_{{ ingredient.id }}')">
                                 <table class="table m-0 table-borderless">
                                     <tr>
-                                        <td style="width: 100px">
-                                            {% if ingredient.measurement_type.fraction %}
-                                                {{ ingredient.measurement_type.fraction }}
-                                            {% endif %}
-                                            {% if ingredient.i %}{{ ingredient.i | no_decimals }}{% endif %}
-                                            {% if ingredient.g %}{{ ingredient.g | no_decimals }}{% endif %}
-                                            {% if ingredient.kg %}{{ ingredient.kg | no_decimals }}{% endif %}
-                                            {% if ingredient.dp %}{{ ingredient.dp | no_decimals }}{% endif %}
-                                            {% if ingredient.tsp %}{{ ingredient.tsp | no_decimals }}{% endif %}
-                                            {% if ingredient.tbsp %}{{ ingredient.tbsp | no_decimals }}{% endif %}
-                                            {% if ingredient.c %}{{ ingredient.c | no_decimals }}{% endif %}
-                                            {% if ingredient.ml %}{{ ingredient.ml | no_decimals }}{% endif %}
-                                            {% if ingredient.l %}{{ ingredient.l | no_decimals }}{% endif %}
-                                            {% if ingredient.measurement_type and ingredient.measurement_type.measurement_type != 'i' %}
-                                                {{ ingredient.measurement_type.measurement_type }}
-                                            {% endif %}
+                                        <td style="width: 100px" class="text-danger">
+                                            X
                                         </td>
                                         <td>
                                             {% if ingredient.ingredient_name %}
@@ -418,13 +404,14 @@
         {% if meal_list %}
             {% for meal_id, meal_name in meal_list.items %}
                 <tr>
-                    <td>
-                        {{ meal_name }}
-                    </td>
-                    <td class="text-right" title="Remove from Shopping List">
-                        <a class="modal_meal_delete" data-toggle="modal"
+                    <td class="table_list">
+                        <a class="modal_details" data-toggle="modal"
                            href="javascript:void(0);"
-                           id="{% url 'shopping_list_items:delete_meal' pk meal_id %}">X</a>
+                           id="{% url 'meals:details' meal_id %}">
+                            <div class="p-2">
+                                {{ meal_name }}
+                            </div>
+                        </a>
                     </td>
                 </tr>
             {% endfor %}
@@ -439,6 +426,14 @@
 
     <script type="application/javascript">
         $('#div_id_is_active').parent().parent().removeClass('col')
+        $(document).ready(function () {
+            jQuery('.modal_details').click(function (e) {
+                var linkvar = $(this).attr('id');
+                $('.modal-body').load(linkvar, function (result) {
+                    $('#myModal').modal({show: true});
+                });
+            });
+        });
     </script>
 
 {% endblock meals %}

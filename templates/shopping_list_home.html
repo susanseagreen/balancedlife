@@ -31,7 +31,7 @@
                 <table class="table border">
                     {% for shopping_list in shopping_lists %}
                         <tr>
-                            <td class="shopping_list" {% if not shopping_list.is_active %}style="text-decoration:line-through"{% endif %}>
+                            <td class="table_list" {% if not shopping_list.is_active %}style="text-decoration:line-through"{% endif %}>
                                 <a href="{% url 'shopping_lists:update' shopping_list.id %}">
                                     <div class="p-2 d-flex justify-content-between">
                                         <div>

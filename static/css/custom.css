@@ -220,11 +220,11 @@ a:hover .username {
     width: 100% !important;
 }
 
-.shopping_list {
+.table_list {
     padding: 0 !important;
 }
 
-.shopping_list:hover {
+.table_list:hover {
     background: #e8fafc;
 }
 

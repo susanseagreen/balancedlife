@@ -247,20 +247,7 @@ class ShoppingListMealItemUpdateView(View):
         form = ShoppingListUpdatePostMealItemForm(request.POST, instance=shopping_list_item)
 
         if form.is_valid():
-            day_of_week = ','.join(form.cleaned_data['day_of_week'])
-            meal = ','.join(form.cleaned_data['meal'])
-            quantity = form.cleaned_data['quantity']
-            if not quantity:
-                quantity = len(form.cleaned_data['day_of_week']) or len(form.cleaned_data['meal']) or 1
-            if not day_of_week:
-                day_of_week = '0'
-            if not meal:
-                meal = '0'
-            instance = form.save(commit=False)
-            instance.day_of_week = day_of_week
-            instance.meal = meal
-            instance.quantity = quantity
-            instance.save()
+            form.save()
 
         return redirect(self.request.META['HTTP_REFERER'])
 
