@@ -25,6 +25,8 @@ class MealIngredientCreateView(View):
         meal = meals.filter(id=self.kwargs['fk']).first()
         if ',' in meal.meal_category:
             meal.meal_category = meal.meal_category.split(',')
+        else:
+            meal.meal_category = [meal.meal_category]
 
         meal_category_dict = categories.build_meal_category_dict()
         meal.meal_categories = []

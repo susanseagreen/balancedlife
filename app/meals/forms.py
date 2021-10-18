@@ -74,6 +74,8 @@ class MealUpdateForm(forms.ModelForm):
         tagged = Meal.objects.get(id=self.instance.id).meal_category
         if ',' in tagged:
             tagged = tagged.split(',')
+        else:
+            tagged = [tagged]
         categories = MealCategory.objects.order_by('name').values_list('id', 'name')
         self.fields['meal_categories'].initial = tagged
         self.fields['meal_categories'].choices = list(categories)
