@@ -98,9 +98,9 @@
                                             <a class="modal_update_ingredient p-2 cursor-pointer"
                                                data-toggle="modal"
                                                href="javascript:void(0);"
-                                                    {% if added.code_meal_ingredient__code_meal__name != 'None' %}
+                                                    {% if added.code_meal_ingredient__code_meal__name %}
                                                id="{% url 'shopping_list_items:update_meal_modal' added.id %}"
-                                                    {% elif added.code_ingredient__name != 'None' %}
+                                                    {% elif added.code_ingredient__name %}
                                                id="{% url 'shopping_list_items:update_ingredient_modal' added.id %}"
                                                     {% else %}
                                                id="{% url 'shopping_list_items:update_item_modal' added.id %}"
@@ -220,9 +220,9 @@
                                                 <a class="modal_update_ingredient p-2 cursor-pointer"
                                                    data-toggle="modal"
                                                    href="javascript:void(0);" style="color: red"
-                                                        {% if removed.code_meal_ingredient__code_meal__name != 'None' %}
+                                                        {% if removed.code_meal_ingredient__code_meal__name %}
                                                    id="{% url 'shopping_list_items:update_meal_modal' removed.id %}"
-                                                        {% elif removed.code_ingredient__name != 'None' %}
+                                                        {% elif removed.code_ingredient__name %}
                                                    id="{% url 'shopping_list_items:update_ingredient_modal' removed.id %}"
                                                         {% else %}
                                                    id="{% url 'shopping_list_items:update_item_modal' removed.id %}"

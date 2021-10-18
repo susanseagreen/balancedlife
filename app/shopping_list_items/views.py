@@ -4,6 +4,8 @@ from django.urls import reverse_lazy
 from django.views.generic import View
 from .forms import (ShoppingListMealItemForm,
                     ShoppingListMealItemSelectForm,
+                    ShoppingListUpdateGetMealItemForm,
+                    ShoppingListUpdatePostMealItemForm,
                     ShoppingListIngredientItemForm,
                     ShoppingListUpdateGetIngredientItemForm,
                     ShoppingListUpdatePostIngredientItemForm,
@@ -229,11 +231,11 @@ class ShoppingListMealItemUpdateView(View):
 
     def get(self, request, *args, **kwargs):
         shopping_list_item = ShoppingListItem.objects.get(id=self.kwargs['fk'])
-        form = ShoppingListUpdateGetIngredientItemForm(instance=shopping_list_item)
+        form = ShoppingListUpdateGetMealItemForm(instance=shopping_list_item)
 
         context = {
             'fk': self.kwargs['fk'],
-            'shopping_list_item': shopping_list_item,
+            'meal_name': shopping_list_item.code_meal_ingredient.code_meal.name,
             'form': form,
         }
 
@@ -242,7 +244,7 @@ class ShoppingListMealItemUpdateView(View):
     def post(self, request, *args, **kwargs):
         shopping_list_item = ShoppingListItem.objects.get(id=self.kwargs['fk'])
 
-        form = ShoppingListUpdatePostIngredientItemForm(request.POST, instance=shopping_list_item)
+        form = ShoppingListUpdatePostMealItemForm(request.POST, instance=shopping_list_item)
 
         if form.is_valid():
             day_of_week = ','.join(form.cleaned_data['day_of_week'])

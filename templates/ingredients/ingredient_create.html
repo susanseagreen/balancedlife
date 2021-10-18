@@ -1,142 +1,153 @@
 {% extends 'base.html' %}
 {% load static crispy_forms_tags get_display %}
 
-{% block content %}
+{% block container %}
+    <div class="container mt-5">
 
-    <div id="myModal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <form method="post" action="">
-        {% csrf_token %}
-        <fieldset>
-            {% crispy form %}
-            <button class="btn btn-dark">Create</button>
-        </fieldset>
-    </form>
-
-    <br>
-    <hr>
-    <br>
-
-    <div class="row">
-        <div class="col-12">
-            <form method="GET">
-                <fieldset>
-                    <div class="form-group m-1 row">
-                        <label class="form-label text-nowrap mt-1 pl-0 pr-2 mw-145 col-sm-3 col-12">Ingredient
-                            Search</label>
-                        <input name="ingredients_search" class="form-control mr-2 col" type="text"
-                               value="{{ ingredients_search }}">
-                        <button class="btn btn-info" type="submit">Search</button>
-                        <a class="btn btn-danger ml-2" href="{% url 'ingredients:create' %}">Clear</a>
-                    </div>
-
-                </fieldset>
-            </form>
-        </div>
-    </div>
-
-    <br>
-    <hr>
-    <br>
-
-    <!--Pagination-->
-    {% if ingredients.paginator.num_pages > 1 %}
         <div class="row">
-            <div class="col">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-center">
-                        {% if ingredients.has_previous %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ ingredients.previous_page_number }}">Previous</a>
-                            </li>
-                        {% else %}
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                            </li>
-                        {% endif %}
 
-                        {% if ingredients.number|add:'-4' > 1 %}
-                            <li class="page-item"><a class="page-link" href="?page={{ ingredients.number|add:'-5' }}">&hellip;</a>
-                            </li>
-                        {% endif %}
+            <div class="col-12">
 
-                        {% for i in ingredients.paginator.page_range %}
-                            {% if ingredients.number == i %}
-                                <li class="page-item active" aria-current="page">
+                <div id="myModal" class="modal fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form method="post" action="">
+                    {% csrf_token %}
+                    <fieldset>
+                        {% crispy form %}
+                        <button class="btn btn-dark">Create</button>
+                    </fieldset>
+                </form>
+
+                <br>
+                <hr>
+                <br>
+
+                <div class="row">
+                    <div class="col-12">
+                        <form method="GET">
+                            <fieldset>
+                                <div class="form-group m-1 row">
+                                    <label class="form-label text-nowrap mt-1 pl-0 pr-2 mw-145 col-sm-3 col-12">Ingredient
+                                        Search</label>
+                                    <input name="ingredients_search" class="form-control mr-2 col" type="text"
+                                           value="{{ ingredients_search }}">
+                                    <button class="btn btn-info" type="submit">Search</button>
+                                    <a class="btn btn-danger ml-2" href="{% url 'ingredients:create' %}">Clear</a>
+                                </div>
+
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+                <br>
+
+                <!--Pagination-->
+                {% if ingredients.paginator.num_pages > 1 %}
+                    <div class="row">
+                        <div class="col">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination justify-content-center">
+                                    {% if ingredients.has_previous %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ ingredients.previous_page_number }}">Previous</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#" tabindex="-1"
+                                               aria-disabled="true">Previous</a>
+                                        </li>
+                                    {% endif %}
+
+                                    {% if ingredients.number|add:'-4' > 1 %}
+                                        <li class="page-item"><a class="page-link"
+                                                                 href="?page={{ ingredients.number|add:'-5' }}">&hellip;</a>
+                                        </li>
+                                    {% endif %}
+
+                                    {% for i in ingredients.paginator.page_range %}
+                                        {% if ingredients.number == i %}
+                                            <li class="page-item active" aria-current="page">
                                     <span class="page-link">
                                         {{ i }}
                                         <span class="sr-only">(current)</span>
                                     </span>
-                                </li>
-                            {% elif i > ingredients.number|add:'-5' and i < ingredients.number|add:'5' %}
-                                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
-                            {% endif %}
-                        {% endfor %}
+                                            </li>
+                                        {% elif i > ingredients.number|add:'-5' and i < ingredients.number|add:'5' %}
+                                            <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
 
-                        {% if ingredients.paginator.num_pages > ingredients.number|add:'4' %}
-                            <li class="page-item"><a class="page-link" href="?page={{ ingredients.number|add:'5' }}">&hellip;</a>
-                            </li>
-                        {% endif %}
+                                    {% if ingredients.paginator.num_pages > ingredients.number|add:'4' %}
+                                        <li class="page-item"><a class="page-link"
+                                                                 href="?page={{ ingredients.number|add:'5' }}">&hellip;</a>
+                                        </li>
+                                    {% endif %}
 
-                        {% if ingredients.has_next %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ ingredients.next_page_number }}">Next</a>
-                            </li>
-                        {% else %}
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </nav>
-            </div>
-        </div>
-
-        <br>
-    {% endif %}
-    <!--end of Pagination-->
-
-    {% if ingredients %}
-        {% if ingredients_search %}
-            <div class="text-center">
-                <h5>Results for "{{ ingredients_search }}"</h5>
-            </div>
-        {% endif %}
-
-        <div class="row">
-            {% for ingredient in ingredients %}
-                {% ifchanged ingredient.code_category %}
-                    <a class="col-12 m-0 font-weight-bold" style="padding: 7px" href="{% url 'ingredients:create' %}?ingredients_search={{ ingredient.code_category.name.lower }}">
-                        {{ ingredient.code_category.name }}:
-                    </a>
-                {% endifchanged %}
-                <a class="modal_update" data-toggle="modal" href="javascript:void(0);"
-                   id="{% url 'ingredients:update_modal' ingredient.id %}">
-                    <div class="list_display">
-                        {{ ingredient.name }}
+                                    {% if ingredients.has_next %}
+                                        <li class="page-item">
+                                            <a class="page-link"
+                                               href="?page={{ ingredients.next_page_number }}">Next</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                        </div>
                     </div>
-                </a>
-            {% endfor %}
+
+                    <br>
+                {% endif %}
+                <!--end of Pagination-->
+
+                {% if ingredients %}
+                    {% if ingredients_search %}
+                        <div class="text-center">
+                            <h5>Results for "{{ ingredients_search }}"</h5>
+                        </div>
+                    {% endif %}
+
+                    <div class="row">
+                        {% for ingredient in ingredients %}
+                            {% ifchanged ingredient.code_category %}
+                                <div class="col-12"></div>
+                                <div class="m-0 font-weight-bold" style="padding: 7px">
+                                    {{ ingredient.code_category.name }}:
+                                </div>
+                            {% endifchanged %}
+                            <a class="modal_update" data-toggle="modal" href="javascript:void(0);"
+                               id="{% url 'ingredients:update_modal' ingredient.id %}">
+                                <div class="list_display">
+                                    {{ ingredient.name }}
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <br>
+
+                <script>
+                    $(document).ready(function () {
+                        jQuery('.modal_update').click(function (e) {
+                            var linkvar = $(this).attr('id');
+                            $('.modal-body').load(linkvar, function (result) {
+                                $('#myModal').modal({show: true});
+                            });
+                        });
+                    });
+                </script>
+            </div>
         </div>
-    {% endif %}
-    <br>
+    </div>
 
-    <script>
-        $(document).ready(function () {
-            jQuery('.modal_update').click(function (e) {
-                var linkvar = $(this).attr('id');
-                $('.modal-body').load(linkvar, function (result) {
-                    $('#myModal').modal({show: true});
-                });
-            });
-        });
-    </script>
-
-{% endblock content %}
+{% endblock container %}

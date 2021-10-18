@@ -1,23 +1,33 @@
 {% extends 'base.html' %}
 {% load static crispy_forms_tags %}
 
-{% block content %}
+{% block container %}
 
-    <h1>{{ meal.name }}</h1>
-    <br>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <fieldset>
-            {% crispy form %}
-            <button class="btn btn-dark">Update</button>
-        </fieldset>
-    </form>
-    <br>
+    <div class="container mt-5">
 
-    <script>
-        $("a:contains('default.png')").remove();
-        $('input[name="image"]').removeClass('form-control')
-        $('input[name="image-clear"]').css("font-size", "0.8rem")
-    </script>
+        <div class="row">
 
-{% endblock content %}
+            <div class="col-12">
+
+                <h1>{{ meal.name }}</h1>
+                <br>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <fieldset>
+                        {% crispy form %}
+                        <button class="btn btn-dark">Update</button>
+                    </fieldset>
+                </form>
+                <br>
+
+                <script>
+                    $("a:contains('default.png')").remove();
+                    $('input[name="image"]').removeClass('form-control')
+                    $('input[name="image-clear"]').css("font-size", "0.8rem")
+                </script>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock container %}

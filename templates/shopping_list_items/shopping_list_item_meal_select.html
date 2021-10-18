@@ -35,11 +35,11 @@
                     <br>
                     {% if meal.image and meal.image != 'default.png' %}
                         <div class="col-12 meal_img" style="background-image: url({{ meal.image.url }})"></div>
+                    {% elif meal.image_link %}
+                        <div class="col-12 meal_img"
+                             style="background-image: url({{ meal.image_link }})"></div>
                     {% else %}
-                        {% if meal.image_link %}
-                            <div class="col-12 meal_img"
-                                 style="background-image: url({{ meal.image_link }})"></div>
-                        {% endif %}
+                        <div class="col-12 meal_img" style="background-color: gray"></div>
                     {% endif %}
                 </div>
             </div>

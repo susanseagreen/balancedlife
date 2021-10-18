@@ -121,6 +121,7 @@ class ShoppingListUpdateGetIngredientItemForm(forms.ModelForm):
         self.fields['ingredient'].initial = Ingredient.objects.get(id=self.initial['code_ingredient']).name
 
         self.helper.layout = Layout(
+            Column('quantity', css_class='d-none'),
             Row(
                 Column('added', css_class='form-group col-1 mb-0 pb-0 fake-label'),
                 Column('measurement_value', css_class='form-group col-3 mb-0 pb-0'),
@@ -128,8 +129,7 @@ class ShoppingListUpdateGetIngredientItemForm(forms.ModelForm):
                 css_class='form-row'
             ),
             Row(
-                Column('ingredient', css_class='form-group col-sm-10 col-12 mb-0 pb-0'),
-                Column('quantity', css_class='form-group col-sm-2 col-12 mb-0 pb-0'),
+                Column('ingredient', css_class='form-group col-12 mb-0 pb-0'),
                 css_class='form-row'
             ),
             Row(
@@ -164,6 +164,7 @@ class ShoppingListUpdatePostIngredientItemForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
+            Column('quantity', css_class='d-none'),
             Row(
                 Column('added', css_class='form-group col-1 mb-0 pb-0 fake-label'),
                 Column('measurement_value', css_class='form-group col-3 mb-0 pb-0'),
@@ -171,8 +172,7 @@ class ShoppingListUpdatePostIngredientItemForm(forms.ModelForm):
                 css_class='form-row'
             ),
             Row(
-                Column('ingredient', css_class='form-group col-sm-10 col-12 mb-0 pb-0'),
-                Column('quantity', css_class='form-group col-sm-2 col-12 mb-0 pb-0'),
+                Column('ingredient', css_class='form-group col-12 mb-0 pb-0'),
                 css_class='form-row'
             ),
             Row(
@@ -181,6 +181,75 @@ class ShoppingListUpdatePostIngredientItemForm(forms.ModelForm):
             ),
             Row(
                 Column('meal', css_class='form-group col-12 mb-0 pb-0'),
+                css_class='form-row'
+            ),
+        )
+
+
+class ShoppingListUpdateGetMealItemForm(forms.ModelForm):
+    measurement_value = forms.DecimalField(label='Amount', max_digits=5, decimal_places=2, required=False)
+    measurement_type = forms.ChoiceField(label='Measurement', choices=measurement_type_choices, widget=Select2Widget, required=False)
+    ingredient = forms.CharField(widget=forms.TextInput(attrs={'readonly': True}), required=False)
+    day_of_week = forms.MultipleChoiceField(choices=days_of_week, widget=forms.CheckboxSelectMultiple, required=False)
+    meal = forms.MultipleChoiceField(choices=meal_choices, widget=forms.CheckboxSelectMultiple, required=False)
+
+    class Meta:
+        model = ShoppingListItem
+        fields = ['added', 'quantity', 'measurement_value', 'measurement_type', 'code_ingredient']
+        labels = {
+            'added': '',
+            'code_ingredient': 'Ingredient',
+            'measurement_value': 'Amount',
+            'measurement_type': 'Measurement',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.fields['ingredient'].initial = Ingredient.objects.get(id=self.initial['code_ingredient']).name
+        self.helper.layout = Layout(
+            Column('quantity', css_class='d-none'),
+            Row(
+                Column('added', css_class='form-group col-1 mb-0 pb-0 fake-label'),
+                Column('measurement_value', css_class='form-group col-3 mb-0 pb-0'),
+                Column('measurement_type', css_class='form-group col-8 mb-0 pb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('ingredient', css_class='form-group col-12 mb-0 pb-0'),
+                css_class='form-row'
+            ),
+        )
+
+
+class ShoppingListUpdatePostMealItemForm(forms.ModelForm):
+    measurement_value = forms.DecimalField(label='Amount', max_digits=5, decimal_places=2, required=False)
+    measurement_type = forms.ChoiceField(label='Measurement', choices=measurement_type_choices, widget=Select2Widget, required=False)
+    ingredient = forms.CharField(widget=forms.TextInput(attrs={'readonly': True}), required=False)
+
+    class Meta:
+        model = ShoppingListItem
+        fields = ['added', 'quantity', 'measurement_value', 'measurement_type']
+        labels = {
+            'added': '',
+            'code_ingredient': 'Ingredient',
+            'measurement_value': 'Amount',
+            'measurement_type': 'Measurement',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Column('quantity', css_class='d-none'),
+            Row(
+                Column('added', css_class='form-group col-1 mb-0 pb-0 fake-label'),
+                Column('measurement_value', css_class='form-group col-3 mb-0 pb-0'),
+                Column('measurement_type', css_class='form-group col-8 mb-0 pb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('ingredient', css_class='form-group col-12 mb-0 pb-0'),
                 css_class='form-row'
             ),
         )
@@ -231,6 +300,7 @@ class ShoppingListUpdateIngredientItemForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
+            Column('quantity', css_class='d-none'),
             Row(
                 Column('added', css_class='form-group col-1 mb-0 pb-0 fake-label'),
                 Column('measurement_value', css_class='form-group col-3 mb-0 pb-0'),
@@ -238,8 +308,7 @@ class ShoppingListUpdateIngredientItemForm(forms.ModelForm):
                 css_class='form-row'
             ),
             Row(
-                Column('ingredient', css_class='form-group col-sm-10 col-12 mb-0 pb-0'),
-                Column('quantity', css_class='form-group col-sm-2 col-12 mb-0 pb-0'),
+                Column('ingredient', css_class='form-group col-12 mb-0 pb-0'),
                 css_class='form-row'
             ),
             Row(

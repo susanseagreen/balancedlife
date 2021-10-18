@@ -1,19 +1,25 @@
 {% extends 'base.html' %}
 {% load static crispy_forms_tags %}
 
-{% block content %}
+{% block container %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
 
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <fieldset>
-            {% crispy form %}
-            <button class="btn btn-dark">Create</button>
-        </fieldset>
-    </form>
-    <br>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <fieldset>
+                        {% crispy form %}
+                        <button class="btn btn-dark">Create</button>
+                    </fieldset>
+                </form>
+                <br>
 
-    <script>
-     $('input[name="image"]').removeClass('form-control')
-    </script>
+                <script>
+                    $('input[name="image"]').removeClass('form-control')
+                </script>
+            </div>
+        </div>
+    </div>
 
-{% endblock content %}
+{% endblock container %}

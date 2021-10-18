@@ -34,7 +34,7 @@
 }
 
 .custom-control-input:checked ~ .custom-control-label::before {
-    color: #fff;
+    color: #f8f9fa;
     border-color: #007bff;
     background-color: #007bff;
 }
@@ -89,27 +89,36 @@ label {
 .page-item.active .page-link {
     background-color: #17a2b8 !important;
     border-color: #17a2b8 !important;
-    color: #fff !important;
+    color: #f8f9fa !important;
 }
 
 a {
     text-decoration: none !important;
     height: 100%;
+    color: #293d3d;
 }
 
-.hide-href {
-    color: #293d3d !important;
+a.btn {
+    color: #f8f9fa !important;
 }
 
-.hide-href:hover {
+a:hover {
     color: #007bff !important;
+}
+
+a.btn:hover {
+    color: #6c757d !important;
+}
+
+a.nav-link:hover {
+    color: #f8f9fa !important;
 }
 
 .top-link {
     padding: 0 10px 5px 10px;
     border-radius: 0 0 10px 10px;
     background: #343a40 !important;
-    color: white;
+    color: #f8f9fa;
 }
 
 .top-link:hover {
@@ -184,7 +193,7 @@ a {
 
 .day_of_week {
     font-size: 8px;
-    color: white;
+    color: #f8f9fa;
     background: yellowgreen;
     padding: 2px 5px;
 }
@@ -200,20 +209,20 @@ a {
 }
 
 a:hover .username {
-    color: white;
+    color: #f8f9fa;
     background: steelblue;
 }
 
 .meal {
     font-size: 8px;
-    color: white;
+    color: #f8f9fa;
     background: cadetblue;
     padding: 2px 5px;
 }
 
 .meal_category {
     font-size: 8px;
-    color: white;
+    color: #f8f9fa;
     background: maroon;
     padding: 2px 5px;
 }
@@ -256,11 +265,12 @@ input[type="checkbox"]:checked {
 }
 
 .list_display:hover {
-    border: 1px solid aliceblue;
+    border: 1px solid #007bff;
 }
 
 .list_display:active {
-    background-color: #007bff;
+    border: 1px solid #293d3d;
+    background-color: #293d3d;
     color: #f8f9fa !important;
 }
 
@@ -276,4 +286,10 @@ tr.strikeout td:before {
     left: 0;
     border-bottom: 1px solid #111;
     width: 100%;
+}
+.table_hover {
+    opacity: 80%;
+}
+.table_hover:hover, .table_hover:active {
+    opacity: 100%;
 }

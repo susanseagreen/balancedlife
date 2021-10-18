@@ -106,22 +106,44 @@
             {% endif %}
             <!--end of Pagination-->
 
-            <table class="table border">
-                {% for meal in meals %}
-                    <tr>
-                        <td>
-                            <div>
-                                <a href="{% url 'meals:update' meal.id %}">{{ meal.name }}</a>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="text-right">
-                                <a href="{% url 'meal_ingredients:create' meal.id %}">Ingredients</a>
-                            </div>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
+            <div class="row">
+            {% for meal in meals %}
+                <div class="col-12 col-sm-4">
+                    <table class="table border table_hover">
+                        {% if meal.image and meal.image != 'default.png' %}
+                            <tr>
+                                <td colspan="2">
+                                    <div class="col-12 meal_img" style="background-image: url({{ meal.image.url }})">
+                                    </div>
+                                </td>
+                            </tr>
+                        {% else %}
+                            {% if meal.image_link %}
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="col-12 meal_img"
+                                             style="background-image: url({{ meal.image_link }})">
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endif %}
+                        <tr class="bg-info">
+                            <td>
+                                <b>
+                                    <a class="text-light" href="{% url 'meals:update' meal.id %}">{{ meal.name }}</a>
+                                </b>
+                            </td>
+                            <td>
+                                <div class="text-right">
+                                    <a class="text-light"
+                                       href="{% url 'meal_ingredients:create' meal.id %}">Ingredients</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            {% endfor %}
         {% else %}
             <table class="table border">
                 <tr>
@@ -132,6 +154,7 @@
             </table>
         {% endif %}
 
+        </div>
     </div>
 
 {% endblock container %}
