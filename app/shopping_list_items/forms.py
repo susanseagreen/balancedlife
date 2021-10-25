@@ -256,7 +256,6 @@ class ShoppingListUpdatePostMealItemForm(forms.ModelForm):
 
 
 class ShoppingListUpdateOtherItemForm(forms.ModelForm):
-    name = forms.CharField(widget=forms.TextInput(attrs={'readonly': True}), required=False)
 
     class Meta:
         model = ShoppingListItem
