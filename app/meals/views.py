@@ -147,7 +147,7 @@ class MealDetailsView(View):
             for meal_category in meal_categories:
                 meal.meal_category.append(meal_category_dict[meal_category])
         else:
-            meal.meal_category = [meal.meal_category]
+            meal.meal_category = [meal_category_dict[meal.meal_category]]
 
         context = {
             'meal_ingredients': meal_ingredients,
