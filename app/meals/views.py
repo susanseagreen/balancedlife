@@ -6,6 +6,7 @@ from .forms import MealCreateForm, MealUpdateForm
 from app.meals.models import Meal
 from app.meal_ingredients.models import MealIngredient
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from common import categories
 
 
 class MealListView(View):
@@ -138,8 +139,13 @@ class MealDetailsView(View):
             .select_related('code_ingredient') \
             .filter(code_meal_id=self.kwargs['pk'])
 
+        meal_category_dict = categories.build_meal_category_dict()
+
         if ',' in meal.meal_category:
-            meal.meal_category = meal.meal_category.split(',')
+            meal_categories = meal.meal_category.split(',')
+            meal.meal_category = []
+            for meal_category in meal_categories:
+                meal.meal_category.append(meal_category_dict[meal_category])
         else:
             meal.meal_category = [meal.meal_category]
 

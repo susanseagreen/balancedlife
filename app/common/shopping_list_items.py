@@ -66,24 +66,24 @@ def build_shopping_list(self, ingredient_list):
     shopping_list_items = ShoppingListItem.objects \
         .filter(code_shopping_list_id=self.kwargs['pk']) \
         .values(
-        'id',
-        'added',
-        'name',
-        'code_ingredient_id',
-        'code_ingredient__name',
-        'code_ingredient__code_category__name',
-        'code_meal_ingredient_id',
-        'code_meal_ingredient__code_meal__meal_category',
-        'code_meal_ingredient__code_meal_id',
-        'code_meal_ingredient__code_meal__name',
-        'code_meal_ingredient__code_meal__servings',
-        'code_meal_ingredient__code_meal__pax_serving',
-        'measurement_type',
-        'measurement_value',
-        'day_of_week',
-        'meal',
-        'quantity'
-    ).order_by('code_ingredient__code_category__name', 'code_ingredient__name')
+            'id',
+            'added',
+            'name',
+            'code_ingredient_id',
+            'code_ingredient__name',
+            'code_ingredient__code_category__name',
+            'code_meal_ingredient_id',
+            'code_meal_ingredient__code_meal__meal_category',
+            'code_meal_ingredient__code_meal_id',
+            'code_meal_ingredient__code_meal__name',
+            'code_meal_ingredient__code_meal__servings',
+            'code_meal_ingredient__code_meal__pax_serving',
+            'measurement_type',
+            'measurement_value',
+            'day_of_week',
+            'meal',
+            'quantity'
+        ).order_by('code_ingredient__code_category__name', 'code_ingredient__name')
 
     meal_category_dict = categories.build_meal_category_dict()
 
