@@ -295,7 +295,7 @@ class ShoppingListOtherItemUpdateView(View):
         return render(request, template_name=self.template_name, context=context)
 
     def post(self, request, *args, **kwargs):
-        shopping_list_item = ShoppingListItem.objects.get(id=self.kwargs['pk'])
+        shopping_list_item = ShoppingListItem.objects.get(id=self.kwargs['fk'])
 
         form = ShoppingListUpdateOtherItemForm(request.POST, instance=shopping_list_item)
 
