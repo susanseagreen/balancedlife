@@ -11,7 +11,7 @@
 
                 <h1>{{ meal.name }}</h1>
                 <br>
-                <form method="post" enctype="multipart/form-data">
+                <form method="post" enctype="multipart/form-data" data-ajax="false">
                     {% csrf_token %}
                     <fieldset>
                         {% crispy form %}

@@ -46,9 +46,14 @@
                     {% endif %}
                 </div>
                 <br>
-                <table class="table m-0 border todo">
-                    {% for id, ingredient in ingredient_list.items %}
-                        {% if ingredient.added %}
+                {% for category, ingredients in ingredient_summary.items %}
+                    <table class="table mb-2 border todo">
+                            <tr>
+                                <th>
+                                    {{ category }}
+                                </th>
+                            </tr>
+                        {% for ingredient in ingredients %}
                             <tr>
                                 <td>
                                     <input style="display: none" type="checkbox" id="checkbox" class="checkbox"/>
@@ -78,9 +83,9 @@
                                     {% endif %}
                                 </td>
                             </tr>
-                        {% endif %}
-                    {% endfor %}
-                </table>
+                        {% endfor %}
+                    </table>
+                {% endfor %}
                 <table class="table m-0 border done">
                 </table>
 
@@ -90,11 +95,18 @@
     </div>
 
     <script type="application/javascript">
-        $('.todo tr').click(function () {
+        $('.todo td').parent().click(function () {
             $(this).closest('tr').find('input').attr("checked", "checked")
             let text = $(this).html()
+
             $('.done').append('<tr class="bg-light strikeout">' + text + '</tr>')
+            let table = $(this).closest('table')
             $(this).remove()
+
+            if (table.find("td").length < 2) {
+                table.remove()
+             }
+
             if ($('input.checkbox').not(':checked').length === 0) {
                 $('#myModal').modal({show: true});
             }

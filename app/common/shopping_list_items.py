@@ -12,19 +12,18 @@ def build_diary(food_diary):
 
 
 def build_food_diary(self, food_diary):
-
     shopping_list_items = ShoppingListItem.objects \
         .filter(code_shopping_list_id=self.kwargs['pk'], added=True) \
         .values(
-            'id',
-            'name',
-            'code_ingredient_id',
-            'code_ingredient__name',
-            'code_meal_ingredient__code_meal_id',
-            'code_meal_ingredient__code_meal__name',
-            'day_of_week',
-            'meal'
-        ).order_by('id')
+        'id',
+        'name',
+        'code_ingredient_id',
+        'code_ingredient__name',
+        'code_meal_ingredient__code_meal_id',
+        'code_meal_ingredient__code_meal__name',
+        'day_of_week',
+        'meal'
+    ).order_by('id')
 
     if shopping_list_items:
 
@@ -67,24 +66,24 @@ def build_shopping_list(self, ingredient_list):
     shopping_list_items = ShoppingListItem.objects \
         .filter(code_shopping_list_id=self.kwargs['pk']) \
         .values(
-            'id',
-            'added',
-            'name',
-            'code_ingredient_id',
-            'code_ingredient__name',
-            'code_ingredient__code_category__name',
-            'code_meal_ingredient_id',
-            'code_meal_ingredient__code_meal__meal_category',
-            'code_meal_ingredient__code_meal_id',
-            'code_meal_ingredient__code_meal__name',
-            'code_meal_ingredient__code_meal__servings',
-            'code_meal_ingredient__code_meal__pax_serving',
-            'measurement_type',
-            'measurement_value',
-            'day_of_week',
-            'meal',
-            'quantity'
-        ).order_by('code_ingredient__code_category__name', 'code_ingredient__name')
+        'id',
+        'added',
+        'name',
+        'code_ingredient_id',
+        'code_ingredient__name',
+        'code_ingredient__code_category__name',
+        'code_meal_ingredient_id',
+        'code_meal_ingredient__code_meal__meal_category',
+        'code_meal_ingredient__code_meal_id',
+        'code_meal_ingredient__code_meal__name',
+        'code_meal_ingredient__code_meal__servings',
+        'code_meal_ingredient__code_meal__pax_serving',
+        'measurement_type',
+        'measurement_value',
+        'day_of_week',
+        'meal',
+        'quantity'
+    ).order_by('code_ingredient__code_category__name', 'code_ingredient__name')
 
     meal_category_dict = categories.build_meal_category_dict()
 
@@ -101,7 +100,8 @@ def build_shopping_list(self, ingredient_list):
                 shopping_list_item['measurement_value'] = float(shopping_list_item['measurement_value'])
 
             if shopping_list_item['measurement_value'] and shopping_list_item['quantity']:
-                shopping_list_item['measurement_value'] = float(shopping_list_item['measurement_value'] * shopping_list_item['quantity'])
+                shopping_list_item['measurement_value'] = float(
+                    shopping_list_item['measurement_value'] * shopping_list_item['quantity'])
 
             if shopping_list_item['code_ingredient_id']:
                 ingredient_id = shopping_list_item['code_ingredient_id']
@@ -137,6 +137,7 @@ def build_shopping_list(self, ingredient_list):
                     'name': shopping_list_item['name'],
                     'ingredient_id': shopping_list_item['code_ingredient_id'],
                     'ingredient_name': shopping_list_item['code_ingredient__name'],
+                    'ingredient_category': shopping_list_item['code_ingredient__code_category__name'],
                     'meal_categories': shopping_list_item['meal_categories'],
                     'meal_ingredient_id': shopping_list_item['code_meal_ingredient_id'],
                     'day_of_week': shopping_list_item['day_of_week'],
@@ -176,7 +177,6 @@ def build_shopping_list(self, ingredient_list):
 
 def build_measurements(ingredient_list):
     for ingredient_id, ingredient in ingredient_list.items():
-
         convert_check(ingredient['measurement_type'], 'kg', 'g', 1000)
         convert_check(ingredient['measurement_type'], 'l', 'c', 4)
         convert_check(ingredient['measurement_type'], 'c', 'tbsp', 16)
@@ -184,7 +184,6 @@ def build_measurements(ingredient_list):
         convert_check(ingredient['measurement_type'], 'tsp', 'ml', 5)
 
     for ingredient_id, ingredient in ingredient_list.items():
-
         convert_up(ingredient['measurement_type'], 'tsp', 'ml', 5)
         convert_up(ingredient['measurement_type'], 'tbsp', 'tsp', 3)
         convert_up(ingredient['measurement_type'], 'c', 'tbsp', 16)
@@ -244,3 +243,28 @@ def get_fraction(ingredient, value):
 
         ingredient['measurement_type'] = value
         ingredient.pop(value)
+
+
+def build_summary(self, ingredient_list):
+
+    ingredient_summary = {}
+
+    for ingredient in ingredient_list.values():
+        ingredient_category = ingredient['ingredient_category']
+
+        if ingredient_category not in ingredient_summary:
+            ingredient_summary[ingredient_category] = []
+
+        if ingredient['added']:
+            ingredient_summary[ingredient_category].append({
+                'id': ingredient['id'],
+                'name': ingredient['name'],
+                'ingredient_id': ingredient['ingredient_id'],
+                'ingredient_name': ingredient['ingredient_name'],
+                'ingredient_category': ingredient['ingredient_category'],
+                'meal_categories': ingredient['meal_categories'],
+                'meal_ingredient_id': ingredient['meal_ingredient_id'],
+                'measurement_type': ingredient['measurement_type'],
+            })
+
+    return ingredient_summary

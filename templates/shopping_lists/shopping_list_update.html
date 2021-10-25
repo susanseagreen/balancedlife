@@ -413,6 +413,11 @@
                             </div>
                         </a>
                     </td>
+                    <td class="text-right p-0" title="Remove from Shopping List">
+                        <a class="modal_meal_delete btn btn-danger m-1" data-toggle="modal"
+                           href="javascript:void(0);"
+                           id="{% url 'shopping_list_items:delete_meal' pk meal_id %}">X</a>
+                    </td>
                 </tr>
             {% endfor %}
         {% else %}

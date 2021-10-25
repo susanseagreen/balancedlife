@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic import View
 from .forms import ShoppingListCreateForm, ShoppingListUpdateDatesForm, ShoppingListUpdateNoDatesForm
 from .models import ShoppingList
+from app.shopping_list_items.models import ShoppingListItem
 from app.common import shopping_list_items
 from datetime import timedelta
 
@@ -72,25 +73,6 @@ class ShoppingListUpdateView(View):
 
         return render(request, template_name=self.template_name, context=context)
 
-    def post(self, request, *args, **kwargs):
-
-        shopping_list = ShoppingList.objects.get(id=self.kwargs['pk'])
-
-        if shopping_list.date_from:
-            form = ShoppingListUpdateDatesForm(request.POST, instance=shopping_list)
-        else:
-            form = ShoppingListUpdateNoDatesForm(request.POST, instance=shopping_list)
-
-        if form.is_valid():
-            instance = form.save(commit=False)
-            if instance.date_from:
-                instance.date_to = instance.date_from + timedelta(days=6)
-            else:
-                instance.date_to = None
-            instance.save()
-
-        return redirect(self.request.META['HTTP_REFERER'])
-
 
 class ShoppingListUpdateModalView(View):
     template_name = 'shopping_lists/shopping_list_update_modal.html'
@@ -144,13 +126,14 @@ class ShoppingListView(View):
         ingredient_list = {}
 
         shopping_list_items.build_shopping_list(self, ingredient_list)
+        ingredient_summary = shopping_list_items.build_summary(self, ingredient_list)
 
         shopping_list = ShoppingList.objects.get(id=self.kwargs['pk'])
 
         context = {
             'pk': self.kwargs['pk'],
             'shopping_list': shopping_list,
-            'ingredient_list': ingredient_list,
+            'ingredient_summary': ingredient_summary,
         }
 
         return render(request, template_name=self.template_name, context=context)
@@ -183,3 +166,26 @@ class ShoppingListFoodDiaryView(View):
         }
 
         return render(request, template_name=self.template_name, context=context)
+
+
+class ShoppingListDeleteView(View):
+    template_name = 'shopping_lists/shopping_list_delete.html'
+
+    def get(self, request, *args, **kwargs):
+
+        shopping_list = ShoppingList.objects.get(id=self.kwargs['pk'])
+
+        context = {
+            'pk': self.kwargs['pk'],
+            'shopping_list': shopping_list,
+        }
+
+        return render(request, template_name=self.template_name, context=context)
+
+    def post(self, request, *args, **kwargs):
+
+        ShoppingListItem.objects.filter(code_shopping_list_id=self.kwargs['pk']).delete()
+        ShoppingList.objects.filter(id=self.kwargs['pk']).delete()
+        messages.success(self.request, "Shopping List deleted")
+
+        return redirect(self.request.META['HTTP_REFERER'])

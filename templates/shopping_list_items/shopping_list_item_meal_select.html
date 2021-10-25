@@ -3,49 +3,55 @@
 
 {% block container %}
 
-    <div id="myModal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <h4 class="text-center mb-4">Add Ingredients to Shopping List</h4>
 
-                    <div class="d-flex justify-content-between">
-                        <h4 class="mb-4">{{ meal.name }}</h4>
-                        <div style="line-height: 1; text-align: right">
-                            <div class="small">{{ meal.pax_serving }} pax / {{ meal.servings }} serving</div>
-                            {% if meal.meal_category %}
-                                {% for meal_category in meal.meal_category %}
-                                    <span class="meal">{{ meal_category }}</span>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
+                <h4 class="text-center mb-4">Add Ingredients to Shopping List</h4>
+            </div>
+
+            <div class="col-sm-6 col-12 mb-4">
+                <div class="d-flex justify-content-between">
+                    <h4 class="mb-4">{{ meal.name }}</h4>
+                    <div style="line-height: 1; text-align: right">
+                        <div class="small">{{ meal.pax_serving }} pax / {{ meal.servings }} serving</div>
+                        {% if meal.meal_category %}
+                            {% for meal_category in meal.meal_category %}
+                                <span class="meal">{{ meal_category }}</span>
+                            {% endfor %}
+                        {% endif %}
                     </div>
+                </div>
 
-                    <form method="post"
-                          action="{% url 'shopping_list_items:select_meal_modal' fk %}?create_data={{ create_data }}">
-                        {% csrf_token %}
-                        <fieldset>
-                            {% crispy select_form %}
-                            <div class="d-flex justify-content-between mt-2">
-                                <button class="btn btn-dark">Add</button>
-                                <a href="{% url 'shopping_lists:update' fk %}" class="btn btn-secondary">Cancel</a>
-                            </div>
-                        </fieldset>
-                    </form>
-                    <br>
+                <form method="post"
+                      action="{% url 'shopping_list_items:select_meal_modal' fk %}?create_data={{ create_data }}">
+                    {% csrf_token %}
+                    <fieldset>
+                        {% crispy select_form %}
+                        <div class="d-flex justify-content-between mt-2">
+                            <button class="btn btn-dark">Add Ingredients</button>
+                            <a href="{% url 'shopping_lists:update' fk %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+
+            <div class="col-sm-6 col-12">
+
+                <div>
                     {% if meal.image and meal.image != 'default.png' %}
                         <div class="col-12 meal_img" style="background-image: url({{ meal.image.url }})"></div>
                     {% elif meal.image_link %}
                         <div class="col-12 meal_img"
                              style="background-image: url({{ meal.image_link }})"></div>
                     {% else %}
-                        <div class="col-12 meal_img" style="background-color: #e8fafc">{% include 'include/meal.svg' %}</div>
+                        <div class="col-12 meal_img"
+                             style="background-color: #e8fafc">{% include 'include/meal.svg' %}</div>
                     {% endif %}
                 </div>
             </div>
         </div>
     </div>
-
 
     <script type="application/javascript">
         $(document).ready(function () {
