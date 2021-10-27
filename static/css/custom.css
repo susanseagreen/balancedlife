@@ -225,7 +225,19 @@ a:hover .username {
 }
 
 .table_list:hover {
-    background: #e8fafc;
+    background: rgba(232, 250, 252, 0.2);
+}
+
+.table_list.main:hover {
+    background: rgb(232, 250, 252) !important;
+}
+
+.table_list.active {
+    background: rgb(232, 250, 252) !important;
+}
+
+.table_list svg {
+    height: 18px;
 }
 
 .meal_img {

@@ -15,10 +15,9 @@
     <div class="row">
         <div class="col-12 text-center">
             <div class="mb-4">
-                <a class="modal_list btn btn-info m-1" data-toggle="modal" href="javascript:void(0);"
-                   title="Create Shopping List"
+                <a class="modal_list btn btn-info m-1" data-toggle="modal" href="javascript:void(0);"\
                    id="{% url 'shopping_lists:create' %}">
-                    Create Shopping List
+                    <span data-toggle="tooltip" data-placement="top" title="Create Shopping List">Create Shopping List</span>
                 </a>
             </div>
             <div class="mb-4">
@@ -47,7 +46,7 @@
                                     </div>
                                 </a>
                             </td>
-                            <td class="text-right p-0" title="Remove from Shopping List">
+                            <td class="text-right p-0" data-toggle="tooltip" data-placement="top" title="Remove from Shopping List">
                                 <a class="modal_shopping_list_delete btn btn-danger m-1" data-toggle="modal"
                                    href="javascript:void(0);"
                                    id="{% url 'shopping_lists:delete' shopping_list.id %}">X</a>

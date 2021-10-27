@@ -84,7 +84,7 @@ class ShoppingListUpdateNoDatesForm(forms.ModelForm):
                 Column('is_active', css_class='form-group mr-2 mb-0 pb-0 fake-label'),
                 Column('name', css_class='form-group mb-0 pb-0 fake-label col'),
                 Column('date_from', css_class='form-group col-sm-5 col mb-0 pb-0 toggle_dates'),
-                HTML('<a class="cursor-pointer button_toggle_dates btn btn-dark text-light mw-45 fake-label mr-1" title="Date">+</a>'),
+                HTML('<a class="cursor-pointer button_toggle_dates btn btn-dark text-light mw-45 fake-label mr-1" data-toggle="tooltip" data-placement="top" title="Date">+</a>'),
                 css_class='form-row'
             ),
         )

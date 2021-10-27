@@ -19,7 +19,8 @@ class MealIngredientCreateForm(forms.ModelForm):
             'measurement_type': '',
         }
         widgets = {
-            'preparation': forms.TextInput(attrs={'placeholder': 'Chopped / Diced / Sliced / Cooked / Raw'})
+            'preparation': forms.TextInput(attrs={'placeholder': 'Chopped / Diced / Sliced / Cooked / Raw'}),
+            'measurement_type': Select2Widget
         }
 
     def __init__(self, *args, **kwargs):

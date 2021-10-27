@@ -91,7 +91,7 @@ class ShoppingListIngredientItemForm(forms.Form):
 
 class ShoppingListUpdateGetIngredientItemForm(forms.ModelForm):
     measurement_value = forms.DecimalField(label='Amount', max_digits=5, decimal_places=2, required=False)
-    measurement_type = forms.ChoiceField(label='Measurement', choices=measurement_type_choices, widget=Select2Widget, required=False)
+    measurement_type = forms.ChoiceField(label='Measurement', choices=measurement_type_choices, required=False)
     ingredient = forms.CharField(widget=forms.TextInput(attrs={'readonly': True}), required=False)
     day_of_week = forms.MultipleChoiceField(choices=days_of_week, widget=forms.CheckboxSelectMultiple, required=False)
     meal = forms.MultipleChoiceField(choices=meal_choices, widget=forms.CheckboxSelectMultiple, required=False)
@@ -102,8 +102,9 @@ class ShoppingListUpdateGetIngredientItemForm(forms.ModelForm):
         labels = {
             'added': '',
             'code_ingredient': 'Ingredient',
-            'measurement_value': 'Amount',
-            'measurement_type': 'Measurement',
+        }
+        widgets = {
+            'measurement_type': Select2Widget
         }
 
     def __init__(self, *args, **kwargs):
@@ -281,7 +282,7 @@ class ShoppingListUpdateOtherItemForm(forms.ModelForm):
 
 class ShoppingListUpdateIngredientItemForm(forms.ModelForm):
     measurement_value = forms.DecimalField(label='Amount', initial=1, max_digits=5, decimal_places=2, required=False)
-    measurement_type = forms.ChoiceField(label='Measurement', choices=measurement_type_choices, widget=Select2Widget, required=False)
+    measurement_type = forms.ChoiceField(label='Measurement', choices=measurement_type_choices, required=False)
     day_of_week = forms.MultipleChoiceField(choices=days_of_week, widget=forms.CheckboxSelectMultiple, required=False)
     meal = forms.MultipleChoiceField(choices=meal_choices, widget=forms.CheckboxSelectMultiple, required=False)
 
@@ -291,8 +292,9 @@ class ShoppingListUpdateIngredientItemForm(forms.ModelForm):
         labels = {
             'added': '',
             'code_ingredient': 'Ingredient',
-            'measurement_value': 'Amount',
-            'measurement_type': 'Measurement',
+        }
+        widgets = {
+            'measurement_type': Select2Widget
         }
 
     def __init__(self, *args, **kwargs):

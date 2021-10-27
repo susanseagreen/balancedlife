@@ -152,9 +152,10 @@ def build_shopping_list(self, ingredient_list):
                     ingredient_list[ingredient_id]['meal_names'].append(
                         shopping_list_item['code_meal_ingredient__code_meal__name'])
 
-            shopping_list_item['servings'] = \
-                f"{shopping_list_item['code_meal_ingredient__code_meal__pax_serving']} pax for " + \
-                f"{shopping_list_item['code_meal_ingredient__code_meal__servings']} servings"
+            if shopping_list_item['code_meal_ingredient__code_meal__pax_serving']:
+                shopping_list_item['servings'] = \
+                    f"{shopping_list_item['code_meal_ingredient__code_meal__pax_serving']} pax for " + \
+                    f"{shopping_list_item['code_meal_ingredient__code_meal__servings']} servings"
 
             if shopping_list_item['added']:
 
@@ -252,10 +253,10 @@ def build_summary(self, ingredient_list):
     for ingredient in ingredient_list.values():
         ingredient_category = ingredient['ingredient_category']
 
-        if ingredient_category not in ingredient_summary:
-            ingredient_summary[ingredient_category] = []
-
         if ingredient['added']:
+            if ingredient_category not in ingredient_summary:
+                ingredient_summary[ingredient_category] = []
+
             ingredient_summary[ingredient_category].append({
                 'id': ingredient['id'],
                 'name': ingredient['name'],

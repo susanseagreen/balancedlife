@@ -79,7 +79,7 @@
                                             {{ meal_ingredient.measurement_value | no_decimals }}
                                         {% endif %}
                                         {% if meal_ingredient.measurement_type %}
-                                            <span title="{{ meal_ingredient.measurement_type | measurement_type_display }}">
+                                            <span data-toggle="tooltip" data-placement="top" title="{{ meal_ingredient.measurement_type | measurement_type_display }}">
                                         {{ meal_ingredient.measurement_type }}
                                     </span>
                                         {% endif %}
