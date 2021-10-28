@@ -125,11 +125,7 @@
                                 <a class="modal_details" data-toggle="modal"
                                    href="javascript:void(0);"
                                    id="{% url 'meals:details' meal.id %}">
-                                    {% if meal.image and meal.image != 'default.png' %}
-                                        <div class="col-12 meal_img"
-                                             style="background-image: url({{ meal.image.url }})">
-                                        </div>
-                                    {% elif meal.image_link %}
+                                    {% if meal.image_link %}
                                         <div class="col-12 meal_img"
                                              style="background-image: url({{ meal.image_link }})">
                                         </div>

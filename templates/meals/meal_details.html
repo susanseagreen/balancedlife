@@ -6,11 +6,7 @@
 {% block container %}
 
     <div class="row m-1">
-        {% if meal.image and meal.image != 'default.png' %}
-            <div class="col-sm-6 col-12 meal_img"
-                 style="background-image: url({{ meal.image.url }})">
-            </div>
-        {% elif meal.image_link %}
+        {% if meal.image_link %}
             <div class="col-sm-6 col-12 meal_img"
                  style="background-image: url({{ meal.image_link }})">
             </div>

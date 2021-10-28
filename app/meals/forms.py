@@ -11,7 +11,7 @@ class MealCreateForm(forms.ModelForm):
 
     class Meta:
         model = Meal
-        fields = ['image_link', 'image', 'name', 'servings', 'pax_serving', 'description', 'steps']
+        fields = ['image_link', 'name', 'servings', 'pax_serving', 'description', 'steps']
 
         widgets = {
             'description': forms.Textarea(attrs={'rows': 4}),
@@ -19,7 +19,6 @@ class MealCreateForm(forms.ModelForm):
         }
         labels = {
             'image_link': 'Image URL',
-            'image': 'Image Upload',
         }
 
     def __init__(self, *args, **kwargs):
@@ -30,7 +29,6 @@ class MealCreateForm(forms.ModelForm):
         self.helper.layout = Layout(
             Row(
                 Column('image_link', css_class='form-group col-12 mb-0 pb-0'),
-                Column('image', css_class='form-group col-12 mb-0 pb-0'),
                 css_class='form-row'
             ),
             Row(
@@ -57,7 +55,7 @@ class MealUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Meal
-        fields = ['image_link', 'image', 'name', 'servings', 'pax_serving', 'description', 'steps']
+        fields = ['image_link', 'name', 'servings', 'pax_serving', 'description', 'steps']
 
         widgets = {
             'description': forms.Textarea(attrs={'rows': 4}),
@@ -65,7 +63,6 @@ class MealUpdateForm(forms.ModelForm):
         }
         labels = {
             'image_link': 'Image URL',
-            'image': 'Image Upload',
         }
 
     def __init__(self, *args, **kwargs):
@@ -82,7 +79,6 @@ class MealUpdateForm(forms.ModelForm):
         self.helper.layout = Layout(
             Row(
                 Column('image_link', css_class='form-group col-12 mb-0 pb-0'),
-                Column('image', css_class='form-group col-12 mb-0 pb-0'),
                 css_class='form-row'
             ),
             Row(

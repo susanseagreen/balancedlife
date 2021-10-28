@@ -5,7 +5,7 @@ from PIL import Image
 class Meal(models.Model):
     name = models.CharField(max_length=50)
     image_link = models.CharField(max_length=255, blank=True, null=True)
-    image = models.ImageField(default='default.png', blank=True)
+    # image = models.ImageField(default='default.png', blank=True)
     servings = models.IntegerField(default=1, blank=True, null=True)
     pax_serving = models.IntegerField("Pax per serving", default=2, blank=True, null=True)
     meal_category = models.CharField(max_length=50)
@@ -19,15 +19,15 @@ class Meal(models.Model):
         self.name = self.name.title()
         super().save()
 
-        try:
-            img = Image.open(self.image.path)  # Open image using self
-
-            if img.height > 300 or img.width > 300:
-                new_img = (300, 300)
-                img.thumbnail(new_img)
-                img.save(self.image.path)  # saving image at the same path
-
-        except FileNotFoundError:
-            pass
+        # try:
+        #     img = Image.open(self.image.path)  # Open image using self
+        #
+        #     if img.height > 300 or img.width > 300:
+        #         new_img = (300, 300)
+        #         img.thumbnail(new_img)
+        #         img.save(self.image.path)  # saving image at the same path
+        #
+        # except FileNotFoundError:
+        #     pass
 
         return super(Meal, self).save(*args, **kwargs)

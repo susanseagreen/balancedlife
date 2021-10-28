@@ -18,12 +18,9 @@
         </div>
 
         <div class="row">
-            {% if meal.image and meal.image != 'default.png' %}
-                <div class="col-sm-4 col-12 meal_img" style="background-image: url({{ meal.image.url }})"></div>
-            {% elif meal.image_link %}
+            {% if meal.image_link %}
                 <div class="col-sm-4 col-12 meal_img"
                      style="background-image: url({{ meal.image_link }})"></div>
-            {% else %}
             {% endif %}
             <div class="col">
                 <form method="post" action="">
