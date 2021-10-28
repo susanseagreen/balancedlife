@@ -50,7 +50,7 @@
                     <table class="table mb-2 border todo">
                             <tr>
                                 <th>
-                                    {{ category }}
+                                    {% if category %}{{ category }}{% else %}Other{% endif %}
                                 </th>
                             </tr>
                         {% for ingredient in ingredients %}
