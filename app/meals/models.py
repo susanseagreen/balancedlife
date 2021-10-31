@@ -10,7 +10,7 @@ class Meal(models.Model):
     pax_serving = models.IntegerField("Pax per serving", default=2, blank=True, null=True)
     meal_category = models.CharField(max_length=50)
     description = models.TextField(max_length=1000, null=True, blank=True)
-    steps = models.TextField('Cooking Instructions', max_length=1000, null=True, blank=True)
+    steps = models.TextField('Cooking Instructions', null=True, blank=True)
 
     def __str__(self):
         return f"{self.name} ({self.pax_serving} pax / {self.servings} serving)"
