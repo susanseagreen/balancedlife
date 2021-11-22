@@ -58,4 +58,5 @@ class IngredientCategoryModalUpdateView(View):
         if form.is_valid():
             form.save()
 
-        return redirect(self.request.META['HTTP_REFERER'])
+        # return redirect(self.request.META['HTTP_REFERER'])
+        return redirect(reverse_lazy('ingredient_categories:create'))

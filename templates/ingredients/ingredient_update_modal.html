@@ -1,16 +1,24 @@
 {% extends 'base.html' %}
 {% load static crispy_forms_tags %}
 
-{% block nav %}{% endblock nav %}
+{#{% block nav %}{% endblock nav %}#}
 
 {% block container %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
 
-    <form method="post" action="{% url 'ingredients:update_modal' pk %}">
-        {% csrf_token %}
-        <fieldset>
-            {% crispy form %}
-            <button class="btn btn-dark">Update</button>
-        </fieldset>
-    </form>
+                <h4 class="text-center mb-4">Update Ingredient</h4>
+
+                <form method="post" action="{% url 'ingredients:update_modal' pk %}">
+                    {% csrf_token %}
+                    <fieldset>
+                        {% crispy form %}
+                        <button class="btn btn-dark">Update</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
 
 {% endblock container %}

@@ -21,13 +21,22 @@
         </a>
     </div>
     <div class="d-flex justify-content-center">
-        <a class="modal_create_meal btn btn-dark m-1" data-toggle="modal" href="javascript:void(0);">
+{#        <a class="modal_create_meal btn btn-dark m-1" data-toggle="modal" href="javascript:void(0);">#}
+{#            Meals#}
+{#        </a>#}
+{#        <a class="modal_create_ingredient btn btn-dark m-1" data-toggle="modal" href="javascript:void(0);">#}
+{#            Ingredients#}
+{#        </a>#}
+{#        <a class="modal_create_other btn btn-dark m-1" data-toggle="modal" href="javascript:void(0);">#}
+{#            Other Items#}
+{#        </a>#}
+        <a class="btn btn-dark m-1" href="{% url 'shopping_list_items:create_meal_modal' pk %}">
             Meals
         </a>
-        <a class="modal_create_ingredient btn btn-dark m-1" data-toggle="modal" href="javascript:void(0);">
+        <a class="btn btn-dark m-1" href="{% url 'shopping_list_items:create_ingredient_modal' pk %}">
             Ingredients
         </a>
-        <a class="modal_create_other btn btn-dark m-1" data-toggle="modal" href="javascript:void(0);">
+        <a class="btn btn-dark m-1" href="{% url 'shopping_list_items:create_item_modal' pk %}">
             Other Items
         </a>
     </div>
@@ -92,15 +101,23 @@
                     <td colspan="2" class="p-0">
                         <div style='width:100%;display:none;' id='d_added_{{ ingredient.id }}'>
                             {% for added in ingredient.added %}
-                                <a class="modal_update_ingredient cursor-pointer"
-                                   data-toggle="modal"
-                                   href="javascript:void(0);"
+{#                                <a class="modal_update_ingredient cursor-pointer"#}
+{#                                   data-toggle="modal"#}
+{#                                   href="javascript:void(0);"#}
+{#                                        {% if added.code_meal_ingredient__code_meal__name %}#}
+{#                                   id="{% url 'shopping_list_items:update_meal_modal' added.id %}"#}
+{#                                        {% elif added.code_ingredient__name %}#}
+{#                                   id="{% url 'shopping_list_items:update_ingredient_modal' added.id %}"#}
+{#                                        {% else %}#}
+{#                                   id="{% url 'shopping_list_items:update_item_modal' added.id %}"#}
+{#                                        {% endif %}>#}
+                                <a class="cursor-pointer"
                                         {% if added.code_meal_ingredient__code_meal__name %}
-                                   id="{% url 'shopping_list_items:update_meal_modal' added.id %}"
+                                   href="{% url 'shopping_list_items:update_meal_modal' added.id %}"
                                         {% elif added.code_ingredient__name %}
-                                   id="{% url 'shopping_list_items:update_ingredient_modal' added.id %}"
+                                   href="{% url 'shopping_list_items:update_ingredient_modal' added.id %}"
                                         {% else %}
-                                   id="{% url 'shopping_list_items:update_item_modal' added.id %}"
+                                   href="{% url 'shopping_list_items:update_item_modal' added.id %}"
                                         {% endif %}>
                                     <table class="table m-0 table-borderless small table_list">
                                         <tr class="border-bottom">
@@ -108,7 +125,7 @@
 
                                                 {% if added.measurement_value or added.measurement_type %}
                                                     <span {% if added.measurement_value %}
-                                                        data-toggle="tooltip" data-placement="top" title="{{ added.measurement_type | measurement_type_display }}"
+                                                        data-toggle="tooltip" data-placement="top" title="{{ added.measurement_type | measurement_type_display }}{% if added.fraction > 1 %}/s{% elif added.measurement_value > 1 %}/s{% endif %}"
                                                     {% endif %}>
                                                     {% if added.measurement_value %}
                                                         {{ added.measurement_value | no_decimals }}
@@ -206,15 +223,23 @@
                         <td colspan="2" class="p-0">
                             <div style='width:100%;display:none;' id='d_removed_{{ ingredient.id }}'>
                                 {% for removed in ingredient.removed %}
-                                    <a class="modal_update_ingredient cursor-pointer"
-                                       data-toggle="modal"
-                                       href="javascript:void(0);" style="color: red"
+{#                                    <a class="modal_update_ingredient cursor-pointer"#}
+{#                                       data-toggle="modal"#}
+{#                                       href="javascript:void(0);" style="color: red"#}
+{#                                            {% if removed.code_meal_ingredient__code_meal__name %}#}
+{#                                       id="{% url 'shopping_list_items:update_meal_modal' removed.id %}"#}
+{#                                            {% elif removed.code_ingredient__name %}#}
+{#                                       id="{% url 'shopping_list_items:update_ingredient_modal' removed.id %}"#}
+{#                                            {% else %}#}
+{#                                       id="{% url 'shopping_list_items:update_item_modal' removed.id %}"#}
+{#                                            {% endif %}>#}
+                                    <a class="cursor-pointer" style="color: red"
                                             {% if removed.code_meal_ingredient__code_meal__name %}
-                                       id="{% url 'shopping_list_items:update_meal_modal' removed.id %}"
+                                       href="{% url 'shopping_list_items:update_meal_modal' removed.id %}"
                                             {% elif removed.code_ingredient__name %}
-                                       id="{% url 'shopping_list_items:update_ingredient_modal' removed.id %}"
+                                       href="{% url 'shopping_list_items:update_ingredient_modal' removed.id %}"
                                             {% else %}
-                                       id="{% url 'shopping_list_items:update_item_modal' removed.id %}"
+                                       href="{% url 'shopping_list_items:update_item_modal' removed.id %}"
                                             {% endif %}>
                                         <table class="table m-0 table-borderless small table_list">
                                             <tr class="border-bottom">
@@ -226,7 +251,7 @@
                                                             {{ removed.fraction }}
                                                         {% endif %}
                                                         {% if removed.measurement_type %}
-                                                            <span data-toggle="tooltip" data-placement="top" title="{{ removed.measurement_type | measurement_type_display }}">
+                                                            <span data-toggle="tooltip" data-placement="top" title="{{ removed.measurement_type | measurement_type_display }}{% if removed.fraction > 1 %}/s{% elif removed.measurement_value > 1 %}/s{% endif %}">
                                                         {{ removed.measurement_type }}
                                                     </span>
                                                         {% endif %}

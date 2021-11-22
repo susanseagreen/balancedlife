@@ -31,9 +31,14 @@
 
         <div class="row justify-content-center">
             {% for ingredient_category in ingredient_categories %}
-                <a class="modal_update" data-toggle="modal"
-                   href="javascript:void(0);"
-                   id="{% url 'ingredient_categories:update_modal' ingredient_category.id %}">
+{#                <a class="modal_update" data-toggle="modal"#}
+{#                   href="javascript:void(0);"#}
+{#                   id="{% url 'ingredient_categories:update_modal' ingredient_category.id %}">#}
+{#                    <div class="list_display">#}
+{#                        {{ ingredient_category.name }}#}
+{#                    </div>#}
+{#                </a>#}
+                <a href="{% url 'ingredient_categories:update_modal' ingredient_category.id %}">
                     <div class="list_display">
                         {{ ingredient_category.name }}
                     </div>

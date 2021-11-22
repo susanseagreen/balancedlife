@@ -16,7 +16,7 @@ class MealIngredientCreateForm(forms.ModelForm):
         fields = ['code_meal', 'measurement_value', 'measurement_type', 'code_ingredient', 'preparation']
         labels = {
             'measurement_value': 'Amount',
-            'measurement_type': '',
+            'measurement_type': 'Measurement',
         }
         widgets = {
             'preparation': forms.TextInput(attrs={'placeholder': 'Chopped / Diced / Sliced / Cooked / Raw'}),
@@ -29,17 +29,10 @@ class MealIngredientCreateForm(forms.ModelForm):
         self.helper.layout = Layout(
             Row(
                 HTML('<input type="hidden" name="code_meal" id="id_code_meal" value="{{ fk }}">'),
-                Column('measurement_value', css_class='form-group col-4 mb-0'),
-                Column('measurement_type', css_class='form-group col-8 fake-label mb-0'),
-                css_class='form-row'
-            ),
-            Row(
-                Column('code_ingredient', css_class='form-group col-12 mb-0'),
-                css_class='form-row'
-            ),
-            Row(
-                Column('preparation', css_class='form-group col-12 mb-0'),
-                css_class='form-row'
+                Column('measurement_value', css_class='form-group col-5 col-lg-1 mb-0'),
+                Column('measurement_type', css_class='form-group col-7 col-lg-2 mb-0'),
+                Column('preparation', css_class='form-group col-12 col-lg-5 mb-0'),
+                Column('code_ingredient', css_class='form-group col-12 col-lg-4 mb-0'),
             ),
         )
 
@@ -61,10 +54,10 @@ class MealIngredientUpdateForm(forms.ModelForm):
         self.helper.layout = Layout(
             Row(
                 Column('added', css_class='form-group col-1 fake-label'),
-                Column('measurement_value', css_class='form-group col-sm-2 col-4'),
-                Column('measurement_type', css_class='form-group col-sm-4 col-7'),
-                Column('preparation', css_class='form-group col-sm-5 col-12'),
-                Column('code_ingredient', css_class='form-group col-12'),
+                Column('measurement_value', css_class='form-group col-5 col-md-4 col-lg-1 mb-0'),
+                Column('measurement_type', css_class='form-group col-6 col-md-7 col-lg-2 mb-0'),
+                Column('preparation', css_class='form-group col-12 col-lg-4 mb-0'),
+                Column('code_ingredient', css_class='form-group col-12 col-lg-4 mb-0'),
                 # HTML('<div class="col form-group col-12">'),
                 # HTML('<div id="div_id_ingredient_name" class="form-group">'),
                 # HTML('<label for="id_ingredient_name">Ingredient</label><div class="">'),

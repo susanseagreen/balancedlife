@@ -1,32 +1,40 @@
 {% extends 'base.html' %}
 {% load static crispy_forms_tags %}
 
-{% block nav %}{% endblock nav %}
+{#{% block nav %}{% endblock nav %}#}
 
 {% block container %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
 
-    <form method="post" action="{% url 'shopping_list_items:create_item_modal' fk %}">
-        {% csrf_token %}
-        <fieldset>
-            {% crispy form %}
-            <button class="btn btn-dark">Create</button>
-        </fieldset>
-    </form>
+                <h4 class="text-center mb-4">Add Item to Shopping List</h4>
 
-    <script type="application/javascript">
-        $(document).ready(function () {
+                <form method="post" action="{% url 'shopping_list_items:create_item_modal' fk %}">
+                    {% csrf_token %}
+                    <fieldset>
+                        {% crispy form %}
+                        <button class="btn btn-dark">Create</button>
+                    </fieldset>
+                </form>
 
-            let checkbox = $('input[type="checkbox"]');
-            let day_of_week = $('input[name="day_of_week"]');
-            let meal = $('input[name="meal"]');
+                <script type="application/javascript">
+                    $(document).ready(function () {
 
-            checkbox.change(function () {
-                let count_day_of_week = day_of_week.filter(':checked').length;
-                let count_meal = meal.filter(':checked').length;
-                $('#id_quantity').val(count_meal * count_day_of_week);
-            });
+                        let checkbox = $('input[type="checkbox"]');
+                        let day_of_week = $('input[name="day_of_week"]');
+                        let meal = $('input[name="meal"]');
 
-        });
-    </script>
+                        checkbox.change(function () {
+                            let count_day_of_week = day_of_week.filter(':checked').length;
+                            let count_meal = meal.filter(':checked').length;
+                            $('#id_quantity').val(count_meal * count_day_of_week);
+                        });
+
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
 
 {% endblock container %}

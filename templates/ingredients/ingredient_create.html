@@ -126,8 +126,9 @@
                                     {{ ingredient.code_category.name }}:
                                 </div>
                             {% endifchanged %}
-                            <a class="modal_update" data-toggle="modal" href="javascript:void(0);"
-                               id="{% url 'ingredients:update_modal' ingredient.id %}">
+                            <a href="{% url 'ingredients:update_modal' ingredient.id %}">
+{#                            <a class="modal_update" data-toggle="modal" href="javascript:void(0);"#}
+{#                               id="{% url 'ingredients:update_modal' ingredient.id %}">#}
                                 <div class="list_display">
                                     {{ ingredient.name }}
                                 </div>
