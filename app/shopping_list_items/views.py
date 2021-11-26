@@ -225,7 +225,7 @@ class ShoppingListIngredientItemUpdateView(View):
             instance.save()
 
         # return redirect(self.request.META['HTTP_REFERER'])
-        return redirect(reverse_lazy('shopping_lists:update', kwargs={'pk': self.kwargs['pk']}))
+        return redirect(reverse_lazy('shopping_lists:update', kwargs={'pk': shopping_list_item.code_shopping_list_id }))
 
 
 class ShoppingListMealItemUpdateView(View):
@@ -251,7 +251,8 @@ class ShoppingListMealItemUpdateView(View):
         if form.is_valid():
             form.save()
 
-        return redirect(self.request.META['HTTP_REFERER'])
+        # return redirect(self.request.META['HTTP_REFERER'])
+        return redirect(reverse_lazy('shopping_lists:update', kwargs={'pk': shopping_list_item.code_shopping_list_id }))
 
 
 class ShoppingListOtherItemCreateView(View):
@@ -306,7 +307,7 @@ class ShoppingListOtherItemUpdateView(View):
             form.save()
 
         # return redirect(self.request.META['HTTP_REFERER'])
-        return redirect(reverse_lazy('shopping_lists:update', kwargs={'pk': self.kwargs['fk']}))
+        return redirect(reverse_lazy('shopping_lists:update', kwargs={'pk': shopping_list_item.code_shopping_list_id }))
 
 
 class ShoppingListDeleteMealView(View):

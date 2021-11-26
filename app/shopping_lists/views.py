@@ -27,6 +27,8 @@ class ShoppingListCreateView(View):
 
         if form.is_valid():
             instance = form.save(commit=False)
+            if not instance.name:
+                instance.name = "Shopping List"
             if instance.date_from:
                 instance.date_to = instance.date_from + timedelta(days=6)
             instance.save()

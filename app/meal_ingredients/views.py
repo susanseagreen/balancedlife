@@ -32,7 +32,8 @@ class MealIngredientCreateView(View):
         meal_category_dict = categories.build_meal_category_dict()
         meal.meal_categories = []
         for meal_category in meal.meal_category:
-            meal.meal_categories.append(meal_category_dict[meal_category])
+            if meal_category in meal_category_dict:
+                meal.meal_categories.append(meal_category_dict[meal_category])
 
         form = MealIngredientCreateForm()
 

@@ -71,6 +71,7 @@ def build_shopping_list(self, ingredient_list):
             'name',
             'code_ingredient_id',
             'code_ingredient__name',
+            'code_ingredient__code_category__order',
             'code_ingredient__code_category__name',
             'code_meal_ingredient_id',
             'code_meal_ingredient__code_meal__meal_category',
@@ -83,7 +84,7 @@ def build_shopping_list(self, ingredient_list):
             'day_of_week',
             'meal',
             'quantity'
-        ).order_by('code_ingredient__code_category__name', 'code_ingredient__name')
+        ).order_by('code_ingredient__code_category__order', 'code_ingredient__code_category__name', 'code_ingredient__name')
 
     meal_category_dict = categories.build_meal_category_dict()
 

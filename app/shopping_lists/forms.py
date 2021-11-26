@@ -12,13 +12,14 @@ class ShoppingListCreateForm(forms.ModelForm):
         fields = ['name', 'date_from']
 
         widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Shopping List'}),
             'date_from': forms.DateInput(attrs={'type': 'date'}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.fields['name'].initial = "Shopping List"
+        self.fields['name'].required = False
         self.helper.layout = Layout(
             Row(
                 Column('name', css_class='form-group col-7 mb-0 pb-0'),
