@@ -44,6 +44,7 @@ $ heroku git:remote -a shopping_list
 $ git push heroku main
 
 $ heroku run python manage.py migrate
+
 $ heroku open
 ```
 or
