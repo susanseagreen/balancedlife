@@ -29,10 +29,10 @@ class MealIngredientCreateForm(forms.ModelForm):
         self.helper.layout = Layout(
             Row(
                 HTML('<input type="hidden" name="code_meal" id="id_code_meal" value="{{ fk }}">'),
-                Column('measurement_value', css_class='form-group col-5 col-lg-1 mb-0'),
-                Column('measurement_type', css_class='form-group col-7 col-lg-2 mb-0'),
-                Column('preparation', css_class='form-group col-12 col-lg-5 mb-0'),
-                Column('code_ingredient', css_class='form-group col-12 col-lg-4 mb-0'),
+                Column('measurement_value', css_class='form-group col-5 mb-0'),
+                Column('measurement_type', css_class='form-group col-7 mb-0'),
+                Column('preparation', css_class='form-group col-12 mb-0'),
+                Column('code_ingredient', css_class='form-group col-12 mb-0'),
             ),
         )
 
@@ -54,10 +54,10 @@ class MealIngredientUpdateForm(forms.ModelForm):
         self.helper.layout = Layout(
             Row(
                 Column('added', css_class='form-group col-1 fake-label'),
-                Column('measurement_value', css_class='form-group col-5 col-md-4 col-lg-1 mb-0'),
-                Column('measurement_type', css_class='form-group col-6 col-md-7 col-lg-2 mb-0'),
-                Column('preparation', css_class='form-group col-12 col-lg-4 mb-0'),
-                Column('code_ingredient', css_class='form-group col-12 col-lg-4 mb-0'),
+                Column('measurement_value', css_class='form-group col-5 mb-0'),
+                Column('measurement_type', css_class='form-group col-6 mb-0'),
+                Column('preparation', css_class='form-group col-12 mb-0'),
+                Column('code_ingredient', css_class='form-group col-12 mb-0'),
                 # HTML('<div class="col form-group col-12">'),
                 # HTML('<div id="div_id_ingredient_name" class="form-group">'),
                 # HTML('<label for="id_ingredient_name">Ingredient</label><div class="">'),
