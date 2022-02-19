@@ -90,11 +90,11 @@ class MealIngredientModalUpdateView(View):
 
     def post(self, request, *args, **kwargs):
 
-        meal_ingredient = MealIngredient.objects.get(id=self.kwargs['pk'])
+        ingredient = MealIngredient.objects.get(id=self.kwargs['pk'])
 
-        form = MealIngredientUpdateForm(request.POST, instance=meal_ingredient)
+        form = MealIngredientUpdateForm(request.POST, instance=ingredient)
 
         if form.is_valid():
             form.save()
 
-        return redirect(self.request.META['HTTP_REFERER'])
+        return redirect(reverse_lazy('meal_ingredients:create', kwargs={'fk': self.kwargs['fk']}))
