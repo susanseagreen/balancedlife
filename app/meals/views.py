@@ -17,7 +17,7 @@ class MealListView(View):
         meals_search = self.request.GET.get('meals_search') or ''
         meals = Meal.objects.filter(name__icontains=meals_search).order_by('name')
 
-        paginator = Paginator(meals, 30)
+        paginator = Paginator(meals, 15)
         page_num = request.GET.get('page', 1)
 
         try:

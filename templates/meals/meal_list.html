@@ -118,7 +118,7 @@
 
             <div class="row">
             {% for meal in meals %}
-                <div class="col-12 col-md-4 col-sm-6 p-1">
+                <div class="col-12 p-1">
                     <table class="table border table_hover mb-1">
                         <tr class="bg-info">
                             <td class="p-0" style="width: 100px">
@@ -140,7 +140,7 @@
                             <td class="p-2">
                                 <a class="text-light"
                                    href="{% url 'meals:update' meal.id %}">
-                                    <h5>
+                                    <h5 class="overflow-hidden" style="height: 27px">
                                         {{ meal.name }}
                                     </h5>
                                 </a>
