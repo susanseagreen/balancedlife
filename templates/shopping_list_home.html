@@ -181,7 +181,7 @@
             {% for meal in meals %}
                 <div class="col-12 p-1">
                     <table class="table border table_hover mb-1">
-                        <tr class="bg-info">
+                        <tr>
                             <td class="p-0" style="width: 100px">
                                 <a class="modal_details" data-toggle="modal"
                                    href="javascript:void(0);"
@@ -199,14 +199,12 @@
                                 </a>
                             </td>
                             <td class="p-2">
-                                <a class="text-light"
-                                   href="{% url 'meals:update' meal.id %}">
+                                <a href="{% url 'meals:update' meal.id %}">
                                     <h5 class="overflow-hidden" style="height: 27px">
                                         {{ meal.name }}
                                     </h5>
                                 </a>
-                                <a class="text-light"
-                                   href="{% url 'meal_ingredients:create' meal.id %}">
+                                <a href="{% url 'meal_ingredients:create' meal.id %}">
                                     <div>
                                         Ingredients&nbsp;
                                     </div>
