@@ -118,169 +118,164 @@
         {% if meals.paginator.num_pages > 1 %}
             <div class="row">
                 <div class="col">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination justify-content-center">
-                            {% if meals.has_previous %}
-                                <li class="page-item">
-                                    <a class="page-link"
-                                       href="?page={{ meals.previous_page_number }}">Previous</a>
-                                </li>
-                            {% else %}
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1"
-                                       aria-disabled="true">Previous</a>
-                                </li>
-                            {% endif %}
+                    <ul class="pagination justify-content-center">
+                        {% if meals.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="?page={{ meals.previous_page_number }}">Previous</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1"
+                                   aria-disabled="true">Previous</a>
+                            </li>
+                        {% endif %}
 
-                            {% if meals.number|add:'-4' > 1 %}
-                                <li class="page-item">
-                                    <a class="page-link"
-                                       href="?page={{ meals.number|add:'-5' }}">&hellip;</a>
-                                </li>
-                            {% endif %}
+                        {% if meals.number|add:'-4' > 1 %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="?page={{ meals.number|add:'-5' }}">&hellip;</a>
+                            </li>
+                        {% endif %}
 
-                            {% for i in meals.paginator.page_range %}
-                                {% if meals.number == i %}
-                                    <li class="page-item active" aria-current="page">
+                        {% for i in meals.paginator.page_range %}
+                            {% if meals.number == i %}
+                                <li class="page-item active" aria-current="page">
                                                                 <span class="page-link">
                                                                     {{ i }}
                                                                     <span class="sr-only">(current)</span>
                                                                 </span>
-                                    </li>
-                                {% elif i > meals.number|add:'-5' and i < meals.number|add:'5' %}
-                                    <li class="page-item">
-                                        <a class="page-link" href="?page={{ i }}">{{ i }}</a>
-                                    </li>
-                                {% endif %}
-                            {% endfor %}
-
-                            {% if meals.paginator.num_pages > meals.number|add:'4' %}
+                                </li>
+                            {% elif i > meals.number|add:'-5' and i < meals.number|add:'5' %}
                                 <li class="page-item">
-                                    <a class="page-link"
-                                       href="?page={{ meals.number|add:'5' }}">&hellip;</a>
+                                    <a class="page-link" href="?page={{ i }}">{{ i }}</a>
                                 </li>
                             {% endif %}
+                        {% endfor %}
 
-                            {% if meals.has_next %}
-                                <li class="page-item">
-                                    <a class="page-link"
-                                       href="?page={{ meals.next_page_number }}">Next</a>
-                                </li>
-                            {% else %}
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1"
-                                       aria-disabled="true">Next</a>
-                                </li>
-                            {% endif %}
-                        </ul>
-                    </nav>
-                    </nav>
+                        {% if meals.paginator.num_pages > meals.number|add:'4' %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="?page={{ meals.number|add:'5' }}">&hellip;</a>
+                            </li>
+                        {% endif %}
+
+                        {% if meals.has_next %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="?page={{ meals.next_page_number }}">Next</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1"
+                                   aria-disabled="true">Next</a>
+                            </li>
+                        {% endif %}
+                    </ul>
                 </div>
             </div>
         {% endif %}
         <!--end of Pagination-->
 
         <div class="row">
-        {% for meal in meals %}
-            <div class="col-12 p-1">
-                <table class="table border table_hover mb-1">
-                    <tr class="bg-info">
-                        <td class="p-0" style="width: 100px">
-                            <a class="modal_details" data-toggle="modal"
-                               href="javascript:void(0);"
-                               id="{% url 'meals:details' meal.id %}">
-                                {% if meal.image_link %}
-                                    <div class="col-12 meal_img"
-                                         style="background-image: url({{ meal.image_link }})">
+            {% for meal in meals %}
+                <div class="col-12 p-1">
+                    <table class="table border table_hover mb-1">
+                        <tr class="bg-info">
+                            <td class="p-0" style="width: 100px">
+                                <a class="modal_details" data-toggle="modal"
+                                   href="javascript:void(0);"
+                                   id="{% url 'meals:details' meal.id %}">
+                                    {% if meal.image_link %}
+                                        <div class="col-12 meal_img"
+                                             style="background-image: url({{ meal.image_link }})">
+                                        </div>
+                                    {% else %}
+                                        <div class="col-12 meal_img"
+                                             style="background-color: #e8fafc">
+                                            {% include 'include/meal.svg' %}
+                                        </div>
+                                    {% endif %}
+                                </a>
+                            </td>
+                            <td class="p-2">
+                                <a class="text-light"
+                                   href="{% url 'meals:update' meal.id %}">
+                                    <h5 class="overflow-hidden" style="height: 27px">
+                                        {{ meal.name }}
+                                    </h5>
+                                </a>
+                                <a class="text-light"
+                                   href="{% url 'meal_ingredients:create' meal.id %}">
+                                    <div>
+                                        Ingredients&nbsp;
                                     </div>
-                                {% else %}
-                                    <div class="col-12 meal_img"
-                                         style="background-color: #e8fafc">
-                                        {% include 'include/meal.svg' %}
-                                    </div>
-                                {% endif %}
-                            </a>
-                        </td>
-                        <td class="p-2">
-                            <a class="text-light"
-                               href="{% url 'meals:update' meal.id %}">
-                                <h5 class="overflow-hidden" style="height: 27px">
-                                    {{ meal.name }}
-                                </h5>
-                            </a>
-                            <a class="text-light"
-                               href="{% url 'meal_ingredients:create' meal.id %}">
-                                <div>
-                                    Ingredients&nbsp;
-                                </div>
-                            </a>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        {% endfor %}
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            {% endfor %}
+        </div>
 
         <!--Pagination-->
         {% if meals.paginator.num_pages > 1 %}
             <div class="row">
                 <div class="col">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination justify-content-center">
-                            {% if meals.has_previous %}
-                                <li class="page-item">
-                                    <a class="page-link"
-                                       href="?page={{ meals.previous_page_number }}">Previous</a>
-                                </li>
-                            {% else %}
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1"
-                                       aria-disabled="true">Previous</a>
-                                </li>
-                            {% endif %}
+                    <ul class="pagination justify-content-center">
+                        {% if meals.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="?page={{ meals.previous_page_number }}">Previous</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1"
+                                   aria-disabled="true">Previous</a>
+                            </li>
+                        {% endif %}
 
-                            {% if meals.number|add:'-4' > 1 %}
-                                <li class="page-item">
-                                    <a class="page-link"
-                                       href="?page={{ meals.number|add:'-5' }}">&hellip;</a>
-                                </li>
-                            {% endif %}
+                        {% if meals.number|add:'-4' > 1 %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="?page={{ meals.number|add:'-5' }}">&hellip;</a>
+                            </li>
+                        {% endif %}
 
-                            {% for i in meals.paginator.page_range %}
-                                {% if meals.number == i %}
-                                    <li class="page-item active" aria-current="page">
+                        {% for i in meals.paginator.page_range %}
+                            {% if meals.number == i %}
+                                <li class="page-item active" aria-current="page">
                                                                 <span class="page-link">
                                                                     {{ i }}
                                                                     <span class="sr-only">(current)</span>
                                                                 </span>
-                                    </li>
-                                {% elif i > meals.number|add:'-5' and i < meals.number|add:'5' %}
-                                    <li class="page-item">
-                                        <a class="page-link" href="?page={{ i }}">{{ i }}</a>
-                                    </li>
-                                {% endif %}
-                            {% endfor %}
-
-                            {% if meals.paginator.num_pages > meals.number|add:'4' %}
+                                </li>
+                            {% elif i > meals.number|add:'-5' and i < meals.number|add:'5' %}
                                 <li class="page-item">
-                                    <a class="page-link"
-                                       href="?page={{ meals.number|add:'5' }}">&hellip;</a>
+                                    <a class="page-link" href="?page={{ i }}">{{ i }}</a>
                                 </li>
                             {% endif %}
+                        {% endfor %}
 
-                            {% if meals.has_next %}
-                                <li class="page-item">
-                                    <a class="page-link"
-                                       href="?page={{ meals.next_page_number }}">Next</a>
-                                </li>
-                            {% else %}
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1"
-                                       aria-disabled="true">Next</a>
-                                </li>
-                            {% endif %}
-                        </ul>
-                    </nav>
-                    </nav>
+                        {% if meals.paginator.num_pages > meals.number|add:'4' %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="?page={{ meals.number|add:'5' }}">&hellip;</a>
+                            </li>
+                        {% endif %}
+
+                        {% if meals.has_next %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="?page={{ meals.next_page_number }}">Next</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1"
+                                   aria-disabled="true">Next</a>
+                            </li>
+                        {% endif %}
+                    </ul>
                 </div>
             </div>
         {% endif %}
@@ -296,7 +291,7 @@
 
     {% endif %}
 
-</div>
+    </div>
 
     <script>
         $(document).ready(function () {
