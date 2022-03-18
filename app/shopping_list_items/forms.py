@@ -59,7 +59,7 @@ class ShoppingListMealItemSelectForm(forms.Form):
 class ShoppingListIngredientItemForm(forms.Form):
     measurement_value = forms.DecimalField(label='Amount', initial=1, max_digits=5, decimal_places=2, required=False)
     measurement_type = forms.ChoiceField(label='Measurement', choices=measurement_type_choices, widget=Select2Widget, required=False)
-    ingredient = forms.ModelChoiceField(queryset=Ingredient.objects.order_by('name'))
+    ingredient = forms.ModelChoiceField(queryset=Ingredient.objects.order_by('name'), widget=Select2Widget)
     day_of_week = forms.MultipleChoiceField(choices=days_of_week, widget=forms.CheckboxSelectMultiple, required=False)
     meal = forms.MultipleChoiceField(choices=meal_choices, widget=forms.CheckboxSelectMultiple, required=False)
     quantity = forms.IntegerField(initial=1, required=False)
