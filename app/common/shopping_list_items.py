@@ -247,7 +247,7 @@ def get_fraction(ingredient, value):
         ingredient.pop(value)
 
 
-def build_summary(self, ingredient_list):
+def build_summary(ingredient_list):
 
     ingredient_summary = {}
 

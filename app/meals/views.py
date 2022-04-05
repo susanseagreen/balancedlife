@@ -70,7 +70,7 @@ class MealCreateView(View):
         else:
             form = MealCreateForm(request.POST)
 
-        if form.is_valid():
+        if form.is_valid() and form.cleaned_data['meal_categories']:
             meal_categories = ','.join(form.cleaned_data['meal_categories'])
             instance = form.save(commit=False)
             instance.meal_category = meal_categories
@@ -120,7 +120,7 @@ class MealUpdateView(View):
         else:
             form = MealUpdateForm(request.POST, instance=meal)
 
-        if form.is_valid():
+        if form.is_valid() and form.cleaned_data['meal_categories']:
             meal_categories = ','.join(form.cleaned_data['meal_categories'])
             instance = form.save(commit=False)
             instance.meal_category = meal_categories
@@ -139,14 +139,7 @@ class MealDetailsView(View):
             .select_related('code_ingredient') \
             .filter(code_meal_id=self.kwargs['pk'])
 
-        meal_category_dict = categories.build_meal_category_dict()
-
-        if ',' in meal.meal_category:
-            meal_categories = meal.meal_category.split(',')
-            meal.meal_category = []
-            for meal_category in meal_categories:
-                meal.meal_category.append(meal_category_dict[meal_category])
-        else:
+        if meal_category_dict := categories.build_meal_category_dict():
             meal.meal_category = [meal_category_dict[meal.meal_category]]
 
         context = {
