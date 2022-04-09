@@ -128,7 +128,7 @@ class ShoppingListView(View):
         ingredient_list = {}
 
         shopping_list_items.build_shopping_list(self, ingredient_list)
-        ingredient_summary = shopping_list_items.build_summary(self, ingredient_list)
+        ingredient_summary = shopping_list_items.build_summary(ingredient_list)
 
         shopping_list = ShoppingList.objects.get(id=self.kwargs['pk'])
 
