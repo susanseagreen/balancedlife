@@ -63,11 +63,22 @@ class MealIngredientCreateView(View):
     def post(self, request, *args, **kwargs):
         form = MealIngredientCreateForm(request.POST)
 
-        if form.is_valid():
+        if not form.is_valid():
+            try:
+                meal_ingredient = MealIngredient.objects.get(
+                    code_meal=request.POST["code_meal"],
+                    code_ingredient=request.POST["code_ingredient"]
+                )
+                meal_ingredient.added = True
+                meal_ingredient.measurement_value = request.POST["measurement_value"] if request.POST["measurement_value"] else None
+                meal_ingredient.measurement_type = request.POST["measurement_type"] if request.POST["measurement_type"] else None
+                meal_ingredient.preparation = request.POST["preparation"] if request.POST["preparation"] else None
+                meal_ingredient.save()
+            except:
+                messages.success(self.request, f"Something went wrong")
+        else:
             instance = form.save(commit=False)
             instance.save()
-        else:
-            messages.success(self.request, f"Ingredient already exists on this Meal")
 
         return redirect(reverse_lazy('meal_ingredients:create', kwargs={'fk': self.kwargs['fk']}))
 
