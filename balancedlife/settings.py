@@ -29,13 +29,6 @@ INSTALLED_APPS = [
     'crispy_forms',
     "django_select2",
 
-    'app.ingredients',
-    'app.ingredient_categories',
-    'app.meal_categories',
-    'app.meal_ingredients',
-    'app.meals',
-    'app.shopping_list_items',
-    'app.shopping_lists',
     'app.registration',
     'templates',
 ]
@@ -50,7 +43,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'shopping_list.urls'
+ROOT_URLCONF = 'balancedlife.urls'
 
 TEMPLATES = [
     {
@@ -68,7 +61,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'shopping_list.wsgi.application'
+WSGI_APPLICATION = 'balancedlife.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

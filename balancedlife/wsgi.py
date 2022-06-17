@@ -1,5 +1,5 @@
 """
-WSGI config for holidaytravelplanner project.
+WSGI config for balancedlife project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/2.1/howto/deployment/wsgi/
 
 import os
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "shopping_list.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "balancedlife.settings")
 
 from django.core.wsgi import get_wsgi_application
 
