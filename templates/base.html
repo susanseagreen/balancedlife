@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{% block title %}Shopping List Creator{% endblock title %}</title>
+    <title>{% block title %}Balanced Life Tracker{% endblock title %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="{% static 'javascript/jquery.js' %}"></script>
     <script src="{% static 'javascript/jquery-ui.js' %}"></script>
@@ -27,7 +27,7 @@
             {% if user.is_authenticated %}
                 <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
                    href="{% url 'home' %}">
-                    Shopping Lists
+                    Home
                 </a>
                 <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
                    href="{% url 'logout' %}">
@@ -60,7 +60,7 @@
 
                 <div class="col-lg-8 col-12">
                     {% block content %}
-                        <h1>Shopping List Creator</h1>
+                        <h1>Balanced Life Tracker</h1>
                     {% endblock content %}
                 </div>
 
