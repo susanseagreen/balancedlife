@@ -181,24 +181,6 @@ a.nav-link:hover {
     width: 100% !important;
 }
 
-#div_id_day_of_week div, #div_id_meal div, #div_id_meal_categories div, #div_id_meal_ingredients div {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-[for^="id_day_of_week_"], [for^="id_meal_"] {
-    margin-right: 12px;
-    font-size: 12px;
-    padding-top: 4px;
-}
-
-.day_of_week {
-    font-size: 8px;
-    color: #f8f9fa;
-    background: yellowgreen;
-    padding: 2px 5px;
-}
-
 .username {
     font-size: 10px;
     color: steelblue;
@@ -212,20 +194,6 @@ a.nav-link:hover {
 a:hover .username {
     color: #f8f9fa;
     background: steelblue;
-}
-
-.meal {
-    font-size: 8px;
-    color: #f8f9fa;
-    background: cadetblue;
-    padding: 2px 5px;
-}
-
-.meal_category {
-    font-size: 8px;
-    color: #f8f9fa;
-    background: maroon;
-    padding: 2px 5px;
 }
 
 .select2 .select2-container .select2-container--default {
@@ -251,38 +219,6 @@ a:hover .username {
 .table_list svg {
     height: 18px;
 }
-
-.meal_img {
-    min-height: 80px;
-    width: 100px;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-}
-
-.meal_img svg {
-    fill: #17a2b8;
-    max-height: 80px;
-    max-width: 100px;
-    margin: auto;
-    display: flex;
-    opacity: 0.2;
-}
-
-/*.meal_img {*/
-/*    min-height: 200px;*/
-/*    background-repeat: no-repeat;*/
-/*    background-size: cover;*/
-/*    background-position: center;*/
-/*}*/
-
-/*.meal_img svg {*/
-/*    fill: #17a2b8;*/
-/*    max-height: 200px;*/
-/*    margin: auto;*/
-/*    display: flex;*/
-/*    opacity: 0.2;*/
-/*}*/
 
 input[type="checkbox"] {
     font-size: 1.4rem;
@@ -346,4 +282,39 @@ tr.strikeout td:before {
 #id_order {
     padding: 0 0 0 12px;
     text-align: center;
+}
+
+.form-control#id_colour {
+    padding: 0 !important;
+}
+
+.colour_block {
+    border: 1px solid lightgray;
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+}
+
+.tracker_block {
+    display: flex;
+    flex-direction: column;
+    height: 225px;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.weekday div {
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    padding: 3px;
+    margin: 2px;
+}
+
+.day_block {
+    cursor: pointer;
+    display: flex;
+    border: 1px solid lightgray;
+    height: 30px;
+    margin: 1px;
 }

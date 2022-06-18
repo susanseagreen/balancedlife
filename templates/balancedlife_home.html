@@ -12,4 +12,53 @@
         </div>
     </div>
 
+    {% for tracker_id, tracker_table in tracker_tables.items %}
+        {% for name, tracker in tracker_table.items %}
+            <div class="mb-3">
+                <div class="d-flex justify-content-between">
+                    <h4>{{ name }}</h4>
+                    <div class="text-right">
+                        <p>{{ start_date }} - {{ end_date }}</p>
+                        <a class="btn-success btn-sm"
+                           title="Add New Achievement"
+                           href="{% url 'tracker:achievements' tracker_id today %}">
+                            Quick Add Today
+                        </a>
+                    </div>
+                </div>
+                {% if tracker.description %}
+                    <p>{{ tracker.description }}</p>
+                {% endif %}
+            </div>
+            <div class="d-flex mb-5">
+                <div class="weekday">
+                    <div title="Sunday">S</div>
+                    <div title="Monday">M</div>
+                    <div title="Tuesday">T</div>
+                    <div title="Wednesday">W</div>
+                    <div title="Thursday">T</div>
+                    <div title="Friday">F</div>
+                    <div title="Saturday">S</div>
+                </div>
+                <div class="tracker_block">
+                    {% for date, colours in tracker.items %}
+                        {% if date %}
+                            <a class="day_block"
+                               title="{{ date }}"
+                               href="{% url 'tracker:achievements' tracker_id date %}">
+                                {% for name, colour in colours %}
+                                    <div title="{% if name %}{{ name }}{% endif %} ({{ date }})"
+                                         style="background-color: {{ colour }}; width: 100%; ">
+                                        &nbsp;
+                                    </div>
+                                {% endfor %}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <hr>
+        {% endfor %}
+    {% endfor %}
+
 {% endblock content %}

@@ -25,14 +25,26 @@
 
         <div class="container">
             {% if user.is_authenticated %}
-                <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
-                   href="{% url 'home' %}">
-                    Home
-                </a>
-                <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
-                   href="{% url 'logout' %}">
-                    Logout
-                </a>
+                <div class="d-flex">
+                    <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
+                       href="{% url 'home' %}">
+                        Home
+                    </a>
+                    <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
+                       href="{% url 'tracker:add' %}">
+                        Trackers
+                    </a>
+                    <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
+                       href="{% url 'tracker:goal_add' %}">
+                        Goals
+                    </a>
+                </div>
+                <div>
+                    <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
+                       href="{% url 'logout' %}">
+                        Logout
+                    </a>
+                </div>
             {% else %}
                 <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center" href="{% url 'login' %}">Login</a>
                 <a class="nav-link pl-3 pr-3 pt-2 pb-2 d-flex align-items-center"
@@ -53,22 +65,32 @@
 </div>
 
 {% if user.is_authenticated %}
+
+    {% if goals %}
+        <div class="container mt-5">
+            <div class="m-1 d-flex flex-wrap">
+                {% for goal in goals %}
+                    <div class="d-flex">
+                        <div class="colour_block" style="background-color: {{ goal.colour }}"></div>
+                        &nbsp;&nbsp;<b>{{ goal.name }}</b>&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                    {% if goal.description %}
+                        <p>{{ goal.description }}</p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
     {% block container %}
         <div class="container mt-5">
 
             <div class="row">
 
-                <div class="col-lg-8 col-12">
+                <div class="col-12">
                     {% block content %}
                         <h1>Balanced Life Tracker</h1>
                     {% endblock content %}
-                </div>
-
-                <div class="col-lg-4 col-12">
-                    <div>
-                        {% block meals %}
-                        {% endblock meals %}
-                    </div>
                 </div>
 
             </div>

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static get_display crispy_forms_tags %}
+
+{% block content %}
+
+    <div id="myModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4>Add Tracker</h4>
+    <br>
+    <form method="post" action="{% url 'tracker:add' %}">
+        {% csrf_token %}
+        <fieldset>
+            {% crispy form %}
+            <button class="btn btn-dark">Add</button>
+        </fieldset>
+    </form>
+
+{% endblock content %}

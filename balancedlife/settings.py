@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "django_select2",
 
     'app.registration',
+    'app.tracker',
     'templates',
 ]
 
