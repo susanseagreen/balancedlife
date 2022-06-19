@@ -81,28 +81,24 @@ class GoalAddView(View):
 
 class GoalUpdateView(View):
     template_name = 'goal/update.html'
-    model = Goal
-    form_class = GoalForm
-    success_url = "/"
 
     def get(self, request, *args, **kwargs):
-        achievement = TrackedItem.objects \
+        goal = Goal.objects \
             .get(id=kwargs["pk"])
-        filters = {"user": self.request.user.id, "date": str(achievement.date)}
-        form = AchievementForm(initial={'filters': filters}, instance=achievement)
-        context = {"pk": kwargs["pk"], "form": form, "achievement": achievement}
+        form = GoalForm(instance=goal)
+        context = {"pk": kwargs["pk"], "form": form, "goal": goal}
 
         return render(request, template_name=self.template_name, context=context)
 
     def post(self, request, *args, **kwargs):
-        achievement = TrackedItem.objects \
+        goal = Goal.objects \
             .get(id=kwargs["pk"])
-        form = AchievementForm(request.POST, instance=achievement)
+        form = GoalForm(request.POST, instance=goal)
 
         if form.is_valid():
             instance = form.save(commit=False)
             instance.save()
-            messages.success(self.request, f"Achievement {instance.code_goal.name} updated")
+            messages.success(self.request, f"Goal {instance.name} updated")
 
         return redirect(reverse_lazy('home'))
 

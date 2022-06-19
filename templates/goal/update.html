@@ -7,7 +7,7 @@
 
 {% block container %}
 
-    <form method="post">
+    <form method="post" action="{% url 'tracker:goal_update' pk %}">
         {% csrf_token %}
         <fieldset>
             {% crispy form %}
