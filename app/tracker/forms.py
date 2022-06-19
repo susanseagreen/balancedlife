@@ -30,7 +30,7 @@ class AchievementForm(forms.ModelForm):
 
     class Meta:
         model = TrackedItem
-        fields = ['code_goal', 'description']
+        fields = ['date', 'code_goal', 'description']
         labels = {
             'code_goal': 'Goal Achieved',
         }

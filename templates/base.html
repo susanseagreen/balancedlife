@@ -83,21 +83,23 @@
                     Add Goals
                 </a>
             </div>
-        {% endblock goals %}
 
-        {% if goals %}
-            <div class="mt-5 d-flex flex-wrap justify-content-center mb-5">
-                {% for goal in goals %}
-                    <a class="d-flex m-1" href="{% url 'tracker:goal_update' goal.id %}">
-                        <div class="colour_block" style="background-color: {{ goal.colour }}"></div>
-                        &nbsp;&nbsp;<b>{{ goal.name }}</b>&nbsp;&nbsp;&nbsp;&nbsp;
-                    </a>
-                    {% if goal.description %}
-                        <p>{{ goal.description }}</p>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        {% endif %}
+            {% if goals %}
+                <div class="d-flex flex-wrap justify-content-center mb-4">
+                    {% for goal in goals %}
+                        <a class="d-flex m-1 modal_goal_update" data-toggle="modal"
+                           href="javascript:void(0);"
+                           id="{% url 'tracker:goal_update' goal.id %}">
+                            <div class="colour_block" style="background-color: {{ goal.colour }}"></div>
+                            &nbsp;&nbsp;{{ goal.name }}&nbsp;&nbsp;&nbsp;
+                        </a>
+                        {% if goal.description %}
+                            <p>{{ goal.description }}</p>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endblock goals %}
     </div>
 
     {% block container %}
@@ -149,6 +151,13 @@
     });
 
     jQuery('.modal_goal_add').click(function (e) {
+        var linkvar = $(this).attr('id');
+        $('.modal-body').load(linkvar, function (result) {
+            $('#myModal').modal({show: true});
+        });
+    });
+
+    jQuery('.modal_goal_update').click(function (e) {
         var linkvar = $(this).attr('id');
         $('.modal-body').load(linkvar, function (result) {
             $('#myModal').modal({show: true});

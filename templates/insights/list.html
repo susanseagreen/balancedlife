@@ -9,17 +9,17 @@
 
     {% if insights %}
         <h5 class="mb-4 text-center">{{ insights.name }}</h5>
-        <table>
+        <table class="table">
             <tr>
                 <th>Logging from</th>
                 <td>{{ insights.created }} ({{ insights.days }} days)</td>
             </tr>
             <tr>
-                <th>Longest Achievement Streak</th>
+                <th>Longest streak</th>
                 <td>{{ insights.longest_streak }} days</td>
             </tr>
             <tr>
-                <th>Achievements days logged</th>
+                <th>Days logged</th>
                 <td>{{ insights.total_tracked }} / {{ insights.days }} days</td>
             </tr>
             <tr>
@@ -27,7 +27,15 @@
                 <td>{{ insights.days|sub:insights.total_tracked }} days</td>
             </tr>
         </table>
-        <br>
     {% endif %}
+
+    {#        <br>#}
+    {#    {% regroup tracked_items by code_goal__name as names %}#}
+    {#    {% for name in names %}#}
+    {#        {{ name.grouper }}<br>#}
+    {#        {% with total=name.list.count %}#}
+    {#            !{{ total }}!#}
+    {#        {% endwith %}#}
+    {#    {% endfor %}#}
 
 {% endblock container %}

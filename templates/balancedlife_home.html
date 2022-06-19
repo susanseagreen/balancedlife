@@ -21,9 +21,10 @@
                         <h4>{{ tracker_table.name }}</h4>
                         <p>{{ start_date }} - {{ end_date }}</p>
                     </div>
-                    <a class="btn-success btn-sm"
+                    <a class="btn-success btn-sm modal_add" data-toggle="modal"
+                       href="javascript:void(0);"
                        title="Add New Achievement"
-                       href="{% url 'tracker:achievements' tracker_id today %}">
+                       id="{% url 'tracker:achievements' tracker_id today %}">
                         Quick Add Today
                     </a>
                 </div>
@@ -44,10 +45,10 @@
                         {% if date < tracker_table.created_at %}
                             <div class="day_block" style="background-color: lightgray"></div>
                         {% elif date == today %}
-                            <a class="day_block pulse"
-                               style="border: 2px solid #dbe4f0;"
-                               style="cursor: pointer"
-                               href="{% url 'tracker:achievements' tracker_id date %}">
+                            <a class="day_block pulse modal_achievement" data-toggle="modal"
+                               href="javascript:void(0);"
+                               style="border: 2px solid #dbe4f0; cursor: pointer"
+                               id="{% url 'tracker:achievements' tracker_id date %}">
                                 {% if details %}
                                     {% for detail in details %}
                                         <div title="{% if detail.name %}{{ detail.name }}{% endif %} ({{ date }})"
@@ -63,10 +64,11 @@
                                 {% endif %}
                             </a>
                         {% elif date < today %}
-                            <a class="day_block"
+                            <a class="day_block modal_achievement" data-toggle="modal"
+                               href="javascript:void(0);"
+                               id="{% url 'tracker:achievements' tracker_id date %}"
                                {% if not details %}style="border: 1px solid lightgray;"{% endif %}
-                               style="cursor: pointer"
-                               href="{% url 'tracker:achievements' tracker_id date %}">
+                               style="cursor: pointer">
                                 {% if details %}
                                     {% for detail in details %}
                                         <div title="{% if detail.name %}{{ detail.name }}{% endif %} ({{ date }})"
@@ -100,19 +102,22 @@
                id="{% url 'tracker:add' %}">Create Tracker</a>
         </div>
 
-        <script type="application/javascript">
-            jQuery('.modal_add').click(function (e) {
-                var linkvar = $(this).attr('id');
-                $('.modal-body').load(linkvar, function (result) {
-                    $('#myModal').modal({show: true});
-                });
-            });
-        </script>
-
     {% endif %}
 
     <script type="application/javascript">
+        jQuery('.modal_add').click(function (e) {
+            var linkvar = $(this).attr('id');
+            $('.modal-body').load(linkvar, function (result) {
+                $('#myModal').modal({show: true});
+            });
+        });
         jQuery('.modal_insights').click(function (e) {
+            var linkvar = $(this).attr('id');
+            $('.modal-body').load(linkvar, function (result) {
+                $('#myModal').modal({show: true});
+            });
+        });
+        jQuery('.modal_achievement').click(function (e) {
             var linkvar = $(this).attr('id');
             $('.modal-body').load(linkvar, function (result) {
                 $('#myModal').modal({show: true});

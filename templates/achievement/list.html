@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
-{% load static get_display crispy_forms_tags %}
+{% load static crispy_forms_tags %}
 
-{% block content %}
+{% block nav %}{% endblock nav %}
+
+{% block goals %}{% endblock goals %}
+
+{% block container %}
 
     <form method="post" action="{% url 'tracker:achievements' tracker_id date %}">
         {% csrf_token %}
@@ -31,4 +35,4 @@
         {% endfor %}
     {% endif %}
 
-{% endblock content %}
+{% endblock container %}

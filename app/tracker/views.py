@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import View, UpdateView, DeleteView
+from django.views.generic import View
 from app.tracker.models import Tracker, TrackedItem, Goal
 from .forms import TrackerCreateForm, GoalForm, AchievementForm
 from datetime import datetime, timedelta
@@ -79,11 +79,32 @@ class GoalAddView(View):
         return redirect(self.request.META['HTTP_REFERER'])
 
 
-class GoalUpdateView(UpdateView):
+class GoalUpdateView(View):
     template_name = 'goal/update.html'
     model = Goal
     form_class = GoalForm
     success_url = "/"
+
+    def get(self, request, *args, **kwargs):
+        achievement = TrackedItem.objects \
+            .get(id=kwargs["pk"])
+        filters = {"user": self.request.user.id, "date": str(achievement.date)}
+        form = AchievementForm(initial={'filters': filters}, instance=achievement)
+        context = {"pk": kwargs["pk"], "form": form, "achievement": achievement}
+
+        return render(request, template_name=self.template_name, context=context)
+
+    def post(self, request, *args, **kwargs):
+        achievement = TrackedItem.objects \
+            .get(id=kwargs["pk"])
+        form = AchievementForm(request.POST, instance=achievement)
+
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.save()
+            messages.success(self.request, f"Achievement {instance.code_goal.name} updated")
+
+        return redirect(reverse_lazy('home'))
 
 
 class AchievementsView(View):
@@ -129,17 +150,14 @@ class AchievementUpdateView(View):
     template_name = 'achievement/update.html'
 
     def get(self, request, *args, **kwargs):
-        achievement = TrackedItem.objects \
-            .get(id=kwargs["pk"])
-        filters = {"user": self.request.user.id, "date": str(achievement.date)}
-        form = AchievementForm(initial={'filters': filters}, instance=achievement)
+        achievement = TrackedItem.objects.get(id=kwargs["pk"])
+        form = AchievementForm(instance=achievement)
         context = {"pk": kwargs["pk"], "form": form, "achievement": achievement}
 
         return render(request, template_name=self.template_name, context=context)
 
     def post(self, request, *args, **kwargs):
-        achievement = TrackedItem.objects \
-            .get(id=kwargs["pk"])
+        achievement = TrackedItem.objects.get(id=kwargs["pk"])
         form = AchievementForm(request.POST, instance=achievement)
 
         if form.is_valid():
@@ -150,7 +168,7 @@ class AchievementUpdateView(View):
         return redirect(reverse_lazy('home'))
 
 
-class AchievementDeleteView(DeleteView):
+class AchievementDeleteView(View):
     template_name = 'achievement/delete.html'
 
     def get(self, request, *args, **kwargs):
@@ -172,6 +190,7 @@ class InsightsView(View):
 
     def get(self, request, *args, **kwargs):
         insights = {}
+        dates = []
         day_count = 0
         longest_streak = 0
         total_tracked = 0
@@ -191,11 +210,14 @@ class InsightsView(View):
                     insights = {
                         "name": tracked_item["code_tracker__name"],
                         "created": date,
-                        "days": (datetime.now().date() - tracked_item["code_tracker__created_at"]).days + 1
+                        "days": (datetime.now().date() - tracked_item["code_tracker__created_at"]).days + 1,
+                        "date": {}
                     }
 
-                if day != date:
+                if date not in dates:
+                    dates.append(date)
                     total_tracked += 1
+                if day != date:
                     day = date
                     day_count = 0
                 day_count += 1
@@ -205,6 +227,6 @@ class InsightsView(View):
         insights["longest_streak"] = longest_streak
         insights["total_tracked"] = total_tracked
 
-        context = {"insights": insights}
+        context = {"insights": insights, "tracked_items": tracked_items}
 
         return render(request, template_name=self.template_name, context=context)
