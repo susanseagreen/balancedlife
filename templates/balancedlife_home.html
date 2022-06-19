@@ -1,34 +1,33 @@
 {% extends 'base.html' %}
-{% load static get_display %}
+{% load static get_display crispy_forms_tags %}
 
 {% block content %}
 
-    <div id="myModal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                </div>
-            </div>
-        </div>
-    </div>
+    {% if tracker_tables %}
 
-    {% for tracker_id, tracker_table in tracker_tables.items %}
-        {% for name, tracker in tracker_table.items %}
+        {% for tracker_id, tracker_table in tracker_tables.items %}
+
+            <div class="mb-4">
+                <a class="modal_insights btn-outline-secondary border border-secondary btn-sm"
+                   data-toggle="modal"
+                   href="javascript:void(0);"
+                   id="{% url 'tracker:insights' tracker_id %}">
+                    Insights
+                </a>
+            </div>
             <div class="mb-3">
-                <div class="d-flex justify-content-between">
-                    <h4>{{ name }}</h4>
-                    <div class="text-right">
+                <div class="d-flex justify-content-between flex-wrap">
+                    <div>
+                        <h4>{{ tracker_table.name }}</h4>
                         <p>{{ start_date }} - {{ end_date }}</p>
-                        <a class="btn-success btn-sm"
-                           title="Add New Achievement"
-                           href="{% url 'tracker:achievements' tracker_id today %}">
-                            Quick Add Today
-                        </a>
                     </div>
+                    <a class="btn-success btn-sm"
+                       title="Add New Achievement"
+                       href="{% url 'tracker:achievements' tracker_id today %}">
+                        Quick Add Today
+                    </a>
                 </div>
-                {% if tracker.description %}
-                    <p>{{ tracker.description }}</p>
-                {% endif %}
+                <p>{{ tracker_table.description }}</p>
             </div>
             <div class="d-flex mb-5">
                 <div class="weekday">
@@ -41,24 +40,84 @@
                     <div title="Saturday">S</div>
                 </div>
                 <div class="tracker_block">
-                    {% for date, colours in tracker.items %}
-                        {% if date %}
-                            <a class="day_block"
-                               title="{{ date }}"
+                    {% for date, details in tracker_table.dates.items %}
+                        {% if date < tracker_table.created_at %}
+                            <div class="day_block" style="background-color: lightgray"></div>
+                        {% elif date == today %}
+                            <a class="day_block pulse"
+                               style="border: 2px solid #dbe4f0;"
+                               style="cursor: pointer"
                                href="{% url 'tracker:achievements' tracker_id date %}">
-                                {% for name, colour in colours %}
-                                    <div title="{% if name %}{{ name }}{% endif %} ({{ date }})"
-                                         style="background-color: {{ colour }}; width: 100%; ">
+                                {% if details %}
+                                    {% for detail in details %}
+                                        <div title="{% if detail.name %}{{ detail.name }}{% endif %} ({{ date }})"
+                                             style="background-color: {{ detail.colour }}; width: 100%; ">
+                                            &nbsp;
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div title="Click to add today's achievements"
+                                         style="width: 100%; ">
                                         &nbsp;
                                     </div>
-                                {% endfor %}
+                                {% endif %}
                             </a>
+                        {% elif date < today %}
+                            <a class="day_block"
+                               {% if not details %}style="border: 1px solid lightgray;"{% endif %}
+                               style="cursor: pointer"
+                               href="{% url 'tracker:achievements' tracker_id date %}">
+                                {% if details %}
+                                    {% for detail in details %}
+                                        <div title="{% if detail.name %}{{ detail.name }}{% endif %} ({{ date }})"
+                                             style="background-color: {{ detail.colour }}; width: 100%; ">
+                                            &nbsp;
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div title="{{ date }}"
+                                         style="width: 100%; ">
+                                        &nbsp;
+                                    </div>
+                                {% endif %}
+                            </a>
+                        {% else %}
+                            <div class="day_block" style="border: 1px solid lightgray;"
+                                 title="{{ date }}"></div>
                         {% endif %}
                     {% endfor %}
                 </div>
             </div>
             <hr>
         {% endfor %}
-    {% endfor %}
+
+    {% else %}
+
+        <div class="text-center">
+            <a class="modal_add btn btn-success" data-toggle="modal"
+               title="Create Goal Tracker Calendar"
+               href="javascript:void(0);"
+               id="{% url 'tracker:add' %}">Create Tracker</a>
+        </div>
+
+        <script type="application/javascript">
+            jQuery('.modal_add').click(function (e) {
+                var linkvar = $(this).attr('id');
+                $('.modal-body').load(linkvar, function (result) {
+                    $('#myModal').modal({show: true});
+                });
+            });
+        </script>
+
+    {% endif %}
+
+    <script type="application/javascript">
+        jQuery('.modal_insights').click(function (e) {
+            var linkvar = $(this).attr('id');
+            $('.modal-body').load(linkvar, function (result) {
+                $('#myModal').modal({show: true});
+            });
+        });
+    </script>
 
 {% endblock content %}

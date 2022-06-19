@@ -1,18 +1,13 @@
 {% extends 'base.html' %}
-{% load static get_display crispy_forms_tags %}
+{% load static crispy_forms_tags %}
 
-{% block content %}
+{% block nav %}{% endblock nav %}
 
-    <div id="myModal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                </div>
-            </div>
-        </div>
-    </div>
+{% block goals %}{% endblock goals %}
 
-    <h4>Add Tracker</h4>
+{% block container %}
+
+    <h4 class="text-center">Add Tracker</h4>
     <br>
     <form method="post" action="{% url 'tracker:add' %}">
         {% csrf_token %}
@@ -22,4 +17,4 @@
         </fieldset>
     </form>
 
-{% endblock content %}
+{% endblock container %}

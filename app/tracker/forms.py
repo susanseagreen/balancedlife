@@ -4,6 +4,8 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, HTML, Row, Column
 from app.tracker.models import Tracker, Goal, TrackedItem
 
+BLANK_CHOICE = (('', '---------'),)
+
 
 class TrackerCreateForm(forms.ModelForm):
     name = forms.CharField(required=False)
@@ -13,7 +15,7 @@ class TrackerCreateForm(forms.ModelForm):
         fields = ['name', 'description']
 
 
-class GoalCreateForm(forms.ModelForm):
+class GoalForm(forms.ModelForm):
     class Meta:
         model = Goal
         fields = ['name', 'colour', 'description']
@@ -23,7 +25,9 @@ class GoalCreateForm(forms.ModelForm):
         }
 
 
-class AchievementCreateForm(forms.ModelForm):
+class AchievementForm(forms.ModelForm):
+    date = forms.CharField(required=False, widget=forms.TextInput(attrs={"readonly": True}))
+
     class Meta:
         model = TrackedItem
         fields = ['code_goal', 'description']
@@ -39,12 +43,14 @@ class AchievementCreateForm(forms.ModelForm):
 
         if filters:
             filters = kwargs['initial']['filters']
-            goal = Goal.objects.filter(code_user_id=filters['user']).values_list("id", "name")
-            self.fields['code_goal'].choices = goal
+            goal = Goal.objects.filter(code_user_id=filters['user']).order_by("name").values_list("id", "name")
+            self.fields['code_goal'].choices = BLANK_CHOICE + tuple(goal)
+            self.fields['date'].initial = filters['date']
 
         self.helper.layout = Layout(
             Row(
-                Column('code_goal', css_class='form-group col-12 mb-0 pb-0'),
+                Column('code_goal', css_class='form-group col-12 col-md-8 mb-0 pb-0'),
+                Column('date', css_class='form-group col-12 col-md-4 mb-0 pb-0'),
                 css_class='form-row'
             ),
             Row(

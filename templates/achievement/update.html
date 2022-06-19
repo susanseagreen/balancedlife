@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static get_display crispy_forms_tags %}
+
+{% block content %}
+
+    <form method="post">
+        {% csrf_token %}
+        <fieldset>
+            {% crispy form %}
+            <div class="d-flex justify-content-between">
+                <button class="btn btn-dark">Update</button>
+                <a class="modal_delete btn btn-danger" data-toggle="modal"
+                   href="javascript:void(0);"
+                   id="{% url 'tracker:achievement_delete' pk %}">Delete</a>
+            </div>
+        </fieldset>
+    </form>
+
+    <script type="application/javascript">
+        jQuery('.modal_delete').click(function (e) {
+            var linkvar = $(this).attr('id');
+            $('.modal-body').load(linkvar, function (result) {
+                $('#myModal').modal({show: true});
+            });
+        });
+    </script>
+
+{% endblock content %}

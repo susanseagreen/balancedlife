@@ -118,7 +118,7 @@ a:hover {
     color: #17a2b8 !important;
 }
 
-a.btn:hover {
+a.btn:hover, a.btn-sm:hover {
     color: #f8f9fa !important;
 }
 
@@ -279,6 +279,10 @@ tr.strikeout td:before {
     opacity: 100%;
 }
 
+.modal-body {
+    padding: 30px;
+}
+
 #id_order {
     padding: 0 0 0 12px;
     text-align: center;
@@ -304,7 +308,6 @@ tr.strikeout td:before {
 }
 
 .weekday div {
-    cursor: pointer;
     font-weight: bold;
     text-align: center;
     padding: 3px;
@@ -312,9 +315,36 @@ tr.strikeout td:before {
 }
 
 .day_block {
-    cursor: pointer;
     display: flex;
-    border: 1px solid lightgray;
     height: 30px;
     margin: 1px;
+    width: calc((100% - 24px) / 12);
+}
+
+.textarea.form-control {
+    height: 65px;
+}
+
+.pulse {
+    animation: pulse-animation 2s infinite;
+}
+
+@keyframes pulse-animation {
+    0% {
+        box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.2);
+    }
+    100% {
+        box-shadow: 0 0 0 5px rgba(0, 0, 0, 0);
+    }
+}
+
+.goals {
+    margin: 2px;
+    font-weight: bold;
+}
+
+.goals > svg {
+    height: 15px;
+    fill: #fff;
+    margin-bottom: 4px;
 }

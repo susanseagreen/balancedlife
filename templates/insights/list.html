@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static crispy_forms_tags mathfilters %}
+
+{% block nav %}{% endblock nav %}
+
+{% block goals %}{% endblock goals %}
+
+{% block container %}
+
+    {% if insights %}
+        <h5 class="mb-4 text-center">{{ insights.name }}</h5>
+        <table>
+            <tr>
+                <th>Logging from</th>
+                <td>{{ insights.created }} ({{ insights.days }} days)</td>
+            </tr>
+            <tr>
+                <th>Longest Achievement Streak</th>
+                <td>{{ insights.longest_streak }} days</td>
+            </tr>
+            <tr>
+                <th>Achievements days logged</th>
+                <td>{{ insights.total_tracked }} / {{ insights.days }} days</td>
+            </tr>
+            <tr>
+                <th>Days missed</th>
+                <td>{{ insights.days|sub:insights.total_tracked }} days</td>
+            </tr>
+        </table>
+        <br>
+    {% endif %}
+
+{% endblock container %}

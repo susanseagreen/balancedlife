@@ -27,7 +27,8 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
 
     'crispy_forms',
-    "django_select2",
+    'django_select2',
+    'mathfilters',
 
     'app.registration',
     'app.tracker',
