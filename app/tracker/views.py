@@ -233,7 +233,7 @@ class InsightsView(View):
 
     def get(self, request, *args, **kwargs):
         insights = {}
-        day_count = 0
+        day_count = 1
         longest_streak = 0
         total_tracked = 0
         day = None
