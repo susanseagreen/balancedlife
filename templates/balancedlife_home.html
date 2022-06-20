@@ -18,7 +18,10 @@
             <div class="mb-3">
                 <div class="d-flex justify-content-between flex-wrap">
                     <div>
-                        <h4>{{ tracker_table.name }}</h4>
+                        <h4>
+                            <a title="Tracker Update"
+                               href="{% url 'tracker:update' tracker_id %}">{{ tracker_table.name }}</a>
+                        </h4>
                         <p>{{ start_date }} - {{ end_date }}</p>
                     </div>
                     <a class="btn-success btn-sm modal_add" data-toggle="modal"

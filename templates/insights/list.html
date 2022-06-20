@@ -9,7 +9,7 @@
 
     {% if insights %}
         <h5 class="mb-4 text-center">{{ insights.name }}</h5>
-        <table class="table">
+        <table class="table table-bordered table-sm">
             <tr>
                 <th>Logging from</th>
                 <td>{{ insights.created }} ({{ insights.days }} days)</td>
@@ -27,15 +27,26 @@
                 <td>{{ insights.days|sub:insights.total_tracked }} days</td>
             </tr>
         </table>
+        <table class="table table-bordered table-sm">
+        <tr>
+            <th>Goals</th>
+            <th class="text-center">Logged</th>
+        </tr>
+        {% for id, insight in insights.goals.items %}
+            <tr>
+                <td>{{ insight.name }}</td>
+                <td class="text-center">{{ insight.log_count }}</td>
+            </tr>
+        {% endfor %}
     {% endif %}
 
-    {#        <br>#}
-    {#    {% regroup tracked_items by code_goal__name as names %}#}
-    {#    {% for name in names %}#}
-    {#        {{ name.grouper }}<br>#}
-    {#        {% with total=name.list.count %}#}
-    {#            !{{ total }}!#}
-    {#        {% endwith %}#}
-    {#    {% endfor %}#}
+{#        <br>#}
+{#    {% regroup tracked_items by code_goal__name as names %}#}
+{#    {% for name in names %}#}
+{#        {{ name.grouper }}<br>#}
+{#        {% with total=name.list.count %}#}
+{#            !{{ total }}!#}
+{#        {% endwith %}#}
+{#    {% endfor %}#}
 
 {% endblock container %}

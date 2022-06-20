@@ -7,7 +7,7 @@ from app.tracker.models import Tracker, Goal, TrackedItem
 BLANK_CHOICE = (('', '---------'),)
 
 
-class TrackerCreateForm(forms.ModelForm):
+class TrackerForm(forms.ModelForm):
     name = forms.CharField(required=False)
 
     class Meta:

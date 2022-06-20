@@ -3,7 +3,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import View
 from app.tracker.models import Tracker, TrackedItem, Goal
-from .forms import TrackerCreateForm, GoalForm, AchievementForm
+from .forms import TrackerForm, GoalForm, AchievementForm
 from datetime import datetime, timedelta
 
 
@@ -12,26 +12,26 @@ class TrackerAddView(View):
 
     def get(self, request, *args, **kwargs):
 
-        form = TrackerCreateForm()
+        form = TrackerForm()
 
         context = {
             'form': form,
         }
 
-        trackers = Tracker.objects.filter(code_user=self.request.user.pk)
-        if trackers:
-            context["trackers"] = trackers
+        # trackers = Tracker.objects.filter(code_user=self.request.user.pk)
+        # if trackers:
+        #     context["trackers"] = trackers
 
         return render(request, template_name=self.template_name, context=context)
 
     def post(self, request, *args, **kwargs):
-        form = TrackerCreateForm(request.POST)
+        form = TrackerForm(request.POST)
 
         if form.is_valid():
             instance = form.save(commit=False)
             instance.code_user_id = self.request.user.pk
             if not instance.name:
-                instance.name = f"Tracker ({datetime.now().strftime('%d %b %Y')})"
+                instance.name = "Daily Tracker"
             instance.save()
 
             if instance.created_at.weekday() != 6:
@@ -44,7 +44,54 @@ class TrackerAddView(View):
                 new_day.code_tracker_id = instance.id
                 new_day.date = sunday + timedelta(day)
                 new_day.save()
-            messages.success(self.request, f"New Tracking Calendar created")
+            messages.success(self.request, f"New Daily Tracker Calendar created")
+
+        return redirect(reverse_lazy('home'))
+
+
+class TrackerUpdateView(View):
+    template_name = 'tracker/update.html'
+
+    def get(self, request, *args, **kwargs):
+        tracker = Tracker.objects.get(id=kwargs["pk"])
+        form = TrackerForm(instance=tracker)
+
+        context = {
+            'pk': kwargs["pk"],
+            'form': form,
+        }
+
+        return render(request, template_name=self.template_name, context=context)
+
+    def post(self, request, *args, **kwargs):
+        tracker = Tracker.objects.get(id=kwargs["pk"])
+        form = TrackerForm(request.POST, instance=tracker)
+
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.code_user_id = self.request.user.pk
+            if not instance.name:
+                instance.name = "Daily Tracker"
+            instance.save()
+            messages.success(self.request, f"Daily Tracker Calendar updated")
+
+        return redirect(reverse_lazy('home'))
+
+
+class TrackerDeleteView(View):
+    template_name = 'tracker/delete.html'
+
+    def get(self, request, *args, **kwargs):
+        tracker = Tracker.objects \
+            .get(id=kwargs["pk"])
+        context = {"pk": kwargs["pk"], "tracker": tracker}
+
+        return render(request, template_name=self.template_name, context=context)
+
+    def post(self, request, *args, **kwargs):
+        TrackedItem.objects.filter(code_tracker_id=self.kwargs['pk']).delete()
+        Tracker.objects.get(id=self.kwargs['pk']).delete()
+        messages.success(self.request, "Tracker deleted")
 
         return redirect(reverse_lazy('home'))
 
@@ -186,7 +233,6 @@ class InsightsView(View):
 
     def get(self, request, *args, **kwargs):
         insights = {}
-        dates = []
         day_count = 0
         longest_streak = 0
         total_tracked = 0
@@ -199,6 +245,7 @@ class InsightsView(View):
                     "code_tracker__name")
 
         for tracked_item in tracked_items:
+            goal_id = tracked_item["code_goal_id"]
             date = tracked_item["date"]
             if date >= tracked_item["code_tracker__created_at"]:
                 if not insights:
@@ -207,11 +254,12 @@ class InsightsView(View):
                         "name": tracked_item["code_tracker__name"],
                         "created": date,
                         "days": (datetime.now().date() - tracked_item["code_tracker__created_at"]).days + 1,
-                        "date": {}
+                        "date": {},
+                        "goals": {}
                     }
 
-                if date not in dates:
-                    dates.append(date)
+                if date not in insights["date"]:
+                    insights["date"][date] = []
                     total_tracked += 1
                 if day != date:
                     day = date
@@ -219,6 +267,15 @@ class InsightsView(View):
                 day_count += 1
                 day += timedelta(1)
                 longest_streak = day_count if day_count > longest_streak else longest_streak
+
+                if goal_id not in insights["goals"]:
+                    insights["goals"][goal_id] = {"log_count": 0, "name": tracked_item["code_goal__name"]}
+                insights["goals"][goal_id]["log_count"] += 1
+
+                insights["date"][date].append({
+                    "name": tracked_item["code_goal__name"],
+                    "description": tracked_item["description"]
+                })
 
         insights["longest_streak"] = longest_streak
         insights["total_tracked"] = total_tracked

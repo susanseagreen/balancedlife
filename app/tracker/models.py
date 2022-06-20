@@ -37,6 +37,3 @@ class TrackedItem(models.Model):
         Goal, on_delete=models.PROTECT,
         related_name='code_tracker_item', null=True)
     description = models.TextField(max_length=255, null=True, blank=True)
-
-    def __str__(self):
-        return self.code_goal.name
